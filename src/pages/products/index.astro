@@ -45,7 +45,7 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
             <h3 class="font-bold text-steel-800 mb-3 text-sm uppercase tracking-wider">Categories</h3>
             <ul class="space-y-0.5">
               <li>
-                <a href="/woshidahuaidan/products/" 
+                <a href="/products/" 
                    class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${!categoryParam ? 'bg-brand-600 text-white' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
                   All Products
                 </a>
@@ -56,7 +56,7 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
                 const isActive = categoryParam === slug;
                 return (
                   <li>
-                    <a href={`/woshidahuaidan/products/?category=${slug}`}
+                    <a href={`/products/?category=${slug}`}
                        class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${isActive ? 'bg-brand-600 text-white' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
                       {cat}
                       {count > 0 && <span class={`ml-1.5 text-xs ${isActive ? 'text-brand-200' : 'text-steel-400'}`}>({count})</span>}
@@ -72,7 +72,7 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
           {categoryParam && (
             <div class="mb-6 flex items-center gap-3">
               <p class="text-sm text-steel-500">Showing <span class="font-semibold text-steel-700">{products.length}</span> products</p>
-              <a href="/woshidahuaidan/products/" class="text-xs text-brand-600 hover:text-brand-700 font-medium">Clear filter</a>
+              <a href="/products/" class="text-xs text-brand-600 hover:text-brand-700 font-medium">Clear filter</a>
             </div>
           )}
 
@@ -81,12 +81,12 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
               <div class="text-5xl mb-4">📦</div>
               <h3 class="text-xl font-bold text-steel-700 mb-2">No products in this category yet</h3>
               <p class="text-steel-500 mb-4">We're adding more products. Contact us for custom requirements.</p>
-              <a href="/woshidahuaidan/contact/" class="btn-primary">Contact Us</a>
+              <a href="/contact/" class="btn-primary">Contact Us</a>
             </div>
           ) : (
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {products.map((product) => (
-                <a href={`/woshidahuaidan/products/${product.id}/`} class="card-base group flex flex-col">
+                <a href={`/products/${product.id}/`} class="card-base group flex flex-col">
                   <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
                     {product.data.image ? (
                       <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover" />

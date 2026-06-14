@@ -80,8 +80,8 @@ const blogPosts = [
           High Precision, High Hardness, Good Materials. Professional Supplier in Gear Motor — One-to-one Design Solutions, Strict Control of Production Quality Inspection, Professional Export Packaging.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up">
-          <a href="/woshidahuaidan/products/" class="btn-primary text-base px-8 py-3.5">Browse Products →</a>
-          <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5">Request Quote</a>
+          <a href="/products/" class="btn-primary text-base px-8 py-3.5">Browse Products →</a>
+          <a href="/contact/" class="btn-white text-base px-8 py-3.5">Request Quote</a>
         </div>
       </div>
     </div>
@@ -159,7 +159,7 @@ const blogPosts = [
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {categories.map((cat) => (
-          <a href={`/woshidahuaidan${cat.href}`} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
+          <a href={cat.href} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
             <span class="text-xl shrink-0">{cat.icon}</span>
             <div>
               <span class="text-sm font-medium text-steel-700 group-hover:text-brand-600 transition-colors leading-tight">{cat.name}</span>
@@ -218,7 +218,7 @@ const blogPosts = [
       <p class="section-subtitle">Industry insights and technical guides from our engineering team.</p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
         {blogPosts.map((post) => (
-          <a href={`/woshidahuaidan${post.href}`} class="card-base p-6 group">
+          <a href={post.href} class="card-base p-6 group">
             <p class="text-xs text-steel-400 mb-2">{post.date}</p>
             <h4 class="font-bold text-steel-800 group-hover:text-brand-600 transition-colors mb-2">{post.title}</h4>
             <span class="text-sm font-semibold text-brand-600">Read More →</span>
@@ -236,7 +236,7 @@ const blogPosts = [
         12-hour response guarantee. Send us your drawings or specifications and we'll provide tailored solutions with 3D custom design blueprints.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Get in Touch</a>
+        <a href="/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Get in Touch</a>
         <a href="mailto:info@ggn-gear.com" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors text-base">info@ggn-gear.com</a>
       </div>
     </div>
