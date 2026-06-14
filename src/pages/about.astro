@@ -1,71 +1,178 @@
 ---
+// ============================================================
+// about.astro — CTS-style About Us page for Guangjin Gear
+// ============================================================
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="About Us" description="Learn about Zhejiang Guangjin Intelligent Technology — a professional manufacturer of industrial gearboxes and transmission components.">
-  <section class="py-16">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold text-steel-900 text-center">About Guangjin</h1>
-      <p class="mt-4 text-steel-500 text-center text-lg">Your trusted partner in industrial transmission solutions</p>
+<Layout title="About Us" description="Learn about Zhejiang Guangjin Intelligent Technology Co., Ltd. — China's professional power transmission manufacturer with 15+ years of experience, 150,000+ products, and customers in 50+ countries.">
+  
+  <!-- Page Header -->
+  <section class="bg-dark-900 text-white py-12 sm:py-16">
+    <div class="container-page">
+      <p class="text-brand-400 font-semibold text-sm uppercase tracking-wider mb-2">About Guangjin</p>
+      <h1 class="text-3xl sm:text-4xl font-black">China's Professional Power Transmission Manufacturer</h1>
+    </div>
+  </section>
 
-      <div class="mt-12 prose max-w-none">
-        <div class="bg-gradient-to-br from-brand-50 to-steel-50 rounded-2xl p-8 sm:p-10 mb-10">
-          <h2 class="text-2xl font-bold text-steel-900 mb-4">Zhejiang Guangjin Intelligent Technology Co., Ltd.</h2>
-          <p class="text-steel-600 leading-relaxed">
-            Established in Zhejiang, China — one of the world's leading manufacturing hubs — Guangjin specializes in the design, manufacture, and export of industrial gearboxes, gear motors, AC motors, and power transmission components.
+  <!-- Company Intro -->
+  <section class="section-py bg-white">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-steel-900 mb-4">Transmit Force, <span class="text-brand-600">Drive Future</span></h2>
+          <p class="text-steel-500 leading-relaxed mb-4">
+            Zhejiang Guangjin Intelligent Technology Co., Ltd. is a leading manufacturer and supplier of industrial power transmission solutions, serving a wide range of industries globally. We integrate trading with in-house manufacturing, supported by our production base and more than 10 shareholding cooperative factories.
           </p>
-          <p class="text-steel-600 leading-relaxed mt-4">
-            With over 15 years of industry experience, we have built a comprehensive product portfolio covering <strong>12 major categories</strong> and <strong>800+ products</strong>, serving customers across <strong>50+ countries</strong> worldwide.
+          <p class="text-steel-500 leading-relaxed mb-4">
+            Founded with a commitment to engineering excellence, Guangjin has grown to become one of China's most trusted names in gearbox manufacturing. Our product range spans worm gearboxes, helical gearboxes, bevel gearboxes, industrial gearboxes, gear motors, AC motors, and complete power transmission components.
           </p>
-        </div>
-
-        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Our Product Lines</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            'Worm Gearboxes (NMRV series)',
-            'Helical Gearboxes',
-            'Bevel Gearboxes',
-            'Industrial Gearboxes',
-            'Mechanical Variators',
-            'Gear Motors',
-            'AC Motors',
-            'Gears & Pinions',
-            'Sprockets',
-            'Belt Pulleys',
-            'Couplings',
-            'Sheet Metal Fabrication',
-          ].map((item) => (
-            <div class="flex items-center gap-3 p-3 bg-steel-50 rounded-lg">
-              <svg class="w-5 h-5 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-              </svg>
-              <span class="text-sm text-steel-700">{item}</span>
+          <p class="text-steel-500 leading-relaxed mb-6">
+            We don't view ourselves as just a supplier — we're a business partner, working closely with customers to provide added value throughout the supply chain and beyond.
+          </p>
+          
+          <!-- Key Stats -->
+          <div class="grid grid-cols-3 gap-4">
+            <div class="text-center p-4 bg-brand-50 rounded-lg">
+              <div class="text-2xl font-black text-brand-600">150K+</div>
+              <div class="text-xs text-steel-500 mt-1">Products</div>
             </div>
-          ))}
-        </div>
-
-        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Why Choose Guangjin?</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {[
-            { title: 'Quality Assurance', desc: 'Strict QC processes from raw materials to finished products. ISO-certified manufacturing.' },
-            { title: 'Competitive Pricing', desc: 'Factory-direct pricing with no middlemen. Best value for your procurement budget.' },
-            { title: 'Global Logistics', desc: 'Efficient shipping to 50+ countries. Sea freight, air freight, and express delivery options.' },
-            { title: 'Custom Solutions', desc: 'OEM/ODM services available. We engineer products to your exact specifications.' },
-            { title: 'Fast Response', desc: 'Inquiry responses within 24 hours. Dedicated account managers for long-term clients.' },
-            { title: 'Technical Support', desc: 'Engineering team available for product selection, installation guidance, and after-sales service.' },
-          ].map((item) => (
-            <div class="p-6 bg-white rounded-xl border border-steel-200 hover:shadow-md transition-shadow">
-              <h3 class="font-semibold text-steel-900 mb-2">{item.title}</h3>
-              <p class="text-sm text-steel-500 leading-relaxed">{item.desc}</p>
+            <div class="text-center p-4 bg-brand-50 rounded-lg">
+              <div class="text-2xl font-black text-brand-600">15+</div>
+              <div class="text-xs text-steel-500 mt-1">Years</div>
             </div>
-          ))}
+            <div class="text-center p-4 bg-brand-50 rounded-lg">
+              <div class="text-2xl font-black text-brand-600">50+</div>
+              <div class="text-xs text-steel-500 mt-1">Countries</div>
+            </div>
+          </div>
         </div>
-
-        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Our Mission</h2>
-        <p class="text-steel-600 leading-relaxed">
-          To provide reliable, high-performance transmission solutions that drive industrial efficiency worldwide. We are committed to continuous innovation, quality excellence, and building lasting partnerships with our customers.
-        </p>
+        
+        <!-- Factory image placeholder -->
+        <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center">
+          <div class="text-center p-8">
+            <div class="text-7xl mb-3">🏭</div>
+            <p class="text-steel-400 text-sm">Factory Image</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Manufacturing Excellence (id=factory for anchor link) -->
+  <section id="factory" class="section-py bg-steel-50">
+    <div class="container-page">
+      <h2 class="section-title">Manufacturing <span class="text-brand-600">Excellence</span></h2>
+      <p class="section-subtitle">
+        Our state-of-the-art production facilities are equipped with advanced CNC machinery and quality control systems.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card-base p-8 text-center">
+          <div class="text-5xl mb-4">⚙️</div>
+          <h3 class="text-lg font-bold text-steel-900 mb-3">CNC Precision Machining</h3>
+          <p class="text-sm text-steel-500 leading-relaxed">
+            Advanced CNC gear hobbing, grinding, and milling centers ensure micron-level precision for every component we manufacture.
+          </p>
+        </div>
+        <div class="card-base p-8 text-center">
+          <div class="text-5xl mb-4">🔥</div>
+          <h3 class="text-lg font-bold text-steel-900 mb-3">Heat Treatment</h3>
+          <p class="text-sm text-steel-500 leading-relaxed">
+            Atmosphere-controlled carburizing furnaces and induction hardening equipment for optimal surface hardness and core toughness.
+          </p>
+        </div>
+        <div class="card-base p-8 text-center">
+          <div class="text-5xl mb-4">✅</div>
+          <h3 class="text-lg font-bold text-steel-900 mb-3">Quality Testing</h3>
+          <p class="text-sm text-steel-500 leading-relaxed">
+            Every gearbox undergoes comprehensive load testing. 100% inspection on dimensional accuracy, noise level, and temperature rise.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="section-py bg-white">
+    <div class="container-page">
+      <h2 class="section-title">Our <span class="text-brand-600">Journey</span></h2>
+      <div class="max-w-3xl mx-auto mt-10 space-y-0">
+        <div class="flex gap-6">
+          <div class="w-px bg-brand-200 relative flex-shrink-0">
+            <div class="w-3 h-3 bg-brand-600 rounded-full absolute top-1.5 -left-1.5"></div>
+          </div>
+          <div class="pb-10">
+            <span class="text-xs text-brand-600 font-bold">2010</span>
+            <h3 class="text-lg font-bold text-steel-900 mt-1">Company Founded</h3>
+            <p class="text-sm text-steel-500 mt-1">Established in Zhejiang Province, China, with a focus on worm gearbox manufacturing.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-px bg-brand-200 relative flex-shrink-0">
+            <div class="w-3 h-3 bg-brand-600 rounded-full absolute top-1.5 -left-1.5"></div>
+          </div>
+          <div class="pb-10">
+            <span class="text-xs text-brand-600 font-bold">2015</span>
+            <h3 class="text-lg font-bold text-steel-900 mt-1">Product Line Expansion</h3>
+            <p class="text-sm text-steel-500 mt-1">Added helical, bevel, and industrial gearbox series. Expanded to gear motors and AC motors.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-px bg-brand-200 relative flex-shrink-0">
+            <div class="w-3 h-3 bg-brand-600 rounded-full absolute top-1.5 -left-1.5"></div>
+          </div>
+          <div class="pb-10">
+            <span class="text-xs text-brand-600 font-bold">2018</span>
+            <h3 class="text-lg font-bold text-steel-900 mt-1">International Growth</h3>
+            <p class="text-sm text-steel-500 mt-1">Began exporting to 50+ countries. Established partnerships across Europe, Americas, and Southeast Asia.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-px bg-brand-200 relative flex-shrink-0">
+            <div class="w-3 h-3 bg-brand-600 rounded-full absolute top-1.5 -left-1.5"></div>
+          </div>
+          <div>
+            <span class="text-xs text-brand-600 font-bold">2024</span>
+            <h3 class="text-lg font-bold text-steel-900 mt-1">Intelligent Manufacturing</h3>
+            <p class="text-sm text-steel-500 mt-1">Invested in smart factory upgrades, CNC automation, and expanded R&D capabilities for next-generation products.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications -->
+  <section class="section-py bg-steel-50">
+    <div class="container-page text-center">
+      <h2 class="section-title">Quality <span class="text-brand-600">Certifications</span></h2>
+      <p class="section-subtitle">Our products meet international quality standards.</p>
+      <div class="flex flex-wrap justify-center gap-6 mt-6">
+        <div class="bg-white rounded-lg border border-steel-200 px-8 py-6">
+          <div class="text-3xl font-black text-brand-600">ISO</div>
+          <p class="text-xs text-steel-500 mt-1">9001:2015</p>
+        </div>
+        <div class="bg-white rounded-lg border border-steel-200 px-8 py-6">
+          <div class="text-3xl font-black text-brand-600">CE</div>
+          <p class="text-xs text-steel-500 mt-1">Certified</p>
+        </div>
+        <div class="bg-white rounded-lg border border-steel-200 px-8 py-6">
+          <div class="text-3xl font-black text-brand-600">ANSI</div>
+          <p class="text-xs text-steel-500 mt-1">Compliant</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 sm:py-20 bg-brand-600 text-white text-center">
+    <div class="container-page">
+      <h2 class="text-3xl font-black mb-4">Partner with Guangjin</h2>
+      <p class="text-brand-100 text-lg max-w-xl mx-auto mb-8">
+        Let's build a reliable supply chain together. We offer custom product services, free samples, and dedicated support.
+      </p>
+      <a href="/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Contact Us Today</a>
+    </div>
+  </section>
+
 </Layout>

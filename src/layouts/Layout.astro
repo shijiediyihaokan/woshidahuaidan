@@ -1,4 +1,7 @@
 ---
+// ============================================================
+// Layout.astro — CTS-style base layout for Guangjin Gear
+// ============================================================
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -10,38 +13,52 @@ export interface Props {
 }
 
 const { title, description, image } = Astro.props;
-const siteTitle = 'Guangjin Gear — Industrial Transmission Solutions';
-const fullTitle = title === 'Home' ? siteTitle : `${title} | Guangjin Gear`;
+const siteName = 'Guangjin Gear';
+const fullTitle = title === 'Home' 
+  ? `${siteName} — Industrial Transmission Solutions Manufacturer` 
+  : `${title} | ${siteName}`;
+const metaDesc = description || 'Zhejiang Guangjin — Professional manufacturer of industrial gearboxes, gear motors, and power transmission components. Trusted supplier in 50+ countries worldwide.';
+const metaImage = image || '/images/og-default.jpg';
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="generator" content={Astro.generator} />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{fullTitle}</title>
+  <meta name="description" content={metaDesc}>
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content={fullTitle}>
+  <meta property="og:description" content={metaDesc}>
+  <meta property="og:type" content="website">
+  <meta property="og:image" content={metaImage}>
+  <meta property="og:site_name" content={siteName}>
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={fullTitle}>
+  <meta name="twitter:description" content={metaDesc}>
+  
+  <!-- Canonical -->
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href}>
+  
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/woshidahuaidan/favicon.svg">
+  <link rel="icon" href="/woshidahuaidan/favicon.ico">
+</head>
 
-    <title>{fullTitle}</title>
-    <meta name="description" content={description || 'Zhejiang Guangjin Intelligent Technology — industrial gearboxes, gear motors, AC motors, gears, sprockets, and power transmission components. Quality manufacturing from China.'} />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description || 'Industrial transmission components manufacturer'} />
-    <meta property="og:type" content="website" />
-    {image && <meta property="og:image" content={image} />}
-
-    <!-- Preload fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  </head>
-  <body class="min-h-screen flex flex-col">
-    <Header />
-    <main class="flex-1">
-      <slot />
-    </main>
-    <Footer />
-  </body>
+<body class="min-h-screen flex flex-col bg-white">
+  <Header />
+  <main class="flex-1">
+    <slot />
+  </main>
+  <Footer />
+</body>
 </html>

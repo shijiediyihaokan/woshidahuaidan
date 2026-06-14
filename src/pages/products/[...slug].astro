@@ -1,118 +1,199 @@
 ---
+// ============================================================
+// products/[...slug].astro — Product detail page
+// ============================================================
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
-  const products = await getCollection('products');
+  const products = await getCollection('products', ({ data }) => data.published);
   return products.map((product) => ({
     params: { slug: product.id },
     props: { product },
   }));
 }
 
-interface Props {
-  product: any;
-}
+const { product } = Astro.props as { product: CollectionEntry<'products'> };
+const { title, category, excerpt, features, specs, image } = product.data;
 
-const { product } = Astro.props;
-const { title, image, excerpt, category, features, specs } = product.data;
+// Related products (same category, excluding current)
+const allProducts = await getCollection('products', ({ data }) => data.published);
+const related = allProducts
+  .filter(p => p.data.category === category && p.id !== product.id)
+  .slice(0, 3);
 ---
 
-<Layout title={title} description={excerpt}>
-  <section class="py-12 sm:py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center gap-2 text-sm text-steel-500 mb-8">
-        <a href="/" class="hover:text-brand-600">Home</a>
+<Layout title={title} description={excerpt} image={image}>
+  
+  <!-- Breadcrumb -->
+  <div class="bg-steel-50 border-b border-steel-200">
+    <div class="container-page py-3">
+      <nav class="flex items-center gap-2 text-sm text-steel-500">
+        <a href="/" class="hover:text-brand-600 transition-colors">Home</a>
         <span>/</span>
-        <a href="/products/" class="hover:text-brand-600">Products</a>
+        <a href="/products/" class="hover:text-brand-600 transition-colors">Products</a>
         <span>/</span>
-        <a href={`/products/?category=${encodeURIComponent(category)}`} class="hover:text-brand-600">{category}</a>
+        <a href={`/products/?category=${category.toLowerCase().replace(/\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
         <span>/</span>
-        <span class="text-steel-800 font-medium truncate">{title}</span>
+        <span class="text-steel-800 font-medium">{title}</span>
       </nav>
+    </div>
+  </div>
 
+  <!-- Product Hero -->
+  <section class="section-py bg-white">
+    <div class="container-page">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <!-- Image -->
+        <!-- Image Gallery -->
         <div>
-          <div class="bg-steel-100 rounded-xl overflow-hidden aspect-[4/3]">
+          <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
             {image ? (
               <img src={image} alt={title} class="w-full h-full object-cover" />
             ) : (
-              <div class="w-full h-full flex items-center justify-center text-steel-400">
-                <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
+              <div class="text-center p-8">
+                <div class="text-7xl mb-3">⚙️</div>
+                <span class="tag tag-red text-sm">{category}</span>
               </div>
             )}
           </div>
+          <!-- Thumbnail row -->
+          <div class="flex gap-3 mt-3">
+            <div class="w-20 h-16 bg-brand-100 rounded border-2 border-brand-500 flex items-center justify-center text-xs font-semibold text-brand-700">Main</div>
+            <div class="w-20 h-16 bg-steel-100 rounded border border-steel-200 flex items-center justify-center text-xs text-steel-400">View 2</div>
+            <div class="w-20 h-16 bg-steel-100 rounded border border-steel-200 flex items-center justify-center text-xs text-steel-400">View 3</div>
+          </div>
         </div>
 
-        <!-- Info -->
+        <!-- Product Info -->
         <div>
-          <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide">{category}</span>
-          <h1 class="mt-2 text-3xl font-bold text-steel-900">{title}</h1>
-          <p class="mt-4 text-steel-600 leading-relaxed">{excerpt}</p>
+          <span class="tag tag-red mb-3">{category}</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-steel-900 mt-2 mb-4">{title}</h1>
+          <p class="text-steel-500 leading-relaxed mb-6">{excerpt}</p>
 
-          <!-- Features -->
-          {features.length > 0 && (
-            <div class="mt-6">
-              <h3 class="text-lg font-semibold text-steel-900 mb-3">Key Features</h3>
-              <ul class="space-y-2">
-                {features.map((f: string) => (
-                  <li class="flex items-start gap-2 text-sm text-steel-600">
-                    <svg class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    {f}
+          <!-- Key Specs Summary -->
+          {specs && specs.length > 0 && (
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              {specs.slice(0, 4).map((spec) => (
+                <div class="bg-steel-50 rounded-lg p-3">
+                  <p class="text-xs text-steel-400 mb-0.5">{spec.name}</p>
+                  <p class="text-sm font-semibold text-steel-800">{spec.value}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <!-- Stock & Actions -->
+          <div class="flex items-center gap-4 mb-2">
+            <span class="flex items-center gap-1.5 text-green-600 font-semibold text-sm">
+              <span class="w-2 h-2 bg-green-500 rounded-full"></span> In Stock
+            </span>
+            <span class="text-xs text-steel-400">Ready for immediate shipment</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 mt-6">
+            <a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
+            <a href="mailto:info@ggn-gear.com" class="btn-outline text-base px-8 py-3">Email Inquiry</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features & Specs Tabs -->
+  <section class="section-py bg-steel-50">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Features -->
+        <div class="lg:col-span-2">
+          <h2 class="text-2xl font-bold text-steel-900 mb-6">Product Details</h2>
+          
+          {features && features.length > 0 && (
+            <div class="mb-8">
+              <h3 class="text-lg font-semibold text-steel-800 mb-4">Key Features</h3>
+              <ul class="space-y-3">
+                {features.map((feature) => (
+                  <li class="flex items-start gap-3">
+                    <span class="text-brand-600 mt-0.5 shrink-0">✓</span>
+                    <span class="text-sm text-steel-600">{feature}</span>
                   </li>
                 ))}
               </ul>
             </div>
           )}
 
-          <!-- CTA -->
-          <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a
-              href="/contact/"
-              class="inline-flex items-center justify-center px-6 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm"
-            >
-              Request Quote
-            </a>
-            <a
-              href="/products/"
-              class="inline-flex items-center justify-center px-6 py-3 border border-steel-300 text-steel-700 font-semibold rounded-lg hover:bg-steel-50 transition-colors"
-            >
-              Back to Products
+          <!-- Full Specs Table -->
+          {specs && specs.length > 0 && (
+            <div>
+              <h3 class="text-lg font-semibold text-steel-800 mb-4">Technical Specifications</h3>
+              <div class="bg-white rounded-lg border border-steel-200 overflow-hidden">
+                <table class="w-full">
+                  <tbody>
+                    {specs.map((spec, i) => (
+                      <tr class={`${i % 2 === 0 ? 'bg-white' : 'bg-steel-50'} border-b border-steel-100 last:border-0`}>
+                        <td class="px-4 py-3 text-sm font-medium text-steel-700 w-1/3">{spec.name}</td>
+                        <td class="px-4 py-3 text-sm text-steel-600">{spec.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <!-- Inquiry Card -->
+          <div class="bg-brand-600 text-white rounded-lg p-6 sticky top-24">
+            <h3 class="text-lg font-bold mb-3">Get a Quote</h3>
+            <p class="text-sm text-brand-100 mb-4">Need pricing or technical details? Our engineers will respond within 24 hours.</p>
+            <a href="/contact/" class="block text-center bg-white text-brand-600 font-bold py-2.5 rounded hover:bg-brand-50 transition-colors text-sm">
+              Contact Us →
             </a>
           </div>
         </div>
       </div>
-
-      <!-- Specs Table -->
-      {specs.length > 0 && (
-        <div class="mt-14">
-          <h2 class="text-2xl font-bold text-steel-900 mb-6">Technical Specifications</h2>
-          <div class="overflow-x-auto rounded-xl border border-steel-200">
-            <table class="w-full">
-              <thead>
-                <tr class="bg-steel-50">
-                  <th class="text-left px-6 py-3 text-sm font-semibold text-steel-700">Parameter</th>
-                  <th class="text-left px-6 py-3 text-sm font-semibold text-steel-700">Value</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-steel-200">
-                {specs.map((spec: { name: string; value: string }) => (
-                  <tr class="hover:bg-steel-50/50">
-                    <td class="px-6 py-3 text-sm font-medium text-steel-700">{spec.name}</td>
-                    <td class="px-6 py-3 text-sm text-steel-600">{spec.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   </section>
+
+  <!-- Related Products -->
+  {related.length > 0 && (
+    <section class="section-py bg-white">
+      <div class="container-page">
+        <h2 class="text-2xl font-bold text-steel-900 mb-6">Related Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {related.map((p) => (
+            <a href={`/products/${p.id}/`} class="card-base group">
+              <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
+                {p.data.image ? (
+                  <img src={p.data.image} alt={p.data.title} class="w-full h-full object-cover" />
+                ) : (
+                  <div class="text-center">
+                    <div class="text-4xl mb-1">⚙️</div>
+                    <span class="tag tag-red">{p.data.category}</span>
+                  </div>
+                )}
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors text-sm">{p.data.title}</h3>
+                <p class="text-xs text-steel-500 mt-1 line-clamp-2">{p.data.excerpt}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="py-16 bg-dark-900 text-white text-center">
+    <div class="container-page">
+      <h2 class="text-2xl sm:text-3xl font-black mb-3">Need a <span class="text-brand-400">Custom Solution</span>?</h2>
+      <p class="text-steel-400 max-w-xl mx-auto mb-6">
+        We provide OEM/ODM services. Tell us your specifications and we'll deliver the right product.
+      </p>
+      <a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
+    </div>
+  </section>
+
 </Layout>

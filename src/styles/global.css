@@ -1,63 +1,271 @@
+/* ============================================================
+   Guangjin Gear — Global Styles (Tailwind v4 / Astro v6)
+   Design system: chinatransmissions.com industrial B2B style
+   ============================================================ */
+
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   @theme — Design Tokens (CTS industrial red palette)
+   ------------------------------------------------------------------ */
 @theme {
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #2563eb;
-  --color-brand-600: #1d4ed8;
-  --color-brand-700: #1e40af;
-  --color-brand-800: #1e3a8a;
-  --color-brand-900: #172554;
+  /* ── Brand Red (CTS #CE1132) ─────────────────────────────── */
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fde3e4;
+  --color-brand-200: #fcc7c9;
+  --color-brand-300: #f99a9e;
+  --color-brand-400: #f55d64;
+  --color-brand-500: #e82a39;
+  --color-brand-600: #ce1132;  /* Primary CTS red */
+  --color-brand-700: #a80d28;
+  --color-brand-800: #8d0f27;
+  --color-brand-900: #761126;
+  --color-brand-950: #410513;
 
-  --color-steel-50: #f8fafc;
-  --color-steel-100: #f1f5f9;
-  --color-steel-200: #e2e8f0;
-  --color-steel-300: #cbd5e1;
-  --color-steel-400: #94a3b8;
-  --color-steel-500: #64748b;
-  --color-steel-600: #475569;
-  --color-steel-700: #334155;
-  --color-steel-800: #1e293b;
-  --color-steel-900: #0f172a;
-  --color-steel-950: #020617;
+  /* ── Neutral / Steel grays ──────────────────────────────── */
+  --color-steel-50: #f9fafb;
+  --color-steel-100: #f3f4f6;
+  --color-steel-200: #e5e7eb;
+  --color-steel-300: #d1d5db;
+  --color-steel-400: #9ca3af;
+  --color-steel-500: #6b7280;
+  --color-steel-600: #4b5563;
+  --color-steel-700: #374151;
+  --color-steel-800: #1f2937;
+  --color-steel-900: #111827;
 
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* ── Dark surfaces ──────────────────────────────────────── */
+  --color-dark-900: #1a1a1a;
+  --color-dark-800: #222222;
+  --color-dark-700: #2d2d2d;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Base styles */
+/* ------------------------------------------------------------------
+   Base Styles
+   ------------------------------------------------------------------ */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-white text-steel-800 antialiased;
+  font-family: var(--font-sans);
+  color: var(--color-steel-800);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Product prose */
-.product-content h2 {
-  @apply text-2xl font-bold text-steel-900 mt-8 mb-4;
+/* ── Typography defaults ─────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
 }
-.product-content h3 {
-  @apply text-xl font-semibold text-steel-800 mt-6 mb-3;
+
+/* ── Link styles ─────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
 }
-.product-content p {
-  @apply mb-4 leading-relaxed;
+a:hover {
+  color: var(--color-brand-600);
 }
-.product-content ul {
-  @apply list-disc pl-6 mb-4 space-y-1;
+
+/* ── Focus ring ───────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
 }
-.product-content li {
-  @apply leading-relaxed;
+
+/* ── Selection ────────────────────────────────────────────── */
+::selection {
+  background: var(--color-brand-600);
+  color: white;
 }
-.product-content table {
-  @apply w-full border-collapse mb-6;
+
+/* ------------------------------------------------------------------
+   Utility Classes
+   ------------------------------------------------------------------ */
+@utility container-page {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
-.product-content th {
-  @apply bg-steel-100 text-left px-4 py-2 border border-steel-200 font-semibold;
+@media (min-width: 640px) {
+  .container-page {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
-.product-content td {
-  @apply px-4 py-2 border border-steel-200;
+@media (min-width: 1024px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ── Section spacing ──────────────────────────────────────── */
+@utility section-py {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .section-py {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* ── Card base ────────────────────────────────────────────── */
+@utility card-base {
+  background: white;
+  border: 1px solid var(--color-steel-200);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.card-base:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-brand-200);
+}
+
+/* ── Button base ──────────────────────────────────────────── */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  background: var(--color-brand-600);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+.btn-primary:hover {
+  background: var(--color-brand-700);
+  color: white;
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  border: 1px solid var(--color-steel-300);
+  color: var(--color-steel-700);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  background: white;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover {
+  border-color: var(--color-brand-500);
+  color: var(--color-brand-600);
+}
+
+@utility btn-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  background: white;
+  color: var(--color-brand-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+.btn-white:hover {
+  background: var(--color-steel-100);
+  color: var(--color-brand-700);
+}
+
+/* ── Section title ────────────────────────────────────────── */
+@utility section-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--color-steel-900);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 2.25rem;
+  }
+}
+
+@utility section-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-steel-500);
+  text-align: center;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3rem;
+}
+
+/* ── Tag / badge ──────────────────────────────────────────── */
+@utility tag {
+  display: inline-block;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border-radius: 9999px;
+}
+
+@utility tag-red {
+  background: var(--color-brand-100);
+  color: var(--color-brand-700);
+}
+
+@utility tag-green {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+/* ── Stock badge ──────────────────────────────────────────── */
+@utility stock-in {
+  color: #059669;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+@utility stock-available {
+  color: var(--color-brand-600);
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* ------------------------------------------------------------------
+   Animations
+   ------------------------------------------------------------------ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ── Hero slider transition ───────────────────────────────── */
+@keyframes slideFade {
+  0%, 100% { opacity: 0; }
+  8%, 25% { opacity: 1; }
+  33% { opacity: 0; }
 }
