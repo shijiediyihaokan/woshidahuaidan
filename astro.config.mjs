@@ -6,7 +6,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ggn-gear.com',
+  site: 'https://shijiediyihaokan.github.io',
+  base: '/woshidahuaidan/',
 
   vite: {
     plugins: [tailwindcss()],
