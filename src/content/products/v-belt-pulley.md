@@ -1,6 +1,6 @@
 ---
 title: "V-Belt Pulley — Taper Bush Type"
-category: "Belt Pulley"
+category: "Sheet Metal Parts"
 excerpt: "V-belt pulleys with taper bush mounting system for easy installation and removal. Available in SPZ, SPA, SPB, and SPC profiles for industrial belt drives."
 features:
   - "Taper bush system — fast mounting, self-centering"

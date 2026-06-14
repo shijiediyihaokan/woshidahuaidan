@@ -1,6 +1,6 @@
 ---
 title: "NMRV Series Worm Gearbox"
-category: "Worm Gearbox"
+category: "Worm Gears"
 excerpt: "NMRV series aluminum housing worm gearbox featuring compact design, high efficiency, and versatile mounting options. Ideal for conveyor systems, packaging machinery, and industrial automation applications."
 features:
   - "Aluminum alloy housing — lightweight and corrosion-resistant"

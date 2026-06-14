@@ -1,6 +1,6 @@
 ---
 title: "GM Series Gear Motor"
-category: "Gear Motor"
+category: "Spur Gear"
 excerpt: "Integrated gear motor combining a high-efficiency electric motor with precision gearbox in one compact unit. Plug-and-play solution for conveyors, packaging, and automation."
 features:
   - "Integrated motor and gearbox — compact, ready to install"

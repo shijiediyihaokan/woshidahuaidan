@@ -1,6 +1,6 @@
 ---
 // ============================================================
-// Header.astro — CTS-style header with top bar + main nav
+// Header.astro — CTS-style header with Guangjin product lines
 // ============================================================
 ---
 
@@ -8,15 +8,9 @@
 <div class="bg-dark-800 text-steel-300 text-xs">
   <div class="container-page">
     <div class="flex items-center justify-between h-9">
-      <div class="flex items-center gap-4">
-        <a href="/woshidahuaidan/about/" class="hover:text-white transition-colors">Customized Service</a>
-        <a href="/woshidahuaidan/blog/" class="hover:text-white transition-colors">Blog</a>
-        <a href="/woshidahuaidan/faq/" class="hover:text-white transition-colors">FAQ</a>
-        <div class="relative group">
-          <button class="hover:text-white transition-colors flex items-center gap-1">
-            🌐 English ▾
-          </button>
-        </div>
+      <div class="flex items-center gap-3">
+        <span>📞 +86-18057543143</span>
+        <a href="mailto:info@ggn-gear.com" class="hover:text-white transition-colors">✉ info@ggn-gear.com</a>
       </div>
       <div class="flex items-center gap-3">
         <form action="/woshidahuaidan/search/" class="hidden sm:flex items-center">
@@ -24,6 +18,9 @@
             class="w-32 lg:w-40 bg-dark-700 text-white text-xs px-2 py-1 rounded border-0 focus:outline-none focus:ring-1 focus:ring-brand-500">
           <button type="submit" class="text-steel-400 hover:text-white ml-1">🔍</button>
         </form>
+        <div class="relative group">
+          <button class="hover:text-white transition-colors flex items-center gap-1">🌐 English ▾</button>
+        </div>
         <a href="/woshidahuaidan/contact/" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1 rounded text-xs font-semibold transition-colors">
           Contact Now！
         </a>
@@ -38,73 +35,59 @@
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <a href="/woshidahuaidan/" class="flex items-center gap-2 shrink-0">
-        <span class="text-2xl font-black text-brand-600 tracking-tight">GUANGJIN</span>
-        <span class="hidden lg:inline text-xs text-steel-500 font-medium leading-tight max-w-[100px]">Industrial<br>Transmission</span>
+        <span class="text-2xl font-black text-brand-600 tracking-tight">GRANGIN</span>
+        <span class="hidden lg:inline text-xs text-steel-500 font-medium leading-tight max-w-[100px]">Power<br>Transmission</span>
       </a>
 
       <!-- Desktop Nav -->
       <nav class="hidden lg:flex items-center gap-0 h-full">
-        <!-- Gearboxes -->
-        <div class="relative group h-full flex items-center">
-          <a href="/woshidahuaidan/products/?category=gearbox" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full">
-            GEARBOXES ▾
-          </a>
-          <div class="absolute top-full left-0 mt-0 w-56 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <a href="/woshidahuaidan/products/?category=worm-gearbox" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Worm Gearbox</a>
-            <a href="/woshidahuaidan/products/?category=helical-gearbox" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Helical Gearbox</a>
-            <a href="/woshidahuaidan/products/?category=bevel-gearbox" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Bevel Gearbox</a>
-            <a href="/woshidahuaidan/products/?category=industrial-gearbox" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Industrial Gearbox</a>
-          </div>
-        </div>
-
-        <!-- Gear Motors -->
-        <div class="relative group h-full flex items-center">
-          <a href="/woshidahuaidan/products/?category=gear-motor" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full">
-            GEAR MOTORS ▾
-          </a>
-          <div class="absolute top-full left-0 mt-0 w-48 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <a href="/woshidahuaidan/products/?category=gear-motor" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">GM Series Gear Motor</a>
-            <a href="/woshidahuaidan/products/?category=ac-motor" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">AC Motor</a>
-          </div>
-        </div>
-
-        <!-- Power Transmission -->
-        <div class="relative group h-full flex items-center">
-          <a href="/woshidahuaidan/products/?category=power-transmission" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full">
-            POWER TRANSMISSION ▾
-          </a>
-          <div class="absolute top-full left-0 mt-0 w-48 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <a href="/woshidahuaidan/products/?category=gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gears & Racks</a>
-            <a href="/woshidahuaidan/products/?category=sprocket" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Sprockets</a>
-            <a href="/woshidahuaidan/products/?category=belt-pulley" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Belt Pulleys</a>
-            <a href="/woshidahuaidan/products/?category=coupling" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Couplings</a>
-          </div>
-        </div>
-
-        <a href="/woshidahuaidan/applications/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
-          APPLICATION
+        <a href="/woshidahuaidan/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
+          HOME
         </a>
 
+        <!-- Products -->
         <div class="relative group h-full flex items-center">
-          <a href="/woshidahuaidan/about/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full">
-            ABOUT ▾
+          <a href="/woshidahuaidan/products/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full">
+            PRODUCTS ▾
           </a>
-          <div class="absolute top-full left-0 mt-0 w-40 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <a href="/woshidahuaidan/about/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">About Guangjin</a>
-            <a href="/woshidahuaidan/about/#factory" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Factory Tour</a>
+          <div class="absolute top-full left-0 mt-0 w-52 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <a href="/woshidahuaidan/products/?category=gears-racks" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gears & Racks</a>
+            <a href="/woshidahuaidan/products/?category=spur-gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Spur Gear</a>
+            <a href="/woshidahuaidan/products/?category=helical-gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Helical Gear</a>
+            <a href="/woshidahuaidan/products/?category=sprockets-chains" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Sprockets & Chains</a>
+            <a href="/woshidahuaidan/products/?category=spiral-bevel-gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Spiral Bevel Gear</a>
+            <a href="/woshidahuaidan/products/?category=bevel-gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Bevel Gear</a>
+            <a href="/woshidahuaidan/products/?category=worm-gears" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Worm Gears</a>
+            <a href="/woshidahuaidan/products/?category=couplings" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Couplings</a>
+            <a href="/woshidahuaidan/products/?category=gear-shaft" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gear Shaft</a>
+            <a href="/woshidahuaidan/products/?category=lead-screw" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Lead Screw</a>
+            <a href="/woshidahuaidan/products/?category=custom-cnc-parts" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Custom CNC Parts</a>
+            <a href="/woshidahuaidan/products/?category=sheet-metal-parts" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Sheet Metal Parts</a>
           </div>
         </div>
 
-        <a href="/woshidahuaidan/blog/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
-          GUIDE
+        <a href="/woshidahuaidan/about/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
+          ABOUT
+        </a>
+
+        <a href="/woshidahuaidan/applications/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
+          CUSTOMIZED SERVICE
+        </a>
+
+        <a href="/woshidahuaidan/news/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
+          NEWS
         </a>
 
         <a href="/woshidahuaidan/contact/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 transition-colors h-full flex items-center">
           CONTACT
         </a>
+
+        <a href="/woshidahuaidan/download/" class="px-3 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors h-full flex items-center">
+          DOWNLOAD
+        </a>
       </nav>
 
-      <!-- Mobile menu button -->
+      <!-- Mobile -->
       <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-steel-600 hover:bg-steel-100" aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -113,15 +96,11 @@
       </button>
     </div>
 
-    <!-- Mobile Nav -->
     <div id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-steel-100 mt-2 pt-2">
-      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">GEARBOXES</a>
-      <a href="/woshidahuaidan/products/?category=gear-motor" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">GEAR MOTORS</a>
-      <a href="/woshidahuaidan/products/?category=power-transmission" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">POWER TRANSMISSION</a>
-      <a href="/woshidahuaidan/applications/" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">APPLICATION</a>
-      <a href="/woshidahuaidan/about/" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">ABOUT</a>
-      <a href="/woshidahuaidan/blog/" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600 border-b border-steel-50">GUIDE</a>
-      <a href="/woshidahuaidan/contact/" class="block px-4 py-3 text-sm font-semibold text-steel-700 hover:text-brand-600">CONTACT</a>
+      <a href="/woshidahuaidan/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">HOME</a>
+      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">PRODUCTS</a>
+      <a href="/woshidahuaidan/about/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">ABOUT</a>
+      <a href="/woshidahuaidan/contact/" class="block px-4 py-3 text-sm font-semibold text-steel-700">CONTACT</a>
       <a href="/woshidahuaidan/contact/" class="block mt-3 mx-4 py-3 bg-brand-600 text-white text-sm font-bold rounded text-center hover:bg-brand-700 transition-colors">
         Contact Now！
       </a>

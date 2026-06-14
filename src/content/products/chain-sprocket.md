@@ -1,6 +1,6 @@
 ---
 title: "Chain Sprocket — Simplex & Duplex"
-category: "Sprocket"
+category: "Sprockets & Chains"
 excerpt: "Precision-machined chain sprockets in simplex, duplex, and triplex configurations. Available in pilot bore, taper bushing, and finished bore styles for all standard chain sizes."
 features:
   - "Precision CNC machined teeth for smooth chain engagement"
