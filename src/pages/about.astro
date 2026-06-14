@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About Us" description="Learn about Zhejiang Guangjin Intelligent Technology — a professional manufacturer of industrial gearboxes and transmission components.">
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold text-steel-900 text-center">About Guangjin</h1>
+      <p class="mt-4 text-steel-500 text-center text-lg">Your trusted partner in industrial transmission solutions</p>
+
+      <div class="mt-12 prose max-w-none">
+        <div class="bg-gradient-to-br from-brand-50 to-steel-50 rounded-2xl p-8 sm:p-10 mb-10">
+          <h2 class="text-2xl font-bold text-steel-900 mb-4">Zhejiang Guangjin Intelligent Technology Co., Ltd.</h2>
+          <p class="text-steel-600 leading-relaxed">
+            Established in Zhejiang, China — one of the world's leading manufacturing hubs — Guangjin specializes in the design, manufacture, and export of industrial gearboxes, gear motors, AC motors, and power transmission components.
+          </p>
+          <p class="text-steel-600 leading-relaxed mt-4">
+            With over 15 years of industry experience, we have built a comprehensive product portfolio covering <strong>12 major categories</strong> and <strong>800+ products</strong>, serving customers across <strong>50+ countries</strong> worldwide.
+          </p>
+        </div>
+
+        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Our Product Lines</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            'Worm Gearboxes (NMRV series)',
+            'Helical Gearboxes',
+            'Bevel Gearboxes',
+            'Industrial Gearboxes',
+            'Mechanical Variators',
+            'Gear Motors',
+            'AC Motors',
+            'Gears & Pinions',
+            'Sprockets',
+            'Belt Pulleys',
+            'Couplings',
+            'Sheet Metal Fabrication',
+          ].map((item) => (
+            <div class="flex items-center gap-3 p-3 bg-steel-50 rounded-lg">
+              <svg class="w-5 h-5 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm text-steel-700">{item}</span>
+            </div>
+          ))}
+        </div>
+
+        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Why Choose Guangjin?</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            { title: 'Quality Assurance', desc: 'Strict QC processes from raw materials to finished products. ISO-certified manufacturing.' },
+            { title: 'Competitive Pricing', desc: 'Factory-direct pricing with no middlemen. Best value for your procurement budget.' },
+            { title: 'Global Logistics', desc: 'Efficient shipping to 50+ countries. Sea freight, air freight, and express delivery options.' },
+            { title: 'Custom Solutions', desc: 'OEM/ODM services available. We engineer products to your exact specifications.' },
+            { title: 'Fast Response', desc: 'Inquiry responses within 24 hours. Dedicated account managers for long-term clients.' },
+            { title: 'Technical Support', desc: 'Engineering team available for product selection, installation guidance, and after-sales service.' },
+          ].map((item) => (
+            <div class="p-6 bg-white rounded-xl border border-steel-200 hover:shadow-md transition-shadow">
+              <h3 class="font-semibold text-steel-900 mb-2">{item.title}</h3>
+              <p class="text-sm text-steel-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <h2 class="text-2xl font-bold text-steel-900 mt-10 mb-4">Our Mission</h2>
+        <p class="text-steel-600 leading-relaxed">
+          To provide reliable, high-performance transmission solutions that drive industrial efficiency worldwide. We are committed to continuous innovation, quality excellence, and building lasting partnerships with our customers.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

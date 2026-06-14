@@ -1,0 +1,83 @@
+---
+// Formspree contact form
+// Replace FORMSPREE_ID with your actual Formspree form ID
+const formspreeId = 'FORMSPREE_ID';
+---
+
+<div class="bg-white rounded-xl border border-steel-200 p-6 sm:p-8">
+  <h3 class="text-xl font-bold text-steel-900 mb-2">Send Us an Inquiry</h3>
+  <p class="text-sm text-steel-500 mb-6">Fill out the form below and we'll get back to you within 24 hours.</p>
+
+  <form
+    action={`https://formspree.io/f/${formspreeId}`}
+    method="POST"
+    class="space-y-5"
+  >
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label for="name" class="block text-sm font-medium text-steel-700 mb-1">Name *</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          class="w-full px-4 py-2.5 border border-steel-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-shadow text-sm"
+          placeholder="Your full name"
+        />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-steel-700 mb-1">Email *</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          class="w-full px-4 py-2.5 border border-steel-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-shadow text-sm"
+          placeholder="you@company.com"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="company" class="block text-sm font-medium text-steel-700 mb-1">Company</label>
+      <input
+        type="text"
+        id="company"
+        name="company"
+        class="w-full px-4 py-2.5 border border-steel-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-shadow text-sm"
+        placeholder="Your company name"
+      />
+    </div>
+
+    <div>
+      <label for="subject" class="block text-sm font-medium text-steel-700 mb-1">Subject *</label>
+      <input
+        type="text"
+        id="subject"
+        name="subject"
+        required
+        class="w-full px-4 py-2.5 border border-steel-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-shadow text-sm"
+        placeholder="What product are you interested in?"
+      />
+    </div>
+
+    <div>
+      <label for="message" class="block text-sm font-medium text-steel-700 mb-1">Message *</label>
+      <textarea
+        id="message"
+        name="message"
+        rows="5"
+        required
+        class="w-full px-4 py-2.5 border border-steel-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-shadow text-sm resize-y"
+        placeholder="Tell us about your requirements (quantity, specifications, etc.)"
+      ></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full sm:w-auto px-8 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm text-sm"
+    >
+      Send Inquiry
+    </button>
+  </form>
+</div>

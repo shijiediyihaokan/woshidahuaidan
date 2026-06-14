@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Worm Gearbox",
+        "Helical Gearbox",
+        "Bevel Gearbox",
+        "Industrial Gearbox",
+        "Variator",
+        "Gear Motor",
+        "AC Motor",
+        "Gear",
+        "Sprocket",
+        "Belt Pulley",
+        "Coupling",
+        "Sheet Metal"
+      ]
+    },
+    "image": {
+      "type": "string"
+    },
+    "excerpt": {
+      "type": "string"
+    },
+    "features": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "specs": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    "order": {
+      "default": 0,
+      "type": "number"
+    },
+    "published": {
+      "default": true,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "excerpt"
+  ]
+}

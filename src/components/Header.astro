@@ -1,0 +1,79 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/products/', label: 'Products' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+---
+
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-steel-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 shrink-0">
+        <span class="text-xl font-bold text-brand-700">Guangjin</span>
+        <span class="hidden sm:inline text-sm text-steel-500 font-medium">Industrial Transmission</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="px-4 py-2 text-sm font-medium text-steel-600 hover:text-brand-600 rounded-lg hover:bg-brand-50 transition-colors"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA -->
+      <a
+        href="/contact/"
+        class="hidden md:inline-flex items-center px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm"
+      >
+        Request Quote
+      </a>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-steel-600 hover:bg-steel-100" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-steel-100 mt-2 pt-2">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="block px-4 py-3 text-sm font-medium text-steel-600 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        href="/contact/"
+        class="block mt-2 mx-4 px-4 py-3 bg-brand-600 text-white text-sm font-semibold rounded-lg text-center hover:bg-brand-700 transition-colors"
+      >
+        Request Quote
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+  });
+</script>

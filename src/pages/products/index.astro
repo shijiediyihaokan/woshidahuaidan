@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import ProductCard from '../../components/ProductCard.astro';
+
+const allProducts = await getCollection('products', ({ data }) => data.published);
+allProducts.sort((a, b) => b.data.order - a.data.order);
+
+// Get unique categories for filter
+const categories = [...new Set(allProducts.map((p) => p.data.category))].sort();
+
+// Get category filter from query params
+const selectedCategory = Astro.url.searchParams.get('category') || '';
+const filtered = selectedCategory
+  ? allProducts.filter((p) => p.data.category === selectedCategory)
+  : allProducts;
+---
+
+<Layout title="Products" description="Browse our complete range of industrial gearboxes, gear motors, AC motors, and power transmission components.">
+  <section class="py-12 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-steel-900">Our Products</h1>
+        <p class="mt-3 text-steel-500 max-w-2xl mx-auto">
+          {selectedCategory
+            ? `Showing products in "${selectedCategory}"`
+            : `Browse all ${allProducts.length} products across ${categories.length} categories`}
+        </p>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="mb-10">
+        <div class="flex flex-wrap justify-center gap-2">
+          <a
+            href="/products/"
+            class={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              !selectedCategory
+                ? 'bg-brand-600 text-white'
+                : 'bg-steel-100 text-steel-600 hover:bg-steel-200'
+            }`}
+          >
+            All
+          </a>
+          {categories.map((cat) => (
+            <a
+              href={`/products/?category=${encodeURIComponent(cat)}`}
+              class={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === cat
+                  ? 'bg-brand-600 text-white'
+                  : 'bg-steel-100 text-steel-600 hover:bg-steel-200'
+              }`}
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      {filtered.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((product) => <ProductCard product={product} />)}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-steel-500 text-lg">No products found in this category yet.</p>
+          <a href="/products/" class="mt-4 inline-block text-brand-600 font-medium hover:underline">View all products</a>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>
