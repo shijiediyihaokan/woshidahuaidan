@@ -8,18 +8,18 @@
     "category": {
       "type": "string",
       "enum": [
-        "Gears & Racks",
-        "Spur Gear",
-        "Helical Gear",
-        "Sprockets & Chains",
-        "Spiral Bevel Gear",
-        "Bevel Gear",
-        "Worm Gears",
-        "Couplings",
-        "Gear Shaft",
+        "Gear",
+        "Sprocket",
+        "Belt Pulley",
+        "Coupling",
+        "Transmission Shaft",
         "Lead Screw",
-        "Custom CNC Parts",
-        "Sheet Metal Parts"
+        "Customized Parts",
+        "Transmission Parts",
+        "Sheet Metal Components",
+        "Gear Motor",
+        "Gearbox",
+        "AC Motor"
       ]
     },
     "image": {

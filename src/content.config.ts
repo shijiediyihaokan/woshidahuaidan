@@ -6,30 +6,23 @@ const products = defineCollection({
   schema: z.object({
     title: z.string(),
     category: z.enum([
-      'Gears & Racks',
-      'Spur Gear',
-      'Helical Gear',
-      'Sprockets & Chains',
-      'Spiral Bevel Gear',
-      'Bevel Gear',
-      'Worm Gears',
-      'Couplings',
-      'Gear Shaft',
+      'Gear',
+      'Sprocket',
+      'Belt Pulley',
+      'Coupling',
+      'Transmission Shaft',
       'Lead Screw',
-      'Custom CNC Parts',
-      'Sheet Metal Parts',
+      'Customized Parts',
+      'Transmission Parts',
+      'Sheet Metal Components',
+      'Gear Motor',
+      'Gearbox',
+      'AC Motor',
     ]),
     image: z.string().optional(),
     excerpt: z.string(),
     features: z.array(z.string()).default([]),
-    specs: z
-      .array(
-        z.object({
-          name: z.string(),
-          value: z.string(),
-        })
-      )
-      .default([]),
+    specs: z.array(z.object({ name: z.string(), value: z.string() })).default([]),
     order: z.number().default(0),
     published: z.boolean().default(true),
   }),

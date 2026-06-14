@@ -1,6 +1,6 @@
 ---
 title: "Jaw Flexible Coupling"
-category: "Couplings"
+category: "Coupling"
 excerpt: "Elastomeric jaw coupling for connecting electric motors to pumps, gearboxes, and other driven machinery. Absorbs shock, vibration, and minor misalignment."
 features:
   - "Elastomeric spider element absorbs shock and vibration"

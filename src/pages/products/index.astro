@@ -8,9 +8,10 @@ const categoryParam = Astro.url.searchParams.get('category');
 const allCategories = [...new Set(allProducts.map(p => p.data.category))].sort();
 
 const categoryOrder = [
-  'Gears & Racks', 'Spur Gear', 'Helical Gear', 'Sprockets & Chains',
-  'Spiral Bevel Gear', 'Bevel Gear', 'Worm Gears', 'Couplings',
-  'Gear Shaft', 'Lead Screw', 'Custom CNC Parts', 'Sheet Metal Parts',
+  'Gear', 'Sprocket', 'Belt Pulley', 'Coupling',
+  'Transmission Shaft', 'Lead Screw', 'Customized Parts',
+  'Transmission Parts', 'Sheet Metal Components',
+  'Gear Motor', 'Gearbox', 'AC Motor',
 ];
 
 const filtered = categoryParam
