@@ -377,14 +377,15 @@ function openModule(type, idx){
     html='<h3>Text Block</h3><div class="field"><label>Content</label><textarea id="mText" rows="4">'+(data.text||'')+'</textarea></div>';
   }
   else if(type==='image'){
-    html='<h3>Image</h3><div class="field"><label>Image</label><div class="upload-widget" id="mImgWidget">'
-      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>'
-        :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
-      +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
-      +'<div class="field" style="margin-bottom:8px"><label>Image URL <small style="font-weight:normal;color:var(--g)">(paste if upload fails)</small></label><input id="mImgUrlManual" placeholder="https://... or /woshidahuaidan/images/..." value="'+(data.img||'')+'" oninput="document.getElementById(\'mImgUrl\').value=this.value" style="padding:6px;font-size:12px"></div>'
-      +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
-      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"></div>'
-      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
+    html='<h3>Image</h3>'
+      +'<div class="upload-widget" id="mImgWidget">'
+      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+      +'</div>'
+      +'<input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
+      +'<div class="field"><label>File Name</label><input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg"></div>'
+      +'<div class="field"><label>Image URL <small style="font-weight:normal;color:var(--g)">(paste if upload fails)</small></label><input id="mImgUrlManual" placeholder="https://... or /woshidahuaidan/images/..." value="'+(data.url||'')+'" oninput="document.getElementById(\'mImgUrl\').value=this.value"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.url||'')+'">';
   }
   else if(type==='leftimg'||type==='rightimg'){
     html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3>'
@@ -392,8 +393,8 @@ function openModule(type, idx){
       +(data.img?'<div class="uw-preview"><img src="'+data.img+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b> <span style="color:var(--g);font-size:11px">'+(data.fileSize||'')+' '+(data.dims||'')+'</span></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload image <small>(≤600KB)</small></div>')
       +'</div>'
       +'<input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
-      +'<div class="field"><label>File Name <small style="font-weight:normal">(editable)</small></label>      +'<div class="field" style="margin-bottom:8px"><label>Image URL <small style="font-weight:normal;color:var(--g)">(paste if upload fails)</small></label><input id="mImgUrlManual" placeholder="https://... or /woshidahuaidan/images/..." value="'+(data.url||'')+'" oninput="document.getElementById(\'mImgUrl\').value=this.value" style="padding:6px;font-size:12px"></div>'
-<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" onchange="updateModalImgName(\'mImgName\')"></div>'
+      +'<div class="field"><label>File Name</label><input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg"></div>'
+      +'<div class="field"><label>Image URL <small style="font-weight:normal;color:var(--g)">(paste if upload fails)</small></label><input id="mImgUrlManual" placeholder="https://... or /woshidahuaidan/images/..." value="'+(data.img||'')+'" oninput="document.getElementById(\'mImgUrl\').value=this.value"></div>'
       +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Product image description"></div>'
       +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
       +'<div class="field"><label>Description</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>'
