@@ -120,6 +120,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
       <a href="#" class="active" data-page="products">📦 Products</a>
       <a href="#" data-page="news">📰 News</a>
       <a href="#" data-page="media">🖼️ Media</a>
+      <a href="#" data-page="overview">📊 Overview</a>
     </nav>
     <div class="user"><div class="avatar">A</div><span id="userName">Admin</span></div>
   </aside>
@@ -245,11 +246,26 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
     <!-- ====== MEDIA ====== -->
     <div id="page-media" class="tab-content">
-      <div class="main-header"><h1>Media Library</h1><p>Upload images</p></div>
+      <div class="main-header"><h1>Media Library</h1><p>Upload images — click URL to copy</p></div>
       <div class="card"><div class="card-grid">
-        <div><div class="upload-zone" onclick="document.getElementById('mediaFile').click()"><div class="icon">📁</div><p>Click to browse</p></div><input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()"></div>
-        <div><h3 style="font-size:14px;margin-bottom:8px">Uploaded</h3><div id="mediaList" style="font-size:12px;color:var(--g)">Upload to see files</div></div>
+        <div><div class="upload-zone" id="mediaUploadZone" onclick="document.getElementById('mediaFile').click()"><div class="icon">📁</div><p>Click to browse<br><small>JPG, PNG, WebP ≤5MB</small></p></div><input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()"></div>
+        <div><h3 style="font-size:14px;margin-bottom:8px">📋 Click URL to copy</h3><div id="mediaList" style="font-size:12px"></div></div>
       </div></div>
+    </div>
+
+    <!-- Overview Page -->
+    <div id="page-overview" class="tab-content">
+      <div class="main-header"><h1>Site Overview</h1><p>Products, news, and category coverage</p></div>
+      <div class="card-grid">
+        <div class="card"><h3>📦 Products by Category</h3><div id="overviewCats" style="font-size:13px;line-height:2">Loading...</div></div>
+        <div class="card"><h3>📰 News Articles</h3><div id="overviewNews" style="font-size:13px;line-height:2">Loading...</div></div>
+        <div class="card"><h3>⚡ Quick Actions</h3>
+          <button class="btn btn-sm" onclick="loadFromGithub()" style="margin:4px">🔄 Load Existing Data</button>
+          <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click()" style="margin:4px">➕ New Product</button>
+          <button class="btn btn-sm" onclick="document.querySelector('[data-page=news]').click()" style="margin:4px">📝 New Article</button>
+          <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">Not set — login first</span></div>
+        </div>
+      </div>
     </div>
   </main>
 </div>
@@ -489,10 +505,20 @@ function checkMetaDesc(){var el=document.getElementById('pMetaDesc'),c=document.
 function login(){
   K=document.getElementById('t').value.trim();if(!K) return toast('Enter token','error');
   fetch(A+'/user',{headers:{'Authorization':'token '+K}}).then(function(r){return r.json()}).then(function(d){
-    if(d.login){document.getElementById('loginPage').style.display='none';document.getElementById('dash').classList.add('on');document.getElementById('userName').textContent=d.login;}
-    else toast('Invalid token','error');
+    if(d.login){
+      document.getElementById('loginPage').style.display='none'; document.getElementById('dash').classList.add('on');
+      document.getElementById('userName').textContent=d.login;
+      document.getElementById('ovToken').textContent='✅ Logged in as '+d.login;
+      localStorage.setItem('ggn_token', K);
+      toast('Welcome, '+d.login+'! Token saved.','success');
+    } else toast('Invalid token','error');
   });
 }
+/* Auto-login from localStorage */
+(function(){
+  var saved=localStorage.getItem('ggn_token');
+  if(saved){ K=saved; document.getElementById('t').value=saved; login(); }
+})();
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
 
 /* Nav */
@@ -566,10 +592,44 @@ function uploadMedia(){
     var b64=ev.target.result.split(',')[1];
     fetch(A+'/repos/'+R+'/contents/public/images/products/'+f.name,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d.content){var url='/woshidahuaidan/images/products/'+f.name;document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0">✅ '+url+' ('+f.name+')</div>';toast('Uploaded!','success');}else toast(d.message,'error');
+      if(d.content){var url='/woshidahuaidan/images/products/'+f.name;
+      document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0;cursor:pointer;padding:4px;border-radius:4px" onclick="copyURL(\''+url+'\',this)" title="Click to copy"><code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-size:11px">'+url+'</code> <span style="font-size:10px;color:var(--g)">('+f.name+')</span></div>';
+      toast('Uploaded! Click URL to copy.','success');} else toast(d.message,'error');
     });
   };r.readAsDataURL(f);
 }
+function copyURL(url, el){
+  navigator.clipboard.writeText(url).then(function(){
+    el.style.background='#d4edda'; setTimeout(function(){el.style.background=''},1000);
+    toast('📋 Copied: '+url,'success');
+  });
+}
+
+/* ====== OVERVIEW ====== */
+function loadOverview(){
+  fetch(A+'/repos/'+R+'/contents/src/content/products',{headers:{'Authorization':'token '+K}})
+  .then(function(r){return r.json()}).then(function(data){
+    var cats={}, total=0, files=Array.isArray(data)?data:[];
+    files.forEach(function(f){
+      if(f.name.endsWith('.md')){
+        fetch(f.download_url).then(function(r2){return r2.text()}).then(function(md){
+          var m=md.match(/category:\s*"([^"]+)"/); if(m){var c=m[1];cats[c]=(cats[c]||0)+1;total++;renderCats();}
+        });
+      }
+    });
+    function renderCats(){
+      var all=['Gearboxes','Gear Motors','AC Motors','Gears','Sprockets','Pulleys','Transmission Shafts','Sheet Metal Fabrication'];
+      var html='<span>Total: <b>'+total+'</b> products</span><br><br>';
+      all.forEach(function(c){ var n=cats[c]||0;
+        html+='<div style="margin:4px 0"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:'+(n?'#27ae60':'#e0e0e0')+';margin-right:6px"></span><b>'+c+'</b>: '+(n||'❌ None')+'</div>';
+      });
+      document.getElementById('overviewCats').innerHTML=html;
+    }
+  }).catch(function(){ document.getElementById('overviewCats').innerHTML='Login first, then click 🔄 Load'; });
+}
+function loadFromGithub(){ loadOverview(); toast('🔄 Loading site data...','success'); }
+/* Auto-load overview when tab clicked */
+document.querySelector('[data-page=overview]').addEventListener('click', function(){ setTimeout(loadOverview,100); });
 
 /* ====== ADD SIMILAR ====== */
 function addSimilar(){
