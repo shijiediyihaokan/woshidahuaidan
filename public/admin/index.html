@@ -529,25 +529,30 @@ function addGalleryImages(){
   document.getElementById('galleryFile').value='';
 }
 function uploadGalleryImage(f){
+  /* Sanitize filename: spaces→hyphens, remove special chars */
+  var ext=f.name.lastIndexOf('.')>0?f.name.substring(f.name.lastIndexOf('.')):'';
+  var base=f.name.substring(0,f.name.lastIndexOf('.')>0?f.name.lastIndexOf('.'):f.name.length);
+  base=base.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9_-]/g,'').substring(0,60);
+  var safeName=base+ext;
   if(f.size > 600*1024){ toast('❌ '+f.name+' too large! '+(f.size/1024).toFixed(0)+'KB > 600KB','error'); return; }
   var reader = new FileReader();
   reader.onload = function(e){
-    var b64=e.target.result.split(',')[1], path='public/images/products/'+f.name;
-    if(!K){ addToGallery(f, e.target.result, null); return; }
-    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    var b64=e.target.result.split(',')[1], path='public/images/products/'+safeName;
+    if(!K){ addToGallery(f, e.target.result, null, safeName); return; }
+    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+safeName,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      var url = '/woshidahuaidan/images/products/'+f.name;
-      if(d.content) addToGallery(f, e.target.result, url);
-      else if(d.message && d.message.includes('already exists')) addToGallery(f, e.target.result, url);
-      else { addToGallery(f, e.target.result, null); toast('Upload issue: '+d.message,'error'); }
-    }).catch(function(){ addToGallery(f, e.target.result, null); });
+      var url = '/woshidahuaidan/images/products/'+safeName;
+      if(d.content) addToGallery(f, e.target.result, url, safeName);
+      else if(d.message && d.message.includes('already exists')) addToGallery(f, e.target.result, url, safeName);
+      else { addToGallery(f, e.target.result, null, safeName); toast('Upload issue: '+d.message,'error'); }
+    }).catch(function(){ addToGallery(f, e.target.result, null, safeName); });
   }; reader.readAsDataURL(f);
 }
-function addToGallery(f, dataUrl, url){
+function addToGallery(f, dataUrl, url, safeName){
   var img = new Image();
   img.onload = function(){
-    var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB';
-    galleryImages.push({name: f.name, url: url||'', size: sizeKB, dims: dims, alt: f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '), dataUrl: dataUrl});
+    var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB', displayName = safeName||f.name;
+    galleryImages.push({name: displayName, url: url||'', size: sizeKB, dims: dims, alt: f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '), dataUrl: dataUrl});
     renderGallery();
   }; img.src = dataUrl;
 }

@@ -61,13 +61,13 @@ const breadcrumb = {
     <div class="container-page">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
-          {image ? <img src={image} alt={imageAlt || title} class="w-full h-full object-cover" /> : <div class="text-center p-8"><div class="text-7xl mb-3">⚙️</div><span class="tag tag-red">{category}</span></div>}
+          {image ? <img src={image} alt={imageAlt || title} class="w-full h-full object-cover" id="mainImg" /> : <div class="text-center p-8"><div class="text-7xl mb-3">⚙️</div><span class="tag tag-red">{category}</span></div>}
         </div>
         <!-- Gallery thumbnails -->
         {galleryImages.length > 1 && (
-          <div class="flex gap-2 mt-3 flex-wrap">
+          <div class="flex gap-2 mt-3 flex-wrap" id="galleryThumbs">
             {galleryImages.map((img, i) => (
-              <div class="w-16 h-16 rounded border border-steel-200 overflow-hidden {i===0?'ring-2 ring-brand-500':''}">
+              <div class="w-16 h-16 rounded border-2 cursor-pointer overflow-hidden {i===0?'border-brand-500':'border-steel-200'}" data-src={img.url} data-alt={img.alt || img.name || `Image ${i+1}`} onclick="document.getElementById('mainImg').src=this.dataset.src;document.getElementById('mainImg').alt=this.dataset.alt;this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('border-brand-500'));this.classList.add('border-brand-500')">
                 <img src={img.url} alt={img.alt || img.name || `Image ${i+1}`} class="w-full h-full object-cover" />
               </div>
             ))}
