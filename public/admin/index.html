@@ -201,20 +201,16 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         </div>
       </div>
 
-      <!-- Image Upload -->
+      <!-- Image Gallery Upload -->
       <div class="card">
-        <h3>🖼️ Main Product Image</h3>
-        <div class="card-grid">
-          <div>
-            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgFile').click()"><div class="icon">📁</div><p>Click to select image<br><small>JPG, PNG, WebP — 5MB max</small></p><div class="preview"><img id="imgPreview" src="" alt="Preview"></div></div>
-            <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="previewImage()">
-            <button class="btn btn-secondary" style="margin-top:10px;width:100%" onclick="uploadNow()">📤 Upload Main Image</button>
-          </div>
-          <div>
-            <div class="field"><label>Image URL</label><input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg" readonly><div class="helper">Auto-filled after upload</div></div>
-            <div class="field"><label>Paste External URL</label><input id="pImgManual" placeholder="https://..." oninput="document.getElementById('pImg').value=this.value"></div>
-          </div>
+        <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(≤600KB each, drag to reorder)</small></h3>
+        <div class="upload-zone" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
+          <div class="icon">📁</div>
+          <p>Click or drag images here<br><small>JPG, PNG, WebP — Max 600KB each. First image = main.</small></p>
         </div>
+        <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="addGalleryImages()">
+        <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px"></div>
+        <input type="hidden" id="pGallery" value="">
       </div>
 
       <!-- Actions -->
@@ -525,67 +521,97 @@ function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.
 document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');}});
 document.querySelectorAll('.tab-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('#page-products .tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('panel-'+this.dataset.panel).classList.add('active');}});
 
-/* ====== IMAGE UPLOAD ====== */
-function previewImage(){
-  var f=document.getElementById('imgFile').files[0];if(!f)return;
-  var r=new FileReader();r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file');
-  var alt=f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');if(!document.getElementById('pImgAlt').value)document.getElementById('pImgAlt').value=alt;};r.readAsDataURL(f);}
+/* ====== GALLERY IMAGE UPLOAD ====== */
+var galleryImages = [];
+function addGalleryImages(){
+  var files = document.getElementById('galleryFile').files;
+  for(var i=0;i<files.length;i++){ uploadGalleryImage(files[i]); }
+  document.getElementById('galleryFile').value='';
+}
+function uploadGalleryImage(f){
+  if(f.size > 600*1024){ toast('❌ '+f.name+' too large! '+(f.size/1024).toFixed(0)+'KB > 600KB','error'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var b64=e.target.result.split(',')[1], path='public/images/products/'+f.name;
+    if(!K){ addToGallery(f, e.target.result, null); return; }
+    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    .then(function(r){return r.json()}).then(function(d){
+      var url = '/woshidahuaidan/images/products/'+f.name;
+      if(d.content) addToGallery(f, e.target.result, url);
+      else if(d.message && d.message.includes('already exists')) addToGallery(f, e.target.result, url);
+      else { addToGallery(f, e.target.result, null); toast('Upload issue: '+d.message,'error'); }
+    }).catch(function(){ addToGallery(f, e.target.result, null); });
+  }; reader.readAsDataURL(f);
+}
+function addToGallery(f, dataUrl, url){
+  var img = new Image();
+  img.onload = function(){
+    var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB';
+    galleryImages.push({name: f.name, url: url||'', size: sizeKB, dims: dims, alt: f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '), dataUrl: dataUrl});
+    renderGallery();
+  }; img.src = dataUrl;
+}
+function renderGallery(){
+  var strip = document.getElementById('galleryStrip'), html='';
+  galleryImages.forEach(function(img, i){
+    html += '<div style="position:relative;width:150px;border:1px solid #eee;border-radius:8px;overflow:hidden;background:#fafafa;flex-shrink:0">'
+      +'<img src="'+img.dataUrl+'" style="width:100%;height:120px;object-fit:cover">'
+      +'<button onclick="removeGalleryImage('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:22px;text-align:center">✕</button>'
+      +(i===0?'<span style="position:absolute;top:4px;left:4px;background:var(--r);color:#fff;border-radius:3px;font-size:10px;padding:1px 5px;font-weight:bold">MAIN</span>':'')
+      +'<div style="padding:6px 8px">'
+      +'<input value="'+img.name+'" onchange="galleryImages['+i+'].name=this.value;updateGallery()" style="width:100%;border:none;font-size:11px;padding:2px;background:transparent" title="File name (editable)">'
+      +'<div style="font-size:10px;color:var(--g);margin:2px 0">'+img.size+' | '+img.dims+'</div>'
+      +'<input value="'+img.alt+'" placeholder="ALT text" onchange="galleryImages['+i+'].alt=this.value;updateGallery()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">'
+      +'</div></div>';
+  });
+  strip.innerHTML = html;
+  updateGallery();
+}
+function removeGalleryImage(i){ galleryImages.splice(i,1); renderGallery(); toast('Image removed','success'); }
+function updateGallery(){
+  document.getElementById('pGallery').value = JSON.stringify(galleryImages.map(function(img){return {name:img.name,url:img.url,size:img.size,dims:img.dims,alt:img.alt};}));
+  // Sync first image to pImg + pImgAlt
+  if(galleryImages.length>0){
+    document.getElementById('pImg').value = galleryImages[0].url;
+    document.getElementById('pImgAlt').value = galleryImages[0].alt;
+  }
+}
 
-/* ====== MODAL IMAGE UPLOAD HANDLER ====== */
+/* Keep old uploadNow as wrapper */
+function uploadNow(){ addGalleryImages(); }
+function previewImage(){}
+
+/* ====== MODAL IMAGE UPLOAD (for module builder) ====== */
 var modalUploadCache={};
 function handleModalUpload(fileInputId, widgetId, nameInputId){
   var fileInput=document.getElementById(fileInputId), f=fileInput.files[0]; if(!f) return;
   if(f.size > 600*1024){ toast('❌ Image too large! Max 600KB. This file: '+(f.size/1024).toFixed(0)+'KB','error'); fileInput.value=''; return; }
   var widget=document.getElementById(widgetId), nameInput=document.getElementById(nameInputId);
-  modalUploadCache[fileInputId]=f;
-  /* Upload to GitHub + show preview */
   var reader=new FileReader(); reader.onload=function(e){
-    var b64=e.target.result.split(',')[1];
-    var path='public/images/products/'+f.name;
-    if(!K) { showPreviewOnly(); return; }
+    var b64=e.target.result.split(',')[1], path='public/images/products/'+f.name;
+    if(!K){ showPreview(); return; }
     fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d.content) {
-        var url='/woshidahuaidan/images/products/'+f.name;
-        var idx=fileInputId.replace('mImgFile','');
-        var urlEl=document.getElementById('mImgUrl'+idx); if(urlEl) urlEl.value=url;
-        showPreview(url);
-      } else if(d.message && d.message.includes('already exists')) {
-        var url='/woshidahuaidan/images/products/'+f.name;
-        var idx=fileInputId.replace('mImgFile','');
-        var urlEl=document.getElementById('mImgUrl'+idx); if(urlEl) urlEl.value=url;
-        showPreview(url);
-      } else { showPreviewOnly(); toast('Upload: '+d.message,'error'); }
-    }).catch(function(){ showPreviewOnly(); });
+      var url='/woshidahuaidan/images/products/'+f.name;
+      if(d.content||(d.message&&d.message.includes('already exists'))){ showPreview(url); }
+      else{ showPreview(); }
+    }).catch(function(){ showPreview(); });
     function showPreview(url){
       var img=new Image(); img.onload=function(){
-        var dims=img.width+'×'+img.height+'px', sizeKB=(f.size/1024).toFixed(0)+'KB';
+        var dims=img.width+'×'+img.height+'px',sizeKB=(f.size/1024).toFixed(0)+'KB';
         widget.innerHTML='<div class="uw-preview"><img src="'+e.target.result+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+f.name+'</b><br><span style="color:#27ae60;font-size:11px">✅ '+sizeKB+' | '+dims+(url?' | Uploaded':'')+'</span></div>';
         widget.style.borderColor='#27ae60';
-        if(nameInput){ nameInput.value=f.name; }
+        if(nameInput) nameInput.value=f.name;
         var idx=fileInputId.replace('mImgFile','');
-        var dE=document.getElementById('mImgDims'+idx); if(dE) dE.value=dims;
-        var sE=document.getElementById('mImgSize'+idx); if(sE) sE.value=sizeKB;
+        var dE=document.getElementById('mImgDims'+idx); if(dE)dE.value=dims;
+        var sE=document.getElementById('mImgSize'+idx); if(sE)sE.value=sizeKB;
+        var uE=document.getElementById('mImgUrl'+idx); if(uE&&url)uE.value=url;
       }; img.src=e.target.result;
     }
-    function showPreviewOnly(){ showPreview(); }
   }; reader.readAsDataURL(f);
 }
-function updateModalImgName(nameInputId){
-  /* User manually changed file name */
-}
+function updateModalImgName(nameInputId){}
 
-function uploadNow(){
-  var f=document.getElementById('imgFile').files[0];if(!f)return toast('Select image','error');
-  var r=new FileReader();r.onload=function(ev){
-    var b64=ev.target.result.split(',')[1],path='public/images/products/'+f.name;
-    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
-    .then(function(r){return r.json()}).then(function(d){
-      if(d.content){var url='/woshidahuaidan/images/products/'+f.name;document.getElementById('pImg').value=url;document.getElementById('pImgManual').value=url;
-      if(!document.getElementById('pImgAlt').value)document.getElementById('pImgAlt').value=f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');toast('✅ '+url,'success');}else toast(d.message,'error');
-    });
-  };r.readAsDataURL(f);
-}
 function uploadMedia(){
   var f=document.getElementById('mediaFile').files[0];if(!f)return;
   var r=new FileReader();r.onload=function(ev){
@@ -634,12 +660,12 @@ document.querySelector('[data-page=overview]').addEventListener('click', functio
 /* ====== ADD SIMILAR ====== */
 function addSimilar(){
   document.getElementById('pTitle').value='';document.getElementById('pSlug').value='';document.getElementById('pSlug').dataset.auto='0';
-  document.getElementById('pImg').value='';document.getElementById('pImgManual').value='';document.getElementById('pImgAlt').value='';
-  document.getElementById('uploadZone').classList.remove('has-file');document.getElementById('imgPreview').src='';document.getElementById('imgFile').value='';
+  document.getElementById('pImg').value='';document.getElementById('pImgAlt').value='';
+  document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
   document.getElementById('pMetaTitle').value='';document.getElementById('pMetaDesc').value='';
   vizData=[];renderAll();
   checkSeoTitle();checkMetaDesc();
-  toast('📋 Copied! Fill in: name, slug, image, SEO title, meta description.','success');document.getElementById('pTitle').focus();
+  toast('📋 Copied! Fill in: name, slug, images, SEO title, meta description.','success');document.getElementById('pTitle').focus();
 }
 
 /* ====== SAVE ====== */
@@ -649,6 +675,7 @@ function buildFM(){
   s=s.replace(/--+/g,'-').replace(/^-|-$/g,'').substring(0,80);
   var c=document.getElementById('pCat').value,sc=document.getElementById('pSub').value;
   var ex=document.getElementById('pExcerpt').value.replace(/"/g,'\\"'),im=document.getElementById('pImg').value,alt=document.getElementById('pImgAlt').value;
+  var gallery=document.getElementById('pGallery').value;
   var fe=document.getElementById('pFeat').value,sp=document.getElementById('pSpec').value;
   var o=parseInt(document.getElementById('pOrder').value)||0;
   var mt=document.getElementById('pMetaTitle').value,md=document.getElementById('pMetaDesc').value.replace(/"/g,'\\"'),kw=document.getElementById('pKeywords').value;
@@ -660,6 +687,7 @@ function buildFM(){
   var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
   if(sc)fm+='subcategory: "'+sc+'"\n';fm+='excerpt: "'+ex+'"\n';
   if(im)fm+='image: "'+im+'"\n';if(alt)fm+='imageAlt: "'+alt+'"\n';
+  if(gallery && gallery!=='[]')fm+='gallery: '+gallery+'\n';
   fm+='slug: "'+s+'"\n';
   if(mt)fm+='metaTitle: "'+mt.replace(/"/g,'\\"')+'"\n';if(md)fm+='metaDescription: "'+md+'"\n';if(kw)fm+='keywords: "'+kw+'"\n';
   if(fe.trim()){var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/"/g,'\\"')+'"\n'});}
@@ -695,8 +723,9 @@ function send(path,content,message){
   .then(function(r){return r.json()}).then(function(d){if(d.content)toast('Saved! Deploying...','success');else toast(d.message,'error');});
 }
 function resetForm(){
-  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgManual','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('pOrder').value='0';document.getElementById('uploadZone').classList.remove('has-file');document.getElementById('imgPreview').src='';document.getElementById('imgFile').value='';
+  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('pOrder').value='0';
+  document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
   vizData=[];renderAll();checkSeoTitle();checkMetaDesc();toast('Reset','success');
 }
 </script>

@@ -13,10 +13,16 @@ export async function getStaticPaths() {
 }
 
 const { product } = Astro.props as { product: CollectionEntry<'products'> };
-const { title, category, subcategory, excerpt, features, specs, image, imageAlt, metaTitle, metaDescription, keywords } = product.data;
+const { title, category, subcategory, excerpt, features, specs, image, imageAlt, metaTitle, metaDescription, keywords, gallery } = product.data;
 const pageDescription = metaDescription || excerpt?.slice(0, 155) || '';
 const pageKeywords = keywords || `${title}, ${category}, China manufacturer, GRANGIN`;
 const pageTitle = metaTitle || `${title} | GRANGIN`;
+
+// Parse gallery if present
+let galleryImages: Array<{url:string,alt?:string,name?:string}> = [];
+if(gallery){
+  try{ galleryImages = JSON.parse(gallery); }catch(e){}
+}
 
 // Get body content
 const body = product.body || '';
@@ -57,6 +63,16 @@ const breadcrumb = {
         <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
           {image ? <img src={image} alt={imageAlt || title} class="w-full h-full object-cover" /> : <div class="text-center p-8"><div class="text-7xl mb-3">⚙️</div><span class="tag tag-red">{category}</span></div>}
         </div>
+        <!-- Gallery thumbnails -->
+        {galleryImages.length > 1 && (
+          <div class="flex gap-2 mt-3 flex-wrap">
+            {galleryImages.map((img, i) => (
+              <div class="w-16 h-16 rounded border border-steel-200 overflow-hidden {i===0?'ring-2 ring-brand-500':''}">
+                <img src={img.url} alt={img.alt || img.name || `Image ${i+1}`} class="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
         <div>
           <span class="tag tag-red">{category}</span>
           <h1 class="text-3xl sm:text-4xl font-black text-steel-900 mt-2 mb-4">{title}</h1>

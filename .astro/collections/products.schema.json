@@ -76,6 +76,9 @@
     "keywords": {
       "type": "string"
     },
+    "gallery": {
+      "type": "string"
+    },
     "$schema": {
       "type": "string"
     }
