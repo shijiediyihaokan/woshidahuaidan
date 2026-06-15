@@ -10,7 +10,6 @@
 body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min-height:100vh}
 .login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)}
 .login-card{background:#fff;padding:48px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:420px;text-align:center}
-.login-card .logo{width:180px;margin-bottom:24px}
 .login-card h1{font-size:22px;margin-bottom:4px}
 .login-card p{font-size:13px;color:var(--g);margin-bottom:24px}
 .login-card input{width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;margin-bottom:16px;transition:.2s}
@@ -18,17 +17,15 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .login-card button{width:100%;padding:14px;background:var(--r);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
 .login-card button:hover{background:#a80d28}
 .login-card .hint{font-size:12px;color:var(--g);margin-top:16px;line-height:1.6}
-.login-card .hint a{color:var(--r)}
 
 .dashboard{display:none}
 .dashboard.on{display:flex;min-height:100vh}
 .sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10}
-.sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px}
+.sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px;font-size:20px;font-weight:800;color:#fff}
 .sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
 .sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.05);border-left-color:var(--r)}
-.sidebar nav a .icon{font-size:16px;width:20px;text-align:center}
 .sidebar .user{padding:16px 20px;border-top:1px solid #333;position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;gap:10px;font-size:13px}
-.sidebar .user .avatar{width:32px;height:32px;background:var(--r);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.sidebar .user .avatar{width:32px;height:32px;background:var(--r);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
 
 .main{margin-left:220px;flex:1;padding:32px}
 .main-header{margin-bottom:32px}
@@ -40,7 +37,6 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .field{margin-bottom:20px}
 .field label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px}
 .field label .req{color:var(--r);margin-left:2px}
@@ -48,6 +44,12 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(206,17,50,.1)}
 .field textarea{resize:vertical;min-height:100px}
 .field .helper{font-size:11px;color:var(--g);margin-top:4px}
+.field input.error,.field textarea.error{border-color:var(--r);background:#fff5f5}
+
+.char-count{font-size:11px;float:right;margin-top:2px}
+.char-count.ok{color:#059669}
+.char-count.warn{color:#e67e22}
+.char-count.bad{color:var(--r)}
 
 .upload-zone{border:2px dashed #d1d5db;border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
 .upload-zone:hover{border-color:var(--r);background:#fef2f2}
@@ -58,29 +60,23 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .upload-zone.has-file .icon,.upload-zone.has-file p{display:none}
 .upload-zone.has-file .preview{display:block}
 
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s}
 .btn-primary{background:var(--r);color:#fff}
 .btn-primary:hover{background:#a80d28}
 .btn-secondary{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
 .btn-secondary:hover{background:#e5e7eb}
 .btn-sm{padding:6px 12px;font-size:12px}
-.btn-xs{padding:4px 8px;font-size:11px;border-radius:6px}
 
-/* Module buttons */
 .modules-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;background:#fafafa;border-radius:8px;border:1px solid #eee}
 .modules-bar .mod-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:#fff;border:1px solid #d1d5db;border-radius:6px;font-size:12px;cursor:pointer;transition:.2s;white-space:nowrap}
 .modules-bar .mod-btn:hover{background:var(--r);color:#fff;border-color:var(--r)}
-.modules-bar .mod-btn:active{transform:scale(.97)}
 .modules-bar .mod-sep{width:1px;background:#d1d5db;margin:2px 4px;align-self:stretch}
+.modules-bar .mod-label{font-size:11px;color:var(--g);font-weight:600;padding:4px 0}
 
-.detail-editor{display:grid;grid-template-columns:1fr auto}
-@media(max-width:1200px){.detail-editor{grid-template-columns:1fr}}
-
-table{font-size:14px}
-.table{width:100%;border-collapse:collapse}
-.table th{text-align:left;padding:12px;font-size:11px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e5e7eb}
-.table td{padding:12px;font-size:13px;border-bottom:1px solid #f0f0f0}
-.table tr:hover td{background:#fafafa}
+/* Title style picker */
+.style-pick{display:flex;gap:4px;align-items:center}
+.style-pick select{padding:4px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:11px}
+.style-pick input[type=color]{width:24px;height:24px;border:none;border-radius:4px;cursor:pointer;padding:0}
 
 .tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:2px solid #e5e7eb}
 .tab-btn{padding:10px 20px;font-size:14px;font-weight:500;color:var(--g);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
@@ -93,12 +89,11 @@ table{font-size:14px}
 .toast.error{background:var(--r);color:#fff}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.card-grid{grid-template-columns:1fr}.form-row,.form-row-3{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.card-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage" class="login-page">
   <div class="login-card">
     <div style="font-size:48px;margin-bottom:16px">⚙️</div>
@@ -106,63 +101,55 @@ table{font-size:14px}
     <p>GRANGIN | CETEN</p>
     <input id="t" type="password" placeholder="GitHub Personal Access Token">
     <button onclick="login()">Sign In</button>
-    <div class="hint">
-      Get your token at<br>
-      <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>
-      Scope: <b>repo</b>
-    </div>
+    <div class="hint">Get your token at<br><a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>Scope: <b>repo</b></div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dash" class="dashboard">
   <aside class="sidebar">
-    <div class="brand" style="font-size:20px;font-weight:800;color:#fff;padding:0 20px 24px">⚙️ Ceten</div>
+    <div class="brand">⚙️ Ceten</div>
     <nav>
       <a href="#" class="active" data-page="products"><span class="icon">📦</span> Products</a>
       <a href="#" data-page="news"><span class="icon">📰</span> News</a>
       <a href="#" data-page="media"><span class="icon">🖼️</span> Media</a>
       <a href="#" data-page="settings"><span class="icon">⚙️</span> Settings</a>
     </nav>
-    <div class="user">
-      <div class="avatar">A</div>
-      <span id="userName">Admin</span>
-    </div>
+    <div class="user"><div class="avatar">A</div><span id="userName">Admin</span></div>
   </aside>
 
   <main class="main">
-    <!-- Products Page -->
+    <!-- ====== PRODUCTS ====== -->
     <div id="page-products" class="tab-content active">
       <div class="main-header" style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <h1>Product Management</h1>
-          <p>Create and manage product listings</p>
-        </div>
-        <div>
-          <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar Product</button>
-        </div>
+        <div><h1>Product Management</h1><p>Create and manage product listings</p></div>
+        <div><button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar Product</button></div>
       </div>
 
-      <!-- Product Editor Card -->
       <div class="card">
         <div class="tabs">
           <button class="tab-btn active" data-panel="basic">Basic Info</button>
           <button class="tab-btn" data-panel="content">Content</button>
           <button class="tab-btn" data-panel="detail">🆕 Detail Page</button>
-          <button class="tab-btn" data-panel="seo">SEO</button>
+          <button class="tab-btn" data-panel="seo">🆕 SEO</button>
         </div>
 
-        <!-- Basic Info Panel -->
+        <!-- Basic Info -->
         <div id="panel-basic" class="tab-content active">
+          <div class="field">
+            <label>Product Name (H1) <span class="req">*</span></label>
+            <input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug()">
+            <div class="helper">This becomes the page H1 heading. Must be unique per product.</div>
+          </div>
           <div class="form-row">
             <div class="field">
-              <label>Product Name <span class="req">*</span></label>
-              <input id="pTitle" placeholder="NMRV050 Worm Gearbox">
+              <label>URL Slug <span class="req">*</span> <span style="font-weight:normal;color:var(--r)">(required)</span></label>
+              <input id="pSlug" placeholder="nmrv050-worm-gearbox">
+              <div class="helper" id="slugHint">Short, clean path. Example: nmrv050-worm-gearbox</div>
             </div>
             <div class="field">
-              <label>URL Slug <span class="req">*</span></label>
-              <input id="pSlug" placeholder="auto-generated-from-title">
-              <div class="helper">Leave empty for auto-generate</div>
+              <label>Image ALT Text <span style="font-weight:normal">(for Google)</span></label>
+              <input id="pImgAlt" placeholder="NMRV050 worm gearbox front view">
+              <div class="helper">Descriptive alt text for main product image (SEO ranking factor)</div>
             </div>
           </div>
           <div class="form-row">
@@ -177,7 +164,7 @@ table{font-size:14px}
           </div>
         </div>
 
-        <!-- Content Panel -->
+        <!-- Content -->
         <div id="panel-content" class="tab-content">
           <div class="field">
             <label>Short Description <span class="req">*</span></label>
@@ -197,87 +184,95 @@ table{font-size:14px}
           </div>
         </div>
 
-        <!-- Detail Page Panel (NEW) -->
+        <!-- Detail Page -->
         <div id="panel-detail" class="tab-content">
           <div class="field">
-            <label>Detail Page Content <span style="color:var(--r);font-weight:normal">(HTML/Markdown)</span></label>
+            <label>Detail Page Content <span style="font-weight:normal">(HTML/Markdown)</span></label>
             <div class="modules-bar">
-              <span style="font-size:11px;color:var(--g);font-weight:600;padding:4px 0">模块:</span>
+              <span class="mod-label">H2:</span>
+              <span class="style-pick">
+                <select id="titleStyle" style="width:auto"><option value="red-left">Red Left Border</option><option value="red-underline">Red Underline</option><option value="dark-left">Dark Left Border</option><option value="dark-underline">Dark Underline</option><option value="red-bg">Red Background</option></select>
+                <input type="color" id="titleColor" value="#ce1132" title="Title color">
+              </span>
               <div class="mod-sep"></div>
-              <button class="mod-btn" onclick="addMod('title')">📌 标题</button>
+              <button class="mod-btn" onclick="addMod('h2')">📌 H2 标题</button>
+              <button class="mod-btn" onclick="addMod('h3')">📌 H3 子标题</button>
               <button class="mod-btn" onclick="addMod('text')">📝 正文</button>
+              <div class="mod-sep"></div>
               <button class="mod-btn" onclick="addMod('leftimg')">🖼️ 左图右文</button>
               <button class="mod-btn" onclick="addMod('rightimg')">🖼️ 右图左文</button>
               <div class="mod-sep"></div>
-              <button class="mod-btn" onclick="addMod('2imgs')">1行2图</button>
-              <button class="mod-btn" onclick="addMod('3imgs')">1行3图</button>
-              <button class="mod-btn" onclick="addMod('4imgs')">1行4图</button>
-              <button class="mod-btn" onclick="addMod('6imgs')">1行6图</button>
+              <button class="mod-btn" onclick="addMod('2imgs')">1×2图</button>
+              <button class="mod-btn" onclick="addMod('3imgs')">1×3图</button>
+              <button class="mod-btn" onclick="addMod('4imgs')">1×4图</button>
+              <button class="mod-btn" onclick="addMod('6imgs')">1×6图</button>
               <div class="mod-sep"></div>
-              <button class="mod-btn" onclick="addMod('features')">✅ 特性列表</button>
-              <button class="mod-btn" onclick="addMod('specs')">📊 参数表格</button>
+              <button class="mod-btn" onclick="addMod('features')">✅ 特性</button>
+              <button class="mod-btn" onclick="addMod('specs')">📊 参数表</button>
               <button class="mod-btn" onclick="addMod('faq')">❓ FAQ</button>
-              <button class="mod-btn" onclick="addMod('cta')">📧 询盘CTA</button>
+              <button class="mod-btn" onclick="addMod('faqSchema')">📋 FAQ Schema</button>
+              <button class="mod-btn" onclick="addMod('cta')">📧 询盘</button>
             </div>
-            <textarea id="pBody" rows="18" placeholder='Use the modules above or write HTML/Markdown directly.
+            <textarea id="pBody" rows="20" placeholder='Recommmended H2 structure:
+## Product Features
+## Technical Parameters
+## Applications
+## FAQ
+## Related Products
 
-Example:
-## Features Of This Product
-
-<模块按钮点击后会自动插入模板>
-
-The body content is rendered as full detail page content.'></textarea>
-            <div class="helper">模块按钮在正文中插入排版模板，然后替换图片URL和文字</div>
+Use H3 for sub-sections within each H2. Use module buttons above to insert styled layouts.'></textarea>
+            <div class="helper">✅ H2 = major sections | H3 = sub-details within sections</div>
           </div>
         </div>
 
-        <!-- SEO Panel -->
+        <!-- SEO -->
         <div id="panel-seo" class="tab-content">
           <div class="field">
-            <label>Meta Title</label>
-            <input id="pMetaTitle" placeholder="Leave empty to use product name">
-            <div class="helper">Recommended: 50-60 characters</div>
+            <label>SEO Title <span class="req">*</span></label>
+            <input id="pMetaTitle" placeholder="NMRV050 Worm Gearbox Manufacturer | GRANGIN" oninput="checkSeoTitle()">
+            <div class="char-count" id="seoTitleCount">0 / 50-60</div>
+            <div class="helper">Must be 50-60 characters. Include product name + brand. MUST be unique per product.</div>
           </div>
           <div class="field">
-            <label>Meta Description</label>
-            <textarea id="pMetaDesc" rows="2" placeholder="Leave empty to use short description"></textarea>
-            <div class="helper">Recommended: 120-160 characters</div>
+            <label>Meta Description <span class="req">*</span></label>
+            <textarea id="pMetaDesc" rows="3" placeholder="NMRV050 worm gearbox with 0.18kW-7.5kW power, aluminum housing, ratios 5:1-100:1. Ideal for conveyors & packaging machines. ISO 9001 certified manufacturer." oninput="checkMetaDesc()"></textarea>
+            <div class="char-count" id="metaDescCount">0 / 120-155</div>
+            <div class="helper">Must be 120-155 characters. Include: keywords, core params, application, unique value. Each product DIFFERENT.</div>
           </div>
           <div class="field">
             <label>Meta Keywords</label>
-            <input id="pKeywords" placeholder="comma, separated, keywords">
+            <input id="pKeywords" placeholder="worm gearbox, NMRV050, gear reducer, speed reducer">
           </div>
           <div class="field">
             <label>Display Order</label>
             <input id="pOrder" type="number" value="0" style="width:120px">
-            <div class="helper">Higher numbers appear first</div>
+            <div class="helper">Higher = first. ≥900000 = featured/hot product</div>
           </div>
         </div>
       </div>
 
-      <!-- Product Image -->
+      <!-- Image Upload -->
       <div class="card">
-        <h3>🖼️ Upload Main Image</h3>
+        <h3>🖼️ Upload Main Product Image</h3>
         <div class="card-grid">
           <div>
             <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgFile').click()">
               <div class="icon">📁</div>
-              <p>Click to upload product image<br><small>JPG, PNG, WebP — Max 5MB</small></p>
+              <p>Click to select product image<br><small>JPG, PNG, WebP — Max 5MB</small></p>
               <div class="preview"><img id="imgPreview" src="" alt="Preview"></div>
             </div>
             <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="previewImage()">
-            <button class="btn btn-secondary" style="margin-top:10px;width:100%" onclick="uploadNow()">📤 Upload Main Image</button>
+            <button class="btn btn-secondary" style="margin-top:10px;width:100%" onclick="uploadNow()">📤 Upload & Set as Main Image</button>
           </div>
           <div>
             <div class="field">
               <label>Image URL</label>
               <input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg" readonly>
-              <div class="helper">Auto-filled after upload</div>
+              <div class="helper">Auto-filled after upload. File name used as default ALT text.</div>
             </div>
             <div class="field">
-              <label>Or Paste Image URL Directly</label>
-              <input id="pImgManual" placeholder="https://... or /woshidahuaidan/images/..." oninput="document.getElementById('pImg').value=this.value">
-              <div class="helper">Manual override for external images</div>
+              <label>Or Paste External URL</label>
+              <input id="pImgManual" placeholder="https://..." oninput="document.getElementById('pImg').value=this.value">
             </div>
           </div>
         </div>
@@ -286,18 +281,15 @@ The body content is rendered as full detail page content.'></textarea>
       <!-- Actions -->
       <div style="display:flex;gap:12px">
         <button class="btn btn-primary" onclick="saveProd()">💾 Save & Publish</button>
-        <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar Product</button>
-        <button class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
+        <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar (clear H1/slug/image)</button>
+        <button class="btn btn-secondary" onclick="resetForm()">↺ Reset All</button>
       </div>
-      <div class="helper" style="margin-top:8px">Changes deploy to live site in ~2 minutes via GitHub Actions</div>
+      <div class="helper" style="margin-top:8px">Deploys to live site in ~2 min via GitHub Actions</div>
     </div>
 
-    <!-- News Page -->
+    <!-- ====== NEWS ====== -->
     <div id="page-news" class="tab-content">
-      <div class="main-header">
-        <h1>News & Articles</h1>
-        <p>Publish blog posts and industry news</p>
-      </div>
+      <div class="main-header"><h1>News & Articles</h1><p>Publish blog posts and industry news</p></div>
       <div class="card">
         <div class="form-row">
           <div class="field"><label>Title <span class="req">*</span></label><input id="nTitle" placeholder="Article title"></div>
@@ -308,58 +300,45 @@ The body content is rendered as full detail page content.'></textarea>
           <div class="field"><label>Featured Image URL</label><input id="nImg" placeholder="/woshidahuaidan/images/news/file.jpg"></div>
         </div>
         <div class="field"><label>Excerpt</label><textarea id="nExcerpt" rows="2" placeholder="Brief summary for listing pages"></textarea></div>
-        
-        <!-- News module buttons -->
         <div class="field">
           <label>Content (Markdown/HTML) <span class="req">*</span></label>
           <div class="modules-bar">
-            <span style="font-size:11px;color:var(--g);font-weight:600;padding:4px 0">模块:</span>
-            <div class="mod-sep"></div>
+            <span class="mod-label">模块:</span>
             <button class="mod-btn" onclick="addModN('lead')">📝 导语</button>
-            <button class="mod-btn" onclick="addModN('heading')">📌 小标题</button>
-            <button class="mod-btn" onclick="addModN('textimg')">🖼️ 正文+配图</button>
+            <button class="mod-btn" onclick="addModN('heading')">📌 标题</button>
+            <button class="mod-btn" onclick="addModN('textimg')">🖼️ 正文+图</button>
             <button class="mod-btn" onclick="addModN('leftimg')">🖼️ 左图右文</button>
-            <button class="mod-btn" onclick="addModN('list')">📋 要点列表</button>
-            <button class="mod-btn" onclick="addModN('highlight')">💡 重点强调</button>
-            <button class="mod-btn" onclick="addModN('steps')">🔢 步骤流程</button>
-            <button class="mod-btn" onclick="addModN('3imgs')">1行3图</button>
-            <button class="mod-btn" onclick="addModN('compare')">📊 对比表格</button>
+            <button class="mod-btn" onclick="addModN('list')">📋 列表</button>
+            <button class="mod-btn" onclick="addModN('highlight')">💡 强调</button>
+            <button class="mod-btn" onclick="addModN('steps')">🔢 步骤</button>
+            <button class="mod-btn" onclick="addModN('3imgs')">1×3图</button>
+            <button class="mod-btn" onclick="addModN('compare')">📊 对比</button>
           </div>
-          <textarea id="nBody" rows="14" placeholder="## Heading&#10;&#10;Your article content here. **Bold** and *italic* supported.&#10;&#10;Use the module buttons above for layout templates."></textarea>
+          <textarea id="nBody" rows="14" placeholder="## Heading&#10;&#10;Your article content here..."></textarea>
         </div>
         <button class="btn btn-primary" onclick="saveNews()">💾 Publish Article</button>
       </div>
     </div>
 
-    <!-- Media Page -->
+    <!-- ====== MEDIA ====== -->
     <div id="page-media" class="tab-content">
-      <div class="main-header">
-        <h1>Media Library</h1>
-        <p>Upload and manage images</p>
-      </div>
+      <div class="main-header"><h1>Media Library</h1><p>Upload and manage images</p></div>
       <div class="card">
         <div class="card-grid">
           <div>
             <div class="upload-zone" id="mediaUpload" onclick="document.getElementById('mediaFile').click()">
-              <div class="icon">📁</div>
-              <p>Drop images here or click to browse<br><small>JPG, PNG, WebP</small></p>
+              <div class="icon">📁</div><p>Click to browse images<br><small>JPG, PNG, WebP</small></p>
             </div>
             <input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()">
           </div>
-          <div>
-            <h3 style="font-size:14px;margin-bottom:8px">Uploaded Files</h3>
-            <div id="mediaList" style="font-size:12px;color:var(--g)">Upload images to see them here</div>
-          </div>
+          <div><h3 style="font-size:14px;margin-bottom:8px">Uploaded Files</h3><div id="mediaList" style="font-size:12px;color:var(--g)">Upload images to see them here</div></div>
         </div>
       </div>
     </div>
 
-    <!-- Settings Page -->
+    <!-- ====== SETTINGS ====== -->
     <div id="page-settings" class="tab-content">
-      <div class="main-header">
-        <h1>Site Settings</h1>
-        <p>Manage company information</p>
-      </div>
+      <div class="main-header"><h1>Site Settings</h1><p>Manage company information</p></div>
       <div class="card">
         <div class="form-row">
           <div class="field"><label>Company Name</label><input id="sCompany" value="Zhejiang Guangjin Intelligent Technology Co., Ltd."></div>
@@ -381,45 +360,96 @@ The body content is rendered as full detail page content.'></textarea>
 <script>
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 
+/* ====== TITLE STYLE TEMPLATES ====== */
+function titleHTML(text, level) {
+  var style = document.getElementById('titleStyle').value;
+  var color = document.getElementById('titleColor').value;
+  var tag = level || 'h2';
+  var templates = {
+    'red-left': '<div style="font-size:'+(tag==='h2'?'22':'17')+'px;color:#222;border-left:4px solid '+color+';padding-left:12px;margin:30px 0 15px 0;font-weight:bold;">'+text+'</div>',
+    'red-underline': '<'+tag+' style="font-size:'+(tag==='h2'?'22':'17')+'px;color:#222;border-bottom:2px solid '+color+';padding-bottom:6px;margin:25px 0 12px 0;">'+text+'</'+tag+'>',
+    'dark-left': '<div style="font-size:'+(tag==='h2'?'22':'17')+'px;color:#1a1a1a;border-left:4px solid '+color+';padding-left:12px;margin:30px 0 15px 0;font-weight:bold;background:#fafafa;padding:10px 15px;">'+text+'</div>',
+    'dark-underline': '<'+tag+' style="font-size:'+(tag==='h2'?'22':'17')+'px;color:#1a1a1a;border-bottom:3px double '+color+';padding-bottom:6px;margin:25px 0 12px 0;">'+text+'</'+tag+'>',
+    'red-bg': '<div style="font-size:'+(tag==='h2'?'20':'16')+'px;color:#fff;background:'+color+';padding:10px 18px;border-radius:6px;margin:25px 0 12px 0;font-weight:bold;">'+text+'</div>'
+  };
+  return (templates[style] || templates['red-left']) + '\n';
+}
+
 /* ====== MODULE TEMPLATES ====== */
 var MODS = {
-  title: '\n## Section Title\n\n',
+  h2: function(){ return titleHTML('Section Title', 'h2'); },
+  h3: function(){ return titleHTML('Sub-section Title', 'h3'); },
   text: '\n<div style="font-size:14px;line-height:1.8;color:#444;margin:15px 0;">\nYour text content here.\n</div>\n',
-  leftimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:45%;vertical-align:top;padding-right:15px;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n</tr></table>\n',
-  rightimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n<td style="width:45%;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n</tr></table>\n',
-  '2imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n</tr></table>\n',
-  '3imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n</tr></table>\n',
-  '4imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 4</p></td>\n</tr></table>\n',
-  '6imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">1</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">2</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">3</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">4</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">5</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">6</p></td>\n</tr></table>\n',
+  leftimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:45%;vertical-align:top;padding-right:15px;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:6px;"></td>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n</tr></table>\n',
+  rightimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n<td style="width:45%;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:6px;"></td>\n</tr></table>\n',
+  '2imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n</tr></table>\n',
+  '3imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n</tr></table>\n',
+  '4imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 4</p></td>\n</tr></table>\n',
+  '6imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">1</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">2</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">3</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">4</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">5</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">6</p></td>\n</tr></table>\n',
   features: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0;"><tr>\n<td style="width:36px;vertical-align:top;padding:10px 0;"><span style="display:inline-block;width:36px;height:36px;background:#ce1132;color:#fff;text-align:center;line-height:36px;border-radius:50%;font-weight:bold;font-size:16px;">1</span></td>\n<td style="vertical-align:top;padding:10px 0 10px 10px;font-size:14px;line-height:1.6;"><strong>Feature Name</strong> — Description</td>\n</tr></table>\n',
-  specs: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><td style="padding:10px 12px;border:1px solid #ddd;background:#f5f5f5;font-weight:bold;width:200px;">Parameter</td><td style="padding:10px 12px;border:1px solid #ddd;">Value</td></tr>\n<tr><td style="padding:10px 12px;border:1px solid #ddd;background:#f5f5f5;font-weight:bold;">Parameter</td><td style="padding:10px 12px;border:1px solid #ddd;">Value</td></tr>\n</table>\n',
-  faq: '\n<p style="font-weight:bold;color:#ce1132;font-size:15px;margin:15px 0 5px 0;">Q: Question here?</p>\n<p style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">Answer here.</p>\n',
+  specs: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><td style="padding:10px 12px;border:1px solid #ddd;background:#f5f5f5;font-weight:bold;width:200px;">Parameter</td><td style="padding:10px 12px;border:1px solid #ddd;">Value</td></tr>\n</table>\n',
+  faq: '\n<div itemscope itemtype="https://schema.org/Question" style="margin:15px 0;">\n<p itemprop="name" style="font-weight:bold;color:#ce1132;font-size:15px;margin:10px 0 5px 0;">Q: Question here?</p>\n<div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">\n<p itemprop="text" style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">Answer here.</p>\n</div>\n</div>\n',
+  faqSchema: '\n<div itemscope itemtype="https://schema.org/FAQPage">\n\n<div itemscope itemtype="https://schema.org/Question" style="margin:15px 0;">\n<h3 itemprop="name" style="font-weight:bold;color:#ce1132;font-size:16px;">Q1: Question one?</h3>\n<div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">\n<div itemprop="text" style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">\n<p>Answer to question one with details.</p>\n</div>\n</div>\n</div>\n\n<div itemscope itemtype="https://schema.org/Question" style="margin:15px 0;">\n<h3 itemprop="name" style="font-weight:bold;color:#ce1132;font-size:16px;">Q2: Question two?</h3>\n<div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">\n<div itemprop="text" style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">\n<p>Answer to question two with details.</p>\n</div>\n</div>\n</div>\n\n</div><!-- end FAQPage Schema -->\n',
   cta: '\n<div style="background:#ce1132;color:#fff;padding:25px 30px;border-radius:8px;text-align:center;margin:30px 0;">\n<h3 style="color:#fff;margin:0 0 10px;font-size:20px;">Need a Custom Solution?</h3>\n<p style="margin:5px 0;font-size:14px;">Send us your drawings — quote within 12 hours.</p>\n<p style="margin:5px 0;font-size:14px;">📧 info@ggn-gear.com | 📞 +86-18057543143</p>\n<a href="mailto:info@ggn-gear.com" style="display:inline-block;background:#fff;color:#ce1132;padding:10px 30px;border-radius:25px;font-weight:bold;text-decoration:none;margin-top:10px;">Send Inquiry Now</a>\n</div>\n'
 };
 
-/* News modules */
 var MODSN = {
   lead: '\n<p style="font-size:16px;color:#666;line-height:1.8;border-left:4px solid #2c3e50;padding-left:15px;margin:20px 0;font-style:italic;">Lead paragraph / article summary</p>\n',
   heading: '\n## Section Heading\n\n',
-  textimg: '\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">Paragraph text.</p>\n<img src="IMAGE-URL" style="width:100%;border-radius:6px;margin:15px 0;" />\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">More text.</p>\n',
-  leftimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:40%;vertical-align:top;padding-right:15px;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n<td style="width:60%;vertical-align:top;font-size:14px;line-height:1.9;color:#444;"><strong style="font-size:16px;color:#2c3e50;">Sub Title</strong><br>Text content.</td>\n</tr></table>\n',
-  list: '\n**List Title**\n<ul style="font-size:14px;line-height:1.8;color:#444;padding-left:20px;margin:12px 0;">\n<li style="margin:6px 0;"><strong>Point</strong> — Description</li>\n<li style="margin:6px 0;"><strong>Point</strong> — Description</li>\n</ul>\n',
+  textimg: '\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">Text.</p>\n<img src="IMAGE-URL" alt="ALT-TEXT" style="width:100%;border-radius:6px;margin:15px 0;" />\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">More text.</p>\n',
+  leftimg: MODS.leftimg,
+  list: '\n**List Title**\n<ul style="font-size:14px;line-height:1.8;color:#444;padding-left:20px;margin:12px 0;">\n<li style="margin:6px 0;"><strong>Point</strong> — Description</li>\n</ul>\n',
   highlight: '\n<div style="background:#f0f4f8;border-left:4px solid #2c3e50;padding:15px 20px;margin:15px 0;font-size:14px;color:#555;line-height:1.7;border-radius:0 6px 6px 0;">\n<strong>⚠ Key Point:</strong> Important content here.\n</div>\n',
   steps: '\n**Step Title**\n\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0;"><tr>\n<td style="width:32px;vertical-align:top;padding:8px 0;"><span style="display:inline-block;width:32px;height:32px;background:#2c3e50;color:#fff;text-align:center;line-height:32px;border-radius:50%;font-weight:bold;font-size:14px;">1</span></td>\n<td style="vertical-align:top;padding:8px 0 8px 12px;font-size:14px;line-height:1.7;color:#444;"><strong>Step</strong> — Description</td>\n</tr></table>\n',
   '3imgs': MODS['3imgs'],
-  compare: '\n**Comparison Title**\n\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:left;">Option A</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:center;width:10%;font-size:18px;">VS</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:left;">Option B</th></tr>\n<tr><td style="padding:10px 12px;border:1px solid #ddd;">Description A</td><td style="padding:10px 12px;border:1px solid #ddd;text-align:center;font-weight:bold;color:#ce1132;">VS</td><td style="padding:10px 12px;border:1px solid #ddd;">Description B</td></tr>\n</table>\n'
+  compare: '\n**Comparison**\n\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><th style="background:#2c3e50;color:#fff;padding:10px 12px;">A</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:center;width:10%;font-size:18px;">VS</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;">B</th></tr>\n<tr><td style="padding:10px 12px;border:1px solid #ddd;">Desc</td><td style="padding:10px 12px;border:1px solid #ddd;text-align:center;font-weight:bold;color:#ce1132;">VS</td><td style="padding:10px 12px;border:1px solid #ddd;">Desc</td></tr>\n</table>\n'
 };
 
-function addMod(key){ insertAtCursor('pBody', MODS[key] || ''); toast('✅ '+key+' inserted','success'); }
+/* Auto slug from title */
+function autoSlug(){
+  var t = document.getElementById('pTitle').value;
+  if(!document.getElementById('pSlug').value || document.getElementById('pSlug').dataset.auto==='1'){
+    document.getElementById('pSlug').value = t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    document.getElementById('pSlug').dataset.auto='1';
+  }
+}
+
+/* Slug validation */
+document.getElementById('pSlug').addEventListener('input', function(){
+  this.dataset.auto='0';
+  var v = this.value;
+  var hint = document.getElementById('slugHint');
+  if(v.length > 80){ hint.innerHTML='⚠ Too long. Keep under 80 chars. Example: <b>nmrv050-worm-gearbox</b>'; hint.style.color='var(--r)'; }
+  else if(v.includes('--') || v.startsWith('-') || v.endsWith('-')){ hint.innerHTML='⚠ No double hyphens or leading/trailing hyphens.'; hint.style.color='var(--r)'; }
+  else { hint.innerHTML='✅ Short, clean path. Example: <b>nmrv050-worm-gearbox</b>'; hint.style.color='var(--g)'; }
+});
+
+/* SEO char counters */
+function checkSeoTitle(){
+  var el=document.getElementById('pMetaTitle'), c=document.getElementById('seoTitleCount'), len=el.value.length;
+  c.textContent = len+' / 50-60';
+  c.className='char-count '+(len>=50&&len<=60?'ok':(len>0?'warn':''));
+  el.className=(len>0&&(len<50||len>60))?'error':'';
+}
+function checkMetaDesc(){
+  var el=document.getElementById('pMetaDesc'), c=document.getElementById('metaDescCount'), len=el.value.length;
+  c.textContent = len+' / 120-155';
+  c.className='char-count '+(len>=120&&len<=155?'ok':(len>0?'warn':''));
+  el.className=(len>0&&(len<120||len>155))?'error':'';
+}
+
+function addMod(key){
+  var code = typeof MODS[key]==='function' ? MODS[key]() : (MODS[key] || '');
+  insertAtCursor('pBody', code);
+  toast('✅ '+key+' inserted','success');
+}
 function addModN(key){ insertAtCursor('nBody', MODSN[key] || ''); toast('✅ '+key+' inserted','success'); }
 
 function insertAtCursor(id, text) {
-  var el = document.getElementById(id);
-  if (!el) return;
+  var el = document.getElementById(id); if (!el) return;
   var start = el.selectionStart, end = el.selectionEnd;
   el.value = el.value.substring(0, start) + text + el.value.substring(end);
-  el.focus();
-  el.selectionStart = el.selectionEnd = start + text.length;
+  el.focus(); el.selectionStart = el.selectionEnd = start + text.length;
 }
 
 /* Login */
@@ -432,18 +462,21 @@ function login(){
   });
 }
 
-function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},2500);}
+function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
 
-/* Navigation */
+/* Nav */
 document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');}});
-
-/* Form tabs */
 document.querySelectorAll('.tab-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('#page-products .tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('panel-'+this.dataset.panel).classList.add('active');}});
 
-/* Image preview */
-function previewImage(){var f=document.getElementById('imgFile').files[0];if(!f) return;var r=new FileReader();r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file')};r.readAsDataURL(f);}
+/* Image */
+function previewImage(){
+  var f=document.getElementById('imgFile').files[0]; if(!f) return;
+  var r=new FileReader(); r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file');
+  /* Auto-fill alt text from filename */
+  var alt = f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
+  if(!document.getElementById('pImgAlt').value) document.getElementById('pImgAlt').value = alt;
+};r.readAsDataURL(f);}
 
-/* Upload image */
 function uploadNow(){
   var f=document.getElementById('imgFile').files[0];
   if(!f) return toast('Select an image first','error');
@@ -453,82 +486,113 @@ function uploadNow(){
     var path='public/images/products/'+f.name;
     fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('pImg').value=url; document.getElementById('pImgManual').value=url; toast('Uploaded: '+url,'success'); }
-      else toast(d.message,'error');
+      if(d.content){
+        var url='/woshidahuaidan/images/products/'+f.name;
+        document.getElementById('pImg').value=url; document.getElementById('pImgManual').value=url;
+        /* Auto alt text */
+        if(!document.getElementById('pImgAlt').value) document.getElementById('pImgAlt').value = f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
+        toast('Uploaded: '+url,'success');
+      } else toast(d.message,'error');
     });
-  };
-  r.readAsDataURL(f);
+  }; r.readAsDataURL(f);
 }
 
 function uploadMedia(){
-  var f=document.getElementById('mediaFile').files[0];
-  if(!f) return;
+  var f=document.getElementById('mediaFile').files[0]; if(!f) return;
   var r=new FileReader();
   r.onload=function(ev){
     var b64=ev.target.result.split(',')[1];
-    var path='public/images/products/'+f.name;
-    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    fetch(A+'/repos/'+R+'/contents/public/images/products/'+f.name,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0">✅ '+url+'</div>'; toast('Uploaded!','success'); }
+      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0">✅ '+url+' <small style="color:var(--g)">('+f.name+')</small></div>'; toast('Uploaded!','success'); }
       else toast(d.message,'error');
     });
-  };
-  r.readAsDataURL(f);
+  }; r.readAsDataURL(f);
 }
 
-/* Add Similar Product */
+/* Add Similar Product - CLEARS H1, slug, image */
 function addSimilar(){
-  document.getElementById('pTitle').value = '[COPY] ' + document.getElementById('pTitle').value;
+  /* Keep: category, subcategory, features, specs, body, SEO fields */
+  /* Clear: product name, slug, image, image alt */
+  document.getElementById('pTitle').value = '';
   document.getElementById('pSlug').value = '';
-  var bodyEl = document.getElementById('pBody');
-  if(bodyEl) bodyEl.value = bodyEl.value;
-  toast('📋 Form populated! Change product name and save.','success');
+  document.getElementById('pSlug').dataset.auto='0';
+  document.getElementById('pImg').value = '';
+  document.getElementById('pImgManual').value = '';
+  document.getElementById('pImgAlt').value = '';
+  document.getElementById('uploadZone').classList.remove('has-file');
+  document.getElementById('imgPreview').src = '';
+  document.getElementById('imgFile').value = '';
+  document.getElementById('pMetaTitle').value = '';
+  document.getElementById('pMetaDesc').value = '';
+  checkSeoTitle(); checkMetaDesc();
+  toast('📋 Copied! Fill in: product name, slug, image, SEO title, meta desc.','success');
   document.getElementById('pTitle').focus();
-  document.getElementById('pTitle').select();
 }
 
 /* Build frontmatter */
 function buildFM(){
   var t=document.getElementById('pTitle').value;
-  var s=document.getElementById('pSlug').value||t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  var s=document.getElementById('pSlug').value;
+  if(!s) s = t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  s = s.replace(/--+/g,'-').replace(/^-|-$/g,'').substring(0,80);
   var c=document.getElementById('pCat').value;
   var sc=document.getElementById('pSub').value;
-  var ex=document.getElementById('pExcerpt').value.replace(/\"/g,'\\\"');
+  var ex=document.getElementById('pExcerpt').value.replace(/"/g,'\\"');
   var im=document.getElementById('pImg').value;
+  var alt=document.getElementById('pImgAlt').value;
   var fe=document.getElementById('pFeat').value;
   var sp=document.getElementById('pSpec').value;
   var o=parseInt(document.getElementById('pOrder').value)||0;
-  var body = (document.getElementById('pBody')||{}).value || '';
+  var mt=document.getElementById('pMetaTitle').value;
+  var md=document.getElementById('pMetaDesc').value.replace(/"/g,'\\"');
+  var kw=document.getElementById('pKeywords').value;
+  var body=(document.getElementById('pBody')||{}).value||'';
 
   var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
   if(sc) fm+='subcategory: "'+sc+'"\n';
   fm+='excerpt: "'+ex+'"\n';
   if(im) fm+='image: "'+im+'"\n';
-  if(fe.trim()){ var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/\"/g,'\\\"')+'"\n'});}
-  if(sp.trim()){ var sl=sp.split('\n').filter(function(l){return l.includes(':')});fm+='specs:\n';sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'\"\n    value: "'+p.slice(1).join(':').trim()+'"\n'});}
+  if(alt) fm+='imageAlt: "'+alt+'"\n';
+  fm+='slug: "'+s+'"\n';
+  if(mt) fm+='metaTitle: "'+mt.replace(/"/g,'\\"')+'"\n';
+  if(md) fm+='metaDescription: "'+md+'"\n';
+  if(kw) fm+='keywords: "'+kw+'"\n';
+  if(fe.trim()){ var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/"/g,'\\"')+'"\n'});}
+  if(sp.trim()){ var sl=sp.split('\n').filter(function(l){return l.includes(':')});fm+='specs:\n';sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'"\n    value: "'+p.slice(1).join(':').trim()+'"\n'});}
   fm+='order: '+o+'\npublished: true\n---\n';
   if(body.trim()) fm+=body;
   return {slug:s,content:fm};
 }
 
-/* Save product */
+/* Save product — validate required fields */
 function saveProd(){
   if(!K) return toast('Login first','error');
   var t=document.getElementById('pTitle').value;
+  var s=document.getElementById('pSlug').value;
   var c=document.getElementById('pCat').value;
   var ex=document.getElementById('pExcerpt').value;
-  if(!t||!c||!ex) return toast('Fill required fields: Name, Category, Description','error');
+  var mt=document.getElementById('pMetaTitle').value;
+  var md=document.getElementById('pMetaDesc').value;
+
+  if(!t) return toast('❌ Product Name (H1) is required','error');
+  if(!s){ s=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); document.getElementById('pSlug').value=s; }
+  if(s.length<2) return toast('❌ URL Slug too short','error');
+  if(!c) return toast('❌ Category is required','error');
+  if(!ex) return toast('❌ Short Description is required','error');
+  if(mt && (mt.length<50||mt.length>60)) return toast('❌ SEO Title must be 50-60 characters (currently '+mt.length+')','error');
+  if(md && (md.length<120||md.length>155)) return toast('❌ Meta Description must be 120-155 characters (currently '+md.length+')','error');
+
   var d=buildFM();
   send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
 }
 
-/* Save news */
 function saveNews(){
   if(!K) return toast('Login first','error');
   var t=document.getElementById('nTitle').value;
   if(!t) return toast('Title required','error');
   var d=document.getElementById('nDate').value||new Date().toISOString().split('T')[0];
-  var ex=document.getElementById('nExcerpt').value.replace(/\"/g,'\\\"');
+  var ex=document.getElementById('nExcerpt').value.replace(/"/g,'\\"');
   var bd=document.getElementById('nBody').value;
   var im=document.getElementById('nImg').value;
   var sl=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -546,7 +610,6 @@ function saveSettings(){
   send('src/data/settings.json',d,'Update site settings');
 }
 
-/* Send to GitHub */
 function send(path,content,message){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
@@ -554,10 +617,12 @@ function send(path,content,message){
 }
 
 function resetForm(){
-  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgManual','pBody'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgManual','pImgAlt','pBody','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('pOrder').value='0';
   document.getElementById('uploadZone').classList.remove('has-file');
   document.getElementById('imgPreview').src='';
+  document.getElementById('imgFile').value='';
+  checkSeoTitle(); checkMetaDesc();
   toast('Form reset','success');
 }
 </script>
