@@ -564,7 +564,8 @@ function renderGallery(){
     html += '<div style="position:relative;width:150px;border:1px solid #eee;border-radius:8px;overflow:hidden;background:#fafafa;flex-shrink:0">'
       +'<img src="'+img.dataUrl+'" style="width:100%;height:120px;object-fit:cover">'
       +'<button onclick="removeGalleryImage('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:22px;text-align:center">✕</button>'
-      +(i===0?'<span style="position:absolute;top:4px;left:4px;background:var(--r);color:#fff;border-radius:3px;font-size:10px;padding:1px 5px;font-weight:bold">MAIN</span>':'')
+      +(i===0?'<span style="position:absolute;top:4px;left:4px;background:var(--r);color:#fff;border-radius:3px;font-size:10px;padding:1px 5px;font-weight:bold">★ MAIN</span>'
+        :'<button onclick="setMainImage('+i+')" title="Set as main image" style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:3px;font-size:10px;padding:1px 5px;cursor:pointer">Set Main</button>')
       +'<div style="padding:6px 8px">'
       +'<input value="'+img.name+'" onchange="galleryImages['+i+'].name=this.value;updateGallery()" style="width:100%;border:none;font-size:11px;padding:2px;background:transparent" title="File name (editable)">'
       +'<div style="font-size:10px;color:var(--g);margin:2px 0">'+img.size+' | '+img.dims+'</div>'
@@ -575,6 +576,12 @@ function renderGallery(){
   updateGallery();
 }
 function removeGalleryImage(i){ galleryImages.splice(i,1); renderGallery(); toast('Image removed','success'); }
+function setMainImage(i){
+  var img = galleryImages.splice(i,1)[0];
+  galleryImages.unshift(img);
+  renderGallery();
+  toast('⭐ New main image set','success');
+}
 function updateGallery(){
   document.getElementById('pGallery').value = JSON.stringify(galleryImages.map(function(img){return {name:img.name,url:img.url,size:img.size,dims:img.dims,alt:img.alt};}));
   // Sync first image to pImg + pImgAlt
