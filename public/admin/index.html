@@ -552,7 +552,9 @@ function addToGallery(f, dataUrl, url, safeName){
   var img = new Image();
   img.onload = function(){
     var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB', displayName = safeName||f.name;
-    galleryImages.push({name: displayName, url: url||'', size: sizeKB, dims: dims, alt: f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '), dataUrl: dataUrl});
+    var productName = document.getElementById('pTitle').value || '';
+    var defaultAlt = productName || f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
+    galleryImages.push({name: displayName, url: url||'', size: sizeKB, dims: dims, alt: defaultAlt, dataUrl: dataUrl});
     renderGallery();
   }; img.src = dataUrl;
 }
