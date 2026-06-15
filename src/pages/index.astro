@@ -147,7 +147,7 @@ const blogPosts = [
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {categories.map((cat) => (
-          <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
+          <a href={`/woshidahuaidan/product-category/${cat.slug}`} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
             <span class="text-xl shrink-0">{cat.icon}</span>
             <div>
               <span class="text-sm font-medium text-steel-700 group-hover:text-brand-600 transition-colors leading-tight">{cat.name}</span>

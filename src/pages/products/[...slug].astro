@@ -26,7 +26,7 @@ const related = allProducts
 // Build page-specific meta
 const pageDescription = excerpt.slice(0, 160);
 const pageKeywords = `${title}, ${category}, China manufacturer, industrial ${category.toLowerCase()}, transmission parts, GRANGIN`;
-const productUrl = new URL(`/woshidahuaidan/products/${product.id}/`, Astro.site).href;
+const productUrl = new URL(`/woshidahuaidan/product/${product.id}/`, Astro.site).href;
 
 // Product structured data
 const productSchema = {
@@ -46,8 +46,8 @@ const productSchema = {
 const breadcrumb = {
   items: [
     { name: 'Home', url: new URL('/woshidahuaidan/', Astro.site).href },
-    { name: 'Products', url: new URL('/woshidahuaidan/products/', Astro.site).href },
-    { name: category, url: new URL(`/woshidahuaidan/products/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`, Astro.site).href },
+    { name: 'Products', url: new URL('/woshidahuaidan/product/', Astro.site).href },
+    { name: category, url: new URL(`/woshidahuaidan/product/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`, Astro.site).href },
     { name: title, url: productUrl },
   ],
 };
@@ -64,9 +64,9 @@ const breadcrumb = {
       <nav class="flex items-center gap-2 text-sm text-steel-500" aria-label="Breadcrumb">
         <a href="/woshidahuaidan/" class="hover:text-brand-600 transition-colors">Home</a>
         <span>/</span>
-        <a href="/woshidahuaidan/products/" class="hover:text-brand-600 transition-colors">Products</a>
+        <a href="/woshidahuaidan/product/" class="hover:text-brand-600 transition-colors">Products</a>
         <span>/</span>
-        <a href={`/woshidahuaidan/products/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
+        <a href={`/woshidahuaidan/product/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
         <span>/</span>
         <span class="text-steel-800 font-medium">{title}</span>
       </nav>
@@ -186,7 +186,7 @@ const breadcrumb = {
         <h2 class="text-2xl font-bold text-steel-900 mb-6">Related Products</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {related.map((p) => (
-            <a href={`/woshidahuaidan/products/${p.id}/`} class="card-base group">
+            <a href={`/woshidahuaidan/product/${p.id}/`} class="card-base group">
               <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
                 <div class="text-center">
                   <div class="text-4xl mb-1">⚙️</div>

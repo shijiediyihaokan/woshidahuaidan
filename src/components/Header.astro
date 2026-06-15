@@ -39,11 +39,11 @@ import { categoryTree } from '../data/categories';
           <div class="absolute top-full left-0 mt-0 w-64 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 max-h-[80vh] overflow-y-auto">
             {categoryTree.map((cat) => (
               <div>
-                <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="block px-4 py-2.5 text-sm font-bold text-steel-800 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100 flex items-center gap-2">
+                <a href={`/woshidahuaidan/product-category/${cat.slug}`} class="block px-4 py-2.5 text-sm font-bold text-steel-800 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100 flex items-center gap-2">
                   <span>{cat.icon}</span> {cat.name}
                 </a>
                 {cat.subcategories.map((sc) => (
-                  <a href={`/woshidahuaidan/products/?category=${cat.slug}&sub=${sc.slug}`} class="block pl-10 pr-4 py-2 text-sm text-steel-500 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-50">
+                  <a href={`/woshidahuaidan/product-category/${cat.slug}/${sc.slug}`} class="block pl-10 pr-4 py-2 text-sm text-steel-500 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-50">
                     {sc.name}
                   </a>
                 ))}

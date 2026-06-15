@@ -14,7 +14,7 @@ import { categoryTree } from '../data/categories';
         <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Products</h4>
         <ul class="space-y-2.5 text-sm">
           {categoryTree.slice(0, 4).map((cat) => (
-            <li><a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="text-steel-400 hover:text-brand-400 transition-colors">{cat.name}</a></li>
+            <li><a href={`/woshidahuaidan/product-category/${cat.slug}`} class="text-steel-400 hover:text-brand-400 transition-colors">{cat.name}</a></li>
           ))}
         </ul>
       </div>
@@ -22,7 +22,7 @@ import { categoryTree } from '../data/categories';
         <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">More</h4>
         <ul class="space-y-2.5 text-sm">
           {categoryTree.slice(4).map((cat) => (
-            <li><a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="text-steel-400 hover:text-brand-400 transition-colors">{cat.name}</a></li>
+            <li><a href={`/woshidahuaidan/product-category/${cat.slug}`} class="text-steel-400 hover:text-brand-400 transition-colors">{cat.name}</a></li>
           ))}
         </ul>
       </div>
