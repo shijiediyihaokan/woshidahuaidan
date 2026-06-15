@@ -136,8 +136,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
       <div class="card">
         <div class="tabs">
           <button class="tab-btn active" data-panel="basic">Basic Info</button>
-          <button class="tab-btn" data-panel="content">Content</button>
-          <button class="tab-btn" data-panel="detail">🎨 Detail Page Builder</button>
+          <button class="tab-btn" data-panel="detail">🎨 Detail Page</button>
           <button class="tab-btn" data-panel="seo">SEO</button>
         </div>
 
@@ -154,20 +153,18 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           </div>
         </div>
 
-        <!-- Content -->
-        <div id="panel-content" class="tab-content">
-          <div class="field"><label>Short Description <span class="req">*</span></label><textarea id="pExcerpt" rows="3" placeholder="Concise description for listings (120-160 chars recommended)"></textarea></div>
-          <div class="form-row">
-            <div class="field"><label>Key Features</label><textarea id="pFeat" rows="4" placeholder="One per line"></textarea><div class="helper">Each line = one bullet point</div></div>
-            <div class="field"><label>Technical Specs</label><textarea id="pSpec" rows="4" placeholder="Name: Value&#10;Size: 025-150"></textarea><div class="helper">Name: Value format</div></div>
-          </div>
-        </div>
-
-        <!-- Detail Page VISUAL Builder -->
+        <!-- Content fields moved to Detail Page -->
         <div id="panel-detail" class="tab-content">
-          <div class="modules-bar">
+          <div class="form-row">
+            <div class="field"><label>Short Description <span class="req">*</span></label><textarea id="pExcerpt" rows="2" placeholder="Concise product description for listings and search results (120-160 chars recommended)"></textarea></div>
+            <div class="field"><label>Key Features</label><textarea id="pFeat" rows="3" placeholder="One feature per line"></textarea><div class="helper">Each line = one bullet point on product page</div></div>
+          </div>
+          <div class="field"><label>Technical Specs</label><textarea id="pSpec" rows="3" placeholder="Name: Value&#10;Size: 025-150&#10;Ratio: 5:1 to 100:1"></textarea><div class="helper">Name: Value format, one per line</div></div>
+          <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+          <div class="field">
+            <label>Detail Page Body</label>
+            <div class="modules-bar">
             <span class="mod-label">H2:</span>
-            <span class="style-pick">
               <select id="titleStyle"><option value="red-left">Red Left Border</option><option value="red-underline">Red Underline</option><option value="dark-left">Dark Left Border</option><option value="dark-underline">Dark Underline</option><option value="red-bg">Red Background</option></select>
               <input type="color" id="titleColor" value="#ce1132">
             </span>
