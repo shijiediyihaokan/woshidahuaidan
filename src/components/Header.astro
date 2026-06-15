@@ -53,7 +53,20 @@ import { categoryTree } from '../data/categories';
         </div>
 
         <a href="/woshidahuaidan/applications/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Applications</a>
-        <a href="/woshidahuaidan/custom-manufacturing/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Custom Manufacturing</a>
+
+        <!-- Custom Manufacturing dropdown -->
+        <div class="relative group h-full flex items-center">
+          <a href="/woshidahuaidan/custom-manufacturing/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">Custom Manufacturing ▾</a>
+          <div class="absolute top-full left-0 mt-0 w-52 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <a href="/woshidahuaidan/custom-manufacturing/cnc-machining/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">CNC Machining</a>
+            <a href="/woshidahuaidan/custom-manufacturing/laser-cutting/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Laser Cutting</a>
+            <a href="/woshidahuaidan/custom-manufacturing/sheet-metal-bending/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Sheet Metal Bending</a>
+            <a href="/woshidahuaidan/custom-manufacturing/welding-fabrication/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Welding Fabrication</a>
+            <a href="/woshidahuaidan/custom-manufacturing/heat-treatment/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Heat Treatment</a>
+            <a href="/woshidahuaidan/custom-manufacturing/surface-treatment/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Surface Treatment</a>
+            <a href="/woshidahuaidan/custom-manufacturing/materials/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Materials</a>
+          </div>
+        </div>
         <a href="/woshidahuaidan/knowledge-center/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Knowledge Center</a>
         <a href="/woshidahuaidan/about/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">About Us</a>
         <a href="/woshidahuaidan/contact/" class="px-3 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 h-full flex items-center">Contact</a>
