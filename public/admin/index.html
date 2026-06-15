@@ -297,7 +297,7 @@ function renderVizModule(m, idx) {
   if(m.type==='h2') h=titleHTML(m.text,'h2',m.style,m.color);
   else if(m.type==='h3') h=titleHTML(m.text,'h3',m.style,m.color);
   else if(m.type==='text') h='<div style="font-size:14px;line-height:1.8;color:#444;margin:10px 0;">'+m.text+'</div>';
-  else if(m.type==='leftimg'){ console.log('RENDERING leftimg, img=',m.img); h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:45%;vertical-align:top;padding-right:15px;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td></tr></table>';
+  else if(m.type==='leftimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:45%;vertical-align:top;padding-right:15px;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td></tr></table>';
   else if(m.type==='rightimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td><td style="width:45%;vertical-align:top;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td></tr></table>';
 
   else if(m.type==='2imgs'||m.type==='3imgs'||m.type==='4imgs'||m.type==='6imgs'){
