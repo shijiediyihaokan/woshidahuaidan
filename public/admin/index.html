@@ -58,6 +58,13 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .style-pick{display:flex;gap:4px;align-items:center}
 .style-pick select{padding:4px 8px;border:1px solid #d1d5db;border-radius:4px;font-size:11px}
 .style-pick input[type=color]{width:24px;height:24px;border:none;border-radius:4px;cursor:pointer;padding:0}
+/* Upload widget in modal */
+.upload-widget{border:2px dashed #d1d5db;border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:8px}
+.upload-widget:hover{border-color:var(--r)}
+.uw-empty{color:var(--g);font-size:13px}
+.uw-preview{display:flex;align-items:center;gap:10px}
+.uw-preview img{max-width:200px;max-height:150px;border-radius:4px}
+.uw-info{text-align:left;font-size:13px;line-height:1.6}
 
 /* Visual preview area */
 .viz-preview{min-height:200px;border:2px dashed #e5e7eb;border-radius:8px;padding:20px;background:#fff;position:relative}
@@ -339,13 +346,34 @@ function openModule(type, idx){
     html='<h3>Text Block</h3><div class="field"><label>Content</label><textarea id="mText" rows="4">'+(data.text||'')+'</textarea></div>';
   }
   else if(type==='leftimg'||type==='rightimg'){
-    html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3><div class="field"><label>Image URL</label><input id="mImg" value="'+(data.img||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div><div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Product image description"></div><div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div><div class="field"><label>Description</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
+    html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3>'
+      +'<div class="upload-widget" id="mImgWidget">'
+      +(data.img?'<div class="uw-preview"><img src="'+data.img+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b> <span style="color:var(--g);font-size:11px">'+(data.fileSize||'')+' '+(data.dims||'')+'</span></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload image <small>(≤600KB)</small></div>')
+      +'</div>'
+      +'<input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
+      +'<div class="field"><label>File Name <small style="font-weight:normal">(editable)</small></label><input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" onchange="updateModalImgName(\'mImgName\')"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Product image description"></div>'
+      +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
+      +'<div class="field"><label>Description</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"><input type="hidden" id="mImgSize" value="'+(data.fileSize||'')+'"><input type="hidden" id="mImgDims" value="'+(data.dims||'')+'">';
   }
   else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
     var n=parseInt(type), imgs=data.imgs||[];
     html='<h3>'+n+' Images in 1 Row</h3>';
     for(var i=0;i<n;i++){ var item=imgs[i]||{};
-      html+='<div class="item-row"><span style="min-width:20px;font-weight:bold;font-size:12px;color:var(--r)">'+(i+1)+'</span><input placeholder="Image URL" value="'+(item.url||'')+'" data-idx="'+i+'" data-field="url"><input placeholder="ALT" value="'+(item.alt||'')+'" data-idx="'+i+'" data-field="alt" style="max-width:150px"><input placeholder="Label" value="'+(item.label||'')+'" data-idx="'+i+'" data-field="label" style="max-width:100px"></div>';
+      html+='<div style="border:1px solid #eee;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa">'
+        +'<div style="font-weight:bold;font-size:13px;color:var(--r);margin-bottom:8px">📷 Image '+(i+1)+'</div>'
+        +'<div class="upload-widget" id="mImgWidget'+i+'">'
+        +(item.url?'<div class="uw-preview"><img src="'+item.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((item.fileName)||'')+'</b> <span style="color:var(--g);font-size:11px">'+(item.fileSize||'')+' '+(item.dims||'')+'</span></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile'+i+'\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+        +'</div>'
+        +'<input type="file" id="mImgFile'+i+'" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile'+i+'\',\'mImgWidget'+i+'\',\'mImgName'+i+'\')">'
+        +'<div style="display:flex;gap:8px;margin-top:8px">'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">File Name</label><input id="mImgName'+i+'" value="'+(item.fileName||'')+'" placeholder="image-'+ (i+1) +'.jpg" style="padding:6px 8px;font-size:12px" onchange="this.dataset.changed=\'1\'"></div>'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">ALT</label><input id="mAlt'+i+'" value="'+(item.alt||'')+'" placeholder="ALT text" style="padding:6px 8px;font-size:12px"></div>'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">Label</label><input id="mLabel'+i+'" value="'+(item.label||'')+'" placeholder="Caption" style="padding:6px 8px;font-size:12px"></div>'
+        +'</div>'
+        +'<input type="hidden" id="mImgUrl'+i+'" value="'+(item.url||'')+'"><input type="hidden" id="mImgSize'+i+'" value="'+(item.fileSize||'')+'"><input type="hidden" id="mImgDims'+i+'" value="'+(item.dims||'')+'">'
+        +'</div>';
     }
   }
   else if(type==='features'){
@@ -382,12 +410,21 @@ function saveModule(type){
   var data={type:type};
   if(type==='h2'||type==='h3'){data.text=document.getElementById('mText').value;data.style=document.getElementById('mStyle').value;data.color=document.getElementById('mColor').value;}
   else if(type==='text'){data.text=document.getElementById('mText').value;}
-  else if(type==='leftimg'||type==='rightimg'){data.img=document.getElementById('mImg').value;data.alt=document.getElementById('mAlt').value;data.sub=document.getElementById('mSub').value;data.text=document.getElementById('mText').value;}
+  else if(type==='leftimg'||type==='rightimg'){
+    data.img=document.getElementById('mImgUrl').value;
+    data.fileName=document.getElementById('mImgName').value;
+    data.fileSize=document.getElementById('mImgSize').value;
+    data.dims=document.getElementById('mImgDims').value;
+    data.alt=document.getElementById('mAlt').value;
+    data.sub=document.getElementById('mSub').value;
+    data.text=document.getElementById('mText').value;
+  }
   else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
     var n=parseInt(type);data.imgs=[];
-    var inputs=document.querySelectorAll('#modal [data-field]');
-    for(var i=0;i<n;i++){ data.imgs.push({url:'',alt:'',label:''}); }
-    inputs.forEach(function(el){var idx=parseInt(el.dataset.idx);if(data.imgs[idx]) data.imgs[idx][el.dataset.field]=el.value;});
+    for(var i=0;i<n;i++){
+      var url=document.getElementById('mImgUrl'+i), name=document.getElementById('mImgName'+i), alt=document.getElementById('mAlt'+i), label=document.getElementById('mLabel'+i), size=document.getElementById('mImgSize'+i), dims=document.getElementById('mImgDims'+i);
+      data.imgs.push({url:url?url.value:'', fileName:name?name.value:'', fileSize:size?size.value:'', dims:dims?dims.value:'', alt:alt?alt.value:'', label:label?label.value:''});
+    }
   }
   else if(type==='features'){
     data.items=[];var names=document.querySelectorAll('#modal [data-field=fname]'), descs=document.querySelectorAll('#modal [data-field=fdesc]');
@@ -467,6 +504,51 @@ function previewImage(){
   var f=document.getElementById('imgFile').files[0];if(!f)return;
   var r=new FileReader();r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file');
   var alt=f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');if(!document.getElementById('pImgAlt').value)document.getElementById('pImgAlt').value=alt;};r.readAsDataURL(f);}
+
+/* ====== MODAL IMAGE UPLOAD HANDLER ====== */
+var modalUploadCache={};
+function handleModalUpload(fileInputId, widgetId, nameInputId){
+  var fileInput=document.getElementById(fileInputId), f=fileInput.files[0]; if(!f) return;
+  if(f.size > 600*1024){ toast('❌ Image too large! Max 600KB. This file: '+(f.size/1024).toFixed(0)+'KB','error'); fileInput.value=''; return; }
+  var widget=document.getElementById(widgetId), nameInput=document.getElementById(nameInputId);
+  modalUploadCache[fileInputId]=f;
+  /* Upload to GitHub + show preview */
+  var reader=new FileReader(); reader.onload=function(e){
+    var b64=e.target.result.split(',')[1];
+    var path='public/images/products/'+f.name;
+    if(!K) { showPreviewOnly(); return; }
+    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d.content) {
+        var url='/woshidahuaidan/images/products/'+f.name;
+        var idx=fileInputId.replace('mImgFile','');
+        var urlEl=document.getElementById('mImgUrl'+idx); if(urlEl) urlEl.value=url;
+        showPreview(url);
+      } else if(d.message && d.message.includes('already exists')) {
+        var url='/woshidahuaidan/images/products/'+f.name;
+        var idx=fileInputId.replace('mImgFile','');
+        var urlEl=document.getElementById('mImgUrl'+idx); if(urlEl) urlEl.value=url;
+        showPreview(url);
+      } else { showPreviewOnly(); toast('Upload: '+d.message,'error'); }
+    }).catch(function(){ showPreviewOnly(); });
+    function showPreview(url){
+      var img=new Image(); img.onload=function(){
+        var dims=img.width+'×'+img.height+'px', sizeKB=(f.size/1024).toFixed(0)+'KB';
+        widget.innerHTML='<div class="uw-preview"><img src="'+e.target.result+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+f.name+'</b><br><span style="color:#27ae60;font-size:11px">✅ '+sizeKB+' | '+dims+(url?' | Uploaded':'')+'</span></div>';
+        widget.style.borderColor='#27ae60';
+        if(nameInput){ nameInput.value=f.name; }
+        var idx=fileInputId.replace('mImgFile','');
+        var dE=document.getElementById('mImgDims'+idx); if(dE) dE.value=dims;
+        var sE=document.getElementById('mImgSize'+idx); if(sE) sE.value=sizeKB;
+      }; img.src=e.target.result;
+    }
+    function showPreviewOnly(){ showPreview(); }
+  }; reader.readAsDataURL(f);
+}
+function updateModalImgName(nameInputId){
+  /* User manually changed file name */
+}
+
 function uploadNow(){
   var f=document.getElementById('imgFile').files[0];if(!f)return toast('Select image','error');
   var r=new FileReader();r.onload=function(ev){
