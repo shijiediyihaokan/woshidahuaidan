@@ -1,36 +1,33 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { categoryTree, getCategory, getSubCategory } from '../../data/categories';
 
 const allProducts = await getCollection('products', ({ data }) => data.published);
-const categoryParam = Astro.url.searchParams.get('category');
+const catParam = Astro.url.searchParams.get('category');
+const subParam = Astro.url.searchParams.get('sub');
 
-const allCategories = [...new Set(allProducts.map(p => p.data.category))].sort();
-
-const categoryOrder = [
-  'Gear', 'Sprocket', 'Belt Pulley', 'Coupling',
-  'Transmission Shaft', 'Lead Screw', 'Customized Parts',
-  'Transmission Parts', 'Sheet Metal Components',
-  'Gear Motor', 'Gearbox', 'AC Motor',
-];
-
-const filtered = categoryParam
-  ? allProducts.filter(p => {
-      const catSlug = p.data.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      const paramSlug = categoryParam.toLowerCase();
-      return catSlug === paramSlug || catSlug.includes(paramSlug) || paramSlug.includes(catSlug);
-    })
-  : allProducts;
+// Filter products
+const filtered = allProducts.filter(p => {
+  if (catParam && p.data.category.toLowerCase().replace(/\s+/g, '-') !== catParam) return false;
+  if (subParam && p.data.subcategory?.toLowerCase().replace(/\s+/g, '-') !== subParam) return false;
+  return true;
+});
 
 const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+const activeCat = catParam ? getCategory(catParam) : null;
+const activeSub = (catParam && subParam) ? getSubCategory(catParam, subParam) : null;
 ---
 
-<Layout title="Products" description="Browse GRANGIN's complete range of gears, sprockets, belt pulleys, gear motors & CNC machined parts. ISO 9001/45001/14001 certified manufacturer in Zhejiang, China.">
+<Layout title="Products" description="Browse GRANGIN's complete range of gears, sprockets, belt pulleys, gear motors & CNC parts. ISO 9001/45001/14001 certified.">
   
   <section class="bg-dark-900 text-white py-12 sm:py-16">
     <div class="container-page">
       <p class="text-brand-400 font-semibold text-sm uppercase tracking-wider mb-2">Product Catalog</p>
-      <h1 class="text-3xl sm:text-4xl font-black">Gears, Sprockets & CNC Machined Parts</h1>
+      <h1 class="text-3xl sm:text-4xl font-black">
+        {activeSub ? activeSub.name : activeCat ? activeCat.name : 'All Products'}
+      </h1>
       <p class="mt-3 text-steel-400 max-w-2xl">
         Fully supports customized drawings and 35+ materials. Direct manufacturer with 25+ QC professionals. 25,000+ pieces monthly output.
       </p>
@@ -40,27 +37,48 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
   <section class="section-py">
     <div class="container-page">
       <div class="flex flex-col lg:flex-row gap-8">
-        <aside class="lg:w-56 shrink-0">
+        <!-- Sidebar: 2-level category tree -->
+        <aside class="lg:w-60 shrink-0">
           <div class="sticky top-20">
             <h3 class="font-bold text-steel-800 mb-3 text-sm uppercase tracking-wider">Categories</h3>
             <ul class="space-y-0.5">
               <li>
                 <a href="/woshidahuaidan/products/" 
-                   class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${!categoryParam ? 'bg-brand-600 text-white' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
+                   class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${!catParam ? 'bg-brand-600 text-white' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
                   All Products
                 </a>
               </li>
-              {categoryOrder.map((cat) => {
-                const slug = cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-                const count = allProducts.filter(p => p.data.category === cat).length;
-                const isActive = categoryParam === slug;
+              {categoryTree.map((cat) => {
+                const isActive = catParam === cat.slug;
+                const count = allProducts.filter(p => p.data.category === cat.name).length;
                 return (
                   <li>
-                    <a href={`/products/?category=${slug}`}
-                       class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${isActive ? 'bg-brand-600 text-white' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
-                      {cat}
-                      {count > 0 && <span class={`ml-1.5 text-xs ${isActive ? 'text-brand-200' : 'text-steel-400'}`}>({count})</span>}
+                    <a href={`/woshidahuaidan/products/?category=${cat.slug}`}
+                       class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${isActive ? 'bg-brand-50 text-brand-700 font-bold' : 'text-steel-600 hover:bg-steel-100 hover:text-brand-600'}`}>
+                      {cat.icon} {cat.name}
+                      {count > 0 && <span class="ml-1.5 text-xs text-steel-400">({count})</span>}
                     </a>
+                    {cat.subcategories && isActive && (
+                      <ul class="ml-4 mt-0.5 space-y-0.5 border-l-2 border-brand-100 pl-3">
+                        <li>
+                          <a href={`/woshidahuaidan/products/?category=${cat.slug}`}
+                             class={`block px-2 py-1.5 rounded text-xs transition-colors ${!subParam ? 'text-brand-700 font-semibold' : 'text-steel-500 hover:text-brand-600'}`}>
+                            All {cat.name}
+                          </a>
+                        </li>
+                        {cat.subcategories.map((sc) => {
+                          const isSubActive = subParam === sc.slug;
+                          return (
+                            <li>
+                              <a href={`/woshidahuaidan/products/?category=${cat.slug}&sub=${sc.slug}`}
+                                 class={`block px-2 py-1.5 rounded text-xs transition-colors ${isSubActive ? 'text-brand-700 font-semibold bg-brand-50' : 'text-steel-500 hover:text-brand-600'}`}>
+                                {sc.name}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </li>
                 );
               })}
@@ -68,42 +86,45 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
           </div>
         </aside>
 
+        <!-- Product Grid -->
         <div class="flex-1 min-w-0">
-          {categoryParam && (
+          {(catParam || subParam) && (
             <div class="mb-6 flex items-center gap-3">
-              <p class="text-sm text-steel-500">Showing <span class="font-semibold text-steel-700">{products.length}</span> products</p>
-              <a href="/woshidahuaidan/products/" class="text-xs text-brand-600 hover:text-brand-700 font-medium">Clear filter</a>
+              <p class="text-sm text-steel-500">
+                {products.length} product{products.length !== 1 ? 's' : ''}
+                {activeSub && <span class="text-steel-700 font-semibold"> in {activeSub.name}</span>}
+                {activeCat && !activeSub && <span class="text-steel-700 font-semibold"> in {activeCat.name}</span>}
+              </p>
+              <a href="/woshidahuaidan/products/" class="text-xs text-brand-600 font-medium">Clear</a>
             </div>
           )}
 
           {products.length === 0 ? (
             <div class="text-center py-20">
               <div class="text-5xl mb-4">📦</div>
-              <h3 class="text-xl font-bold text-steel-700 mb-2">No products in this category yet</h3>
-              <p class="text-steel-500 mb-4">We're adding more products. Contact us for custom requirements.</p>
+              <h3 class="text-xl font-bold text-steel-700 mb-2">Coming Soon</h3>
+              <p class="text-steel-500 mb-4">Products in this category are being added. Contact us for your requirements.</p>
               <a href="/woshidahuaidan/contact/" class="btn-primary">Contact Us</a>
             </div>
           ) : (
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {products.map((product) => (
-                <a href={`/products/${product.id}/`} class="card-base group flex flex-col">
+                <a href={`/woshidahuaidan/products/${product.id}/`} class="card-base group flex flex-col">
                   <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
-                    {product.data.image ? (
-                      <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover" />
-                    ) : (
-                      <div class="text-center p-4">
-                        <div class="text-5xl mb-2">⚙️</div>
-                        <span class="tag tag-red">{product.data.category}</span>
-                      </div>
-                    )}
+                    <div class="text-center p-4">
+                      <div class="text-5xl mb-2">⚙️</div>
+                      <span class="tag tag-red">{product.data.category}</span>
+                    </div>
                   </div>
                   <div class="p-4 flex-1 flex flex-col">
-                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-1">{product.data.category}</span>
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-1">
+                      {product.data.subcategory || product.data.category}
+                    </span>
                     <h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors mb-2 line-clamp-2">{product.data.title}</h3>
                     <p class="text-sm text-steel-500 leading-relaxed line-clamp-2 mb-3 flex-1">{product.data.excerpt}</p>
                     <div class="flex items-center justify-between pt-3 border-t border-steel-100">
                       <span class="stock-in">In Stock</span>
-                      <span class="text-sm font-semibold text-brand-600 group-hover:text-brand-700 transition-colors">Quick Quote →</span>
+                      <span class="text-sm font-semibold text-brand-600">Quick Quote →</span>
                     </div>
                   </div>
                 </a>
@@ -114,5 +135,4 @@ const products = filtered.sort((a, b) => a.data.order - b.data.order || a.data.t
       </div>
     </div>
   </section>
-
 </Layout>

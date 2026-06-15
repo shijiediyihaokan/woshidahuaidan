@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { categoryTree } from '../data/categories';
 
 const stats = [
   { value: '10,000+', label: 'Factory Area (m²)' },
@@ -14,20 +15,7 @@ const qualityFeatures = [
   { title: 'Rapid Delivery Assurance', desc: 'Priority fast-track for urgent orders. Optimized production scheduling coordination. Strict adherence to precision, hardness and quality standards.', icon: '🚀' },
 ];
 
-const categories = [
-  { name: 'Gear', icon: '⚙️', href: '/products/?category=gear' },
-  { name: 'Sprocket', icon: '🔗', href: '/products/?category=sprocket' },
-  { name: 'Belt Pulley', icon: '🔄', href: '/products/?category=belt-pulley' },
-  { name: 'Coupling', icon: '🔩', href: '/products/?category=coupling' },
-  { name: 'Transmission Shaft', icon: '📏', href: '/products/?category=transmission-shaft' },
-  { name: 'Lead Screw', icon: '🔨', href: '/products/?category=lead-screw' },
-  { name: 'Customized Parts', icon: '🖥️', href: '/products/?category=customized-parts' },
-  { name: 'Transmission Parts', icon: '🏭', href: '/products/?category=transmission-parts' },
-  { name: 'Sheet Metal', icon: '🏗️', href: '/products/?category=sheet-metal-components' },
-  { name: 'Gear Motor', icon: '⚡', href: '/products/?category=gear-motor' },
-  { name: 'Gearbox', icon: '🪱', href: '/products/?category=gearbox' },
-  { name: 'AC Motor', icon: '🔌', href: '/products/?category=ac-motor' },
-];
+const categories = categoryTree;
 
 const industries = [
   { name: 'Grain & Oil Equipment', desc: 'Reliable power transmission for grain processing and oil extraction machinery.', icon: '🌾' },
@@ -159,11 +147,13 @@ const blogPosts = [
       </p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {categories.map((cat) => (
-          <a href={cat.href} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
+          <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
             <span class="text-xl shrink-0">{cat.icon}</span>
             <div>
               <span class="text-sm font-medium text-steel-700 group-hover:text-brand-600 transition-colors leading-tight">{cat.name}</span>
-              <p class="text-[10px] text-steel-400 mt-0.5">Support Customized Size ›</p>
+              {cat.subcategories && (
+                <p class="text-[10px] text-steel-400 mt-0.5">{cat.subcategories.length} subcategories ›</p>
+              )}
             </div>
           </a>
         ))}

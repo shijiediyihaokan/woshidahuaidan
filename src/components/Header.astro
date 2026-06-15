@@ -1,7 +1,7 @@
 ---
+import { categoryTree } from '../data/categories';
 ---
 
-<!-- Top Bar -->
 <div class="bg-dark-800 text-steel-300 text-xs">
   <div class="container-page">
     <div class="flex items-center justify-between h-9">
@@ -10,11 +10,11 @@
         <a href="mailto:info@ggn-gear.com" class="hover:text-white transition-colors">✉ info@ggn-gear.com</a>
       </div>
       <div class="flex items-center gap-3">
-        <form action="/search/" class="hidden sm:flex items-center">
+        <form action="/woshidahuaidan/search/" class="hidden sm:flex items-center">
           <input type="text" name="q" placeholder="Search products..." class="w-32 lg:w-40 bg-dark-700 text-white text-xs px-2 py-1 rounded border-0 focus:outline-none focus:ring-1 focus:ring-brand-500">
           <button type="submit" class="text-steel-400 hover:text-white ml-1">🔍</button>
         </form>
-        <div class="relative group"><button class="hover:text-white transition-colors flex items-center gap-1">🌐 English ▾</button></div>
+        <button class="hover:text-white transition-colors">🌐 English</button>
         <a href="/woshidahuaidan/contact/" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1 rounded text-xs font-semibold transition-colors">Contact Now！</a>
       </div>
     </div>
@@ -29,27 +29,20 @@
       </a>
       <nav class="hidden lg:flex items-center gap-0 h-full">
         <a href="/woshidahuaidan/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">HOME</a>
-        <div class="relative group h-full flex items-center">
-          <a href="/woshidahuaidan/products/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">PRODUCTS ▾</a>
-          <div class="absolute top-full left-0 mt-0 w-56 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-            <a href="/woshidahuaidan/products/?category=gear" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gear</a>
-            <a href="/woshidahuaidan/products/?category=sprocket" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Sprocket</a>
-            <a href="/woshidahuaidan/products/?category=belt-pulley" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Belt Pulley</a>
-            <a href="/woshidahuaidan/products/?category=coupling" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Coupling</a>
-            <a href="/woshidahuaidan/products/?category=transmission-shaft" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Transmission Shaft</a>
-            <a href="/woshidahuaidan/products/?category=lead-screw" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Lead Screw</a>
-            <a href="/woshidahuaidan/products/?category=customized-parts" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Customized Parts</a>
-            <a href="/woshidahuaidan/products/?category=transmission-parts" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Transmission Parts</a>
-            <a href="/woshidahuaidan/products/?category=sheet-metal-components" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Sheet Metal Components</a>
-            <a href="/woshidahuaidan/products/?category=gear-motor" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gear Motor</a>
-            <a href="/woshidahuaidan/products/?category=gearbox" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Gearbox</a>
-            <a href="/woshidahuaidan/products/?category=ac-motor" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">AC Motor</a>
+        {categoryTree.slice(0, 8).map((cat) => (
+          <div class="relative group h-full flex items-center">
+            <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">
+              {cat.name.toUpperCase()} ▾
+            </a>
+            {cat.subcategories && cat.subcategories.length > 0 && (
+              <div class="absolute top-full left-0 mt-0 w-52 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                {cat.subcategories.map((sc) => (
+                  <a href={`/woshidahuaidan/products/?category=${cat.slug}&sub=${sc.slug}`} class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">{sc.name}</a>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-        <a href="/woshidahuaidan/about/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">ABOUT</a>
-        <a href="/woshidahuaidan/news/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">NEWS</a>
-        <a href="/woshidahuaidan/contact/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">CONTACT</a>
-        <a href="/woshidahuaidan/download/" class="px-3 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 h-full flex items-center">DOWNLOAD</a>
+        ))}
       </nav>
       <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-steel-600 hover:bg-steel-100" aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,8 +53,9 @@
     </div>
     <div id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-steel-100 mt-2 pt-2">
       <a href="/woshidahuaidan/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">HOME</a>
-      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">PRODUCTS</a>
+      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">ALL PRODUCTS</a>
       <a href="/woshidahuaidan/about/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">ABOUT</a>
+      <a href="/woshidahuaidan/news/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">NEWS</a>
       <a href="/woshidahuaidan/contact/" class="block px-4 py-3 text-sm font-semibold text-steel-700">CONTACT</a>
       <a href="/woshidahuaidan/contact/" class="block mt-3 mx-4 py-3 bg-brand-600 text-white text-sm font-bold rounded text-center">Contact Now！</a>
     </div>

@@ -22,6 +22,9 @@
         "AC Motor"
       ]
     },
+    "subcategory": {
+      "type": "string"
+    },
     "image": {
       "type": "string"
     },

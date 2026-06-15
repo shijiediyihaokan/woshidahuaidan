@@ -1,6 +1,7 @@
 ---
 title: "S Series Industrial Gearbox"
 category: "Gearbox"
+subcategory: "industrial-gearbox"
 excerpt: "S series foot-mounted helical-worm gearbox for heavy-duty industrial applications. High torque density with robust cast iron housing and optional cooling systems."
 features:
   - "Helical-worm combination for high ratios in compact size"

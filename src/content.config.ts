@@ -19,6 +19,7 @@ const products = defineCollection({
       'Gearbox',
       'AC Motor',
     ]),
+    subcategory: z.string().optional(),
     image: z.string().optional(),
     excerpt: z.string(),
     features: z.array(z.string()).default([]),

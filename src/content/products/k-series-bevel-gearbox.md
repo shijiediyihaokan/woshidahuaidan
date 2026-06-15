@@ -1,6 +1,7 @@
 ---
 title: "K Series Helical Bevel Gearbox"
 category: "Gearbox"
+subcategory: "bevel-gearbox"
 excerpt: "K series helical bevel gearbox combining helical and bevel gear stages in a compact right-angle configuration. High torque capacity with universal mounting flexibility."
 features:
   - "Right-angle power transmission with helical-bevel gearing"
