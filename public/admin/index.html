@@ -335,6 +335,23 @@ function renderVizModule(m, idx) {
   else if(m.type==='cta'){
     h='<div style="background:#ce1132;color:#fff;padding:25px 30px;border-radius:8px;text-align:center;margin:30px 0;"><h3 style="color:#fff;margin:0 0 10px;font-size:20px;">'+m.title+'</h3><p style="margin:5px 0;font-size:14px;">'+m.text+'</p><p style="margin:5px 0;font-size:14px;">📧 '+m.email+' | 📞 '+m.phone+'</p><a href="mailto:'+m.email+'" style="display:inline-block;background:#fff;color:#ce1132;padding:10px 30px;border-radius:25px;font-weight:bold;text-decoration:none;margin-top:10px;">Send Inquiry Now</a></div>';
   }
+  else if(m.type==='table'){
+    var style=m.style||'striped', color=m.color||'#ce1132', headerBg=style==='dark'?'#2c3e50':color, cellBorder='1px solid #ddd';
+    var rows=m.rows||[], cols=m.cols||2;
+    h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">';
+    if(rows.length>0){
+      h+='<thead><tr>';
+      for(var c=0;c<cols;c++){h+='<th style="background:'+headerBg+';color:#fff;padding:10px 12px;border:'+cellBorder+';text-align:left;font-weight:bold;">'+(rows[0][c]||'')+'</th>';}
+      h+='</tr></thead><tbody>';
+      for(var r=1;r<rows.length;r++){
+        h+='<tr>';
+        for(var c=0;c<cols;c++){var bg=style==='striped'&&r%2===1?'#f9f9f9':'#fff';h+='<td style="padding:10px 12px;border:'+cellBorder+';background:'+bg+';">'+(rows[r][c]||'')+'</td>';}
+        h+='</tr>';
+      }
+      h+='</tbody>';
+    }
+    h+='</table>';
+  }
   return '<div class="viz-module" data-idx="'+idx+'" onclick="editModule('+idx+')"><div class="viz-actions"><button onclick="event.stopPropagation();editModule('+idx+')">✏️</button><button onclick="event.stopPropagation();delModule('+idx+')">🗑</button><button onclick="event.stopPropagation();moveUp('+idx+')">↑</button><button onclick="event.stopPropagation();moveDown('+idx+')">↓</button></div>'+h+'</div>';
 }
 
