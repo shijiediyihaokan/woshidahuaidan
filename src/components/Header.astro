@@ -29,7 +29,7 @@ import { categoryTree } from '../data/categories';
       </a>
       <nav class="hidden lg:flex items-center gap-0 h-full">
         <a href="/woshidahuaidan/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">HOME</a>
-        {categoryTree.slice(0, 8).map((cat) => (
+        {categoryTree.map((cat) => (
           <div class="relative group h-full flex items-center">
             <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">
               {cat.name.toUpperCase()} ▾

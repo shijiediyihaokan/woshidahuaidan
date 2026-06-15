@@ -1,7 +1,7 @@
 ---
 title: "R Series Helical Gearbox"
-category: "Gearbox"
-subcategory: "helical-gearbox"
+category: "Gearboxes"
+subcategory: "helical-gearboxes"
 excerpt: "R series inline helical gearbox with high efficiency up to 96% per stage. Hardened helical gears for quiet, reliable power transmission in industrial drives, pumps, and mixers."
 features:
   - "High efficiency helical gearing — up to 96% per stage"

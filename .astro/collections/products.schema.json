@@ -8,18 +8,14 @@
     "category": {
       "type": "string",
       "enum": [
-        "Gear",
-        "Sprocket",
-        "Belt Pulley",
-        "Coupling",
-        "Transmission Shaft",
-        "Lead Screw",
-        "Customized Parts",
-        "Transmission Parts",
-        "Sheet Metal Components",
-        "Gear Motor",
-        "Gearbox",
-        "AC Motor"
+        "Gearboxes",
+        "Gear Motors",
+        "AC Motors",
+        "Gears",
+        "Sprockets",
+        "Pulleys",
+        "Transmission Shafts",
+        "Sheet Metal Fabrication"
       ]
     },
     "subcategory": {

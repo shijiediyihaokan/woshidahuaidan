@@ -1,135 +1,119 @@
 // ============================================================
-// Category hierarchy — matches ggn-gear.com structure
+// Category hierarchy — new site structure (8 categories)
 // ============================================================
 export interface SubCategory {
   name: string;
   slug: string;
-  icon?: string;
 }
 export interface Category {
   name: string;
   slug: string;
   icon: string;
-  subcategories?: SubCategory[];
+  subcategories: SubCategory[];
 }
 
-// Full category tree matching ggn-gear.com
 export const categoryTree: Category[] = [
   {
-    name: 'Gear',
-    slug: 'gear',
+    name: 'Gearboxes',
+    slug: 'gearboxes',
     icon: '⚙️',
     subcategories: [
-      { name: 'Spur Gear', slug: 'spur-gear', icon: '🔧' },
-      { name: 'Helical Gear', slug: 'helical-gear', icon: '🔄' },
-      { name: 'Bevel Gear', slug: 'bevel-gear', icon: '⚡' },
-      { name: 'Spiral Bevel Gear', slug: 'spiral-bevel-gear', icon: '📐' },
-      { name: 'Worm Gears', slug: 'worm-gears', icon: '🪱' },
-      { name: 'Gear Shaft', slug: 'gear-shaft', icon: '📏' },
+      { name: 'Worm Gearboxes', slug: 'worm-gearboxes' },
+      { name: 'Helical Gearboxes', slug: 'helical-gearboxes' },
+      { name: 'Bevel Gearboxes', slug: 'bevel-gearboxes' },
+      { name: 'Right Angle Gearboxes', slug: 'right-angle-gearboxes' },
+      { name: 'Screw Jacks', slug: 'screw-jacks' },
+      { name: 'Speed Variators', slug: 'speed-variators' },
+      { name: 'Industrial Gearboxes', slug: 'industrial-gearboxes' },
     ],
   },
   {
-    name: 'Sprocket',
-    slug: 'sprocket',
-    icon: '🔗',
-    subcategories: [
-      { name: 'Simplex Sprocket', slug: 'simplex-sprocket' },
-      { name: 'Duplex Sprocket', slug: 'duplex-sprocket' },
-      { name: 'Triplex Sprocket', slug: 'triplex-sprocket' },
-    ],
-  },
-  {
-    name: 'Belt Pulley',
-    slug: 'belt-pulley',
-    icon: '🔄',
-    subcategories: [
-      { name: 'V-Belt Pulley', slug: 'v-belt-pulley' },
-      { name: 'Timing Belt Pulley', slug: 'timing-belt-pulley' },
-    ],
-  },
-  {
-    name: 'Coupling',
-    slug: 'coupling',
-    icon: '🔩',
-    subcategories: [
-      { name: 'Jaw Coupling', slug: 'jaw-coupling' },
-      { name: 'Gear Coupling', slug: 'gear-coupling' },
-      { name: 'Chain Coupling', slug: 'chain-coupling' },
-    ],
-  },
-  {
-    name: 'Transmission Shaft',
-    slug: 'transmission-shaft',
-    icon: '📏',
-  },
-  {
-    name: 'Lead Screw',
-    slug: 'lead-screw',
-    icon: '🔨',
-  },
-  {
-    name: 'Customized Parts',
-    slug: 'customized-parts',
-    icon: '🖥️',
-  },
-  {
-    name: 'Transmission Parts',
-    slug: 'transmission-parts',
-    icon: '🏭',
-  },
-  {
-    name: 'Sheet Metal Components',
-    slug: 'sheet-metal-components',
-    icon: '🏗️',
-  },
-  {
-    name: 'Gear Motor',
-    slug: 'gear-motor',
+    name: 'Gear Motors',
+    slug: 'gear-motors',
     icon: '⚡',
     subcategories: [
-      { name: 'AC Gear Motor', slug: 'ac-gear-motor' },
-      { name: 'DC Gear Motor', slug: 'dc-gear-motor' },
-      { name: 'Worm Gear Motor', slug: 'worm-gear-motor' },
+      { name: 'AC Gear Motors', slug: 'ac-gear-motors' },
+      { name: 'Worm Gear Motors', slug: 'worm-gear-motors' },
+      { name: 'Helical Gear Motors', slug: 'helical-gear-motors' },
+      { name: 'Bevel Gear Motors', slug: 'bevel-gear-motors' },
     ],
   },
   {
-    name: 'Gearbox',
-    slug: 'gearbox',
-    icon: '🪱',
-    subcategories: [
-      { name: 'Worm Gearbox', slug: 'worm-gearbox' },
-      { name: 'Helical Gearbox', slug: 'helical-gearbox' },
-      { name: 'Bevel Gearbox', slug: 'bevel-gearbox' },
-      { name: 'Industrial Gearbox', slug: 'industrial-gearbox' },
-      { name: 'Variator', slug: 'variator' },
-    ],
-  },
-  {
-    name: 'AC Motor',
-    slug: 'ac-motor',
+    name: 'AC Motors',
+    slug: 'ac-motors',
     icon: '🔌',
     subcategories: [
-      { name: '3-Phase Motor', slug: '3-phase-motor' },
-      { name: 'Single-Phase Motor', slug: 'single-phase-motor' },
+      { name: 'Single Phase AC Motors', slug: 'single-phase-ac-motors' },
+      { name: 'Three Phase AC Motors', slug: 'three-phase-ac-motors' },
+    ],
+  },
+  {
+    name: 'Gears',
+    slug: 'gears',
+    icon: '🔧',
+    subcategories: [
+      { name: 'Spur Gears', slug: 'spur-gears' },
+      { name: 'Helical Gears', slug: 'helical-gears' },
+      { name: 'Bevel Gears', slug: 'bevel-gears' },
+      { name: 'Worm Gears', slug: 'worm-gears' },
+      { name: 'Custom Gears', slug: 'custom-gears' },
+    ],
+  },
+  {
+    name: 'Sprockets',
+    slug: 'sprockets',
+    icon: '🔗',
+    subcategories: [
+      { name: 'Roller Chain Sprockets', slug: 'roller-chain-sprockets' },
+      { name: 'Double Pitch Sprockets', slug: 'double-pitch-sprockets' },
+      { name: 'Idler Sprockets', slug: 'idler-sprockets' },
+      { name: 'Custom Sprockets', slug: 'custom-sprockets' },
+    ],
+  },
+  {
+    name: 'Pulleys',
+    slug: 'pulleys',
+    icon: '🔄',
+    subcategories: [
+      { name: 'Timing Pulleys', slug: 'timing-pulleys' },
+      { name: 'V-Belt Pulleys', slug: 'v-belt-pulleys' },
+      { name: 'Custom Pulleys', slug: 'custom-pulleys' },
+    ],
+  },
+  {
+    name: 'Transmission Shafts',
+    slug: 'transmission-shafts',
+    icon: '📏',
+    subcategories: [
+      { name: 'Gear Shafts', slug: 'gear-shafts' },
+      { name: 'Spline Shafts', slug: 'spline-shafts' },
+      { name: 'Linear Shafts', slug: 'linear-shafts' },
+      { name: 'Custom Shafts', slug: 'custom-shafts' },
+    ],
+  },
+  {
+    name: 'Sheet Metal Fabrication',
+    slug: 'sheet-metal-fabrication',
+    icon: '🏗️',
+    subcategories: [
+      { name: 'Sheet Metal Enclosures', slug: 'sheet-metal-enclosures' },
+      { name: 'Stamping Parts', slug: 'stamping-parts' },
+      { name: 'Welding Parts', slug: 'welding-parts' },
+      { name: 'Laser Cut Sheet Metal Parts', slug: 'laser-cut-sheet-metal-parts' },
+      { name: 'Bent Sheet Metal Parts', slug: 'bent-sheet-metal-parts' },
+      { name: 'Custom Metal Fabrication', slug: 'custom-metal-fabrication' },
     ],
   },
 ];
 
-// All subcategory slugs for validation
-export const allSubCategorySlugs = categoryTree
-  .flatMap(c => c.subcategories || [])
-  .map(sc => sc.slug);
-
-// Flat list of all category names (for schema enum)
 export const allCategoryNames = categoryTree.map(c => c.name);
+export const allSubSlugs = categoryTree.flatMap(c => c.subcategories.map(sc => sc.slug));
 
-// Get category by slug
 export function getCategory(slug: string) {
   return categoryTree.find(c => c.slug === slug);
 }
 
-// Get subcategory by parent slug and child slug
 export function getSubCategory(parentSlug: string, childSlug: string) {
-  const cat = getCategory(parentSlug);
+  const cat = categoryTree.find(c => c.slug === parentSlug);
   return cat?.subcategories?.find(sc => sc.slug === childSlug);
 }
