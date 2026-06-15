@@ -3,193 +3,451 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ceten Admin</title>
+<title>Ceten Dashboard</title>
 <style>
-  :root{--r:#ce1132;--d:#1a1a1a;--g:#6b7280;--l:#f3f4f6}
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:Inter,system-ui,sans-serif;background:#f9fafb;color:#111827}
-  .login{max-width:400px;margin:100px auto;background:#fff;padding:40px;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
-  .login h1{font-size:24px;margin-bottom:8px}
-  .login .sub{font-size:14px;color:var(--g);margin-bottom:24px}
-  .login input{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;margin-bottom:12px}
-  .login button{width:100%;padding:12px;background:var(--r);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
-  .err{color:var(--r);font-size:13px;margin-top:8px}
-  .app{display:none;max-width:1000px;margin:20px auto;padding:20px}
-  .app.on{display:block}
-  .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-  .hdr h1{font-size:22px}
-  .hdr button{padding:8px 16px;background:#374151;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px}
-  .tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid #e5e7eb}
-  .tab{padding:10px 20px;cursor:pointer;font-size:14px;font-weight:500;color:var(--g);border-bottom:2px solid transparent;margin-bottom:-2px}
-  .tab.a{color:var(--r);border-bottom-color:var(--r)}
-  form{display:none}
-  form.a{display:block}
-  .fg{margin-bottom:16px}
-  label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
-  input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
-  textarea{resize:vertical;min-height:80px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .msg{padding:10px 16px;border-radius:8px;font-size:14px;margin-bottom:16px}
-  .msg.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
-  .msg.bad{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
-  .btn{padding:12px 32px;background:var(--r);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
-  small{font-size:12px;color:var(--g)}
-  .info{background:#eff6ff;border:1px solid #bfdbfe;padding:12px 16px;border-radius:8px;font-size:13px;color:#1e40af;margin-bottom:20px}
+:root{--r:#ce1132;--d:#1a1a1a;--g:#6b7280;--l:#f3f4f6;--b:#2563eb;--w:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min-height:100vh}
+/* Login */
+.login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)}
+.login-card{background:#fff;padding:48px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:420px;text-align:center}
+.login-card .logo{width:180px;margin-bottom:24px}
+.login-card h1{font-size:22px;margin-bottom:4px}
+.login-card p{font-size:13px;color:var(--g);margin-bottom:24px}
+.login-card input{width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;margin-bottom:16px;transition:.2s}
+.login-card input:focus{outline:none;border-color:var(--r)}
+.login-card button{width:100%;padding:14px;background:var(--r);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.login-card button:hover{background:#a80d28}
+.login-card .hint{font-size:12px;color:var(--g);margin-top:16px;line-height:1.6}
+.login-card .hint a{color:var(--r)}
+
+/* Dashboard */
+.dashboard{display:none}
+.dashboard.on{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10}
+.sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px}
+.sidebar .brand img{height:32px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
+.sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.05);border-left-color:var(--r)}
+.sidebar nav a .icon{font-size:16px;width:20px;text-align:center}
+.sidebar .user{padding:16px 20px;border-top:1px solid #333;position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;gap:10px;font-size:13px}
+.sidebar .user .avatar{width:32px;height:32px;background:var(--r);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+
+.main{margin-left:220px;flex:1;padding:32px}
+.main-header{margin-bottom:32px}
+.main-header h1{font-size:28px;font-weight:800}
+.main-header p{color:var(--g);font-size:14px;margin-top:4px}
+
+/* Cards */
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:24px;margin-bottom:24px}
+.card h3{font-size:16px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px}
+.field label .req{color:var(--r);margin-left:2px}
+.field input,.field select,.field textarea{width:100%;padding:10px 14px;border:1.5px solid #d1d5db;border-radius:8px;font-size:14px;font-family:inherit;transition:.2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(206,17,50,.1)}
+.field textarea{resize:vertical;min-height:100px}
+.field .helper{font-size:11px;color:var(--g);margin-top:4px}
+
+/* Image upload */
+.upload-zone{border:2px dashed #d1d5db;border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
+.upload-zone:hover{border-color:var(--r);background:#fef2f2}
+.upload-zone .icon{font-size:40px;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:var(--g)}
+.upload-zone .preview{margin-top:12px;display:none}
+.upload-zone .preview img{max-width:100%;max-height:200px;border-radius:8px}
+.upload-zone.has-file .icon,.upload-zone.has-file p{display:none}
+.upload-zone.has-file .preview{display:block}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+.btn-primary{background:var(--r);color:#fff}
+.btn-primary:hover{background:#a80d28}
+.btn-secondary{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
+.btn-secondary:hover{background:#e5e7eb}
+.btn-sm{padding:6px 12px;font-size:12px}
+
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#f3f4f6;border-radius:20px;font-size:12px;font-weight:500}
+.tag .remove{cursor:pointer;color:var(--g);font-size:14px;line-height:1}
+.tag .remove:hover{color:var(--r)}
+
+/* Table */
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:left;padding:12px;font-size:11px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e5e7eb}
+.table td{padding:12px;font-size:13px;border-bottom:1px solid #f0f0f0}
+.table tr:hover td{background:#fafafa}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:2px solid #e5e7eb}
+.tab-btn{padding:10px 20px;font-size:14px;font-weight:500;color:var(--g);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab-btn.active{color:var(--r);border-bottom-color:var(--r)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;z-index:100;animation:slideIn .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.toast.success{background:#059669;color:#fff}
+.toast.error{background:var(--r);color:#fff}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.card-grid{grid-template-columns:1fr}.form-row,.form-row-3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<div id="loginBox" class="login">
-  <h1>Ceten Admin</h1>
-  <p class="sub">GRANGIN | CETEN Content Management</p>
-  <input id="pw" type="password" placeholder="Enter admin password">
-  <button onclick="go()">Login</button>
-  <p class="err" id="e"></p>
+<!-- LOGIN -->
+<div id="loginPage" class="login-page">
+  <div class="login-card">
+    <div style="font-size:48px;margin-bottom:16px">⚙️</div>
+    <h1>Ceten Dashboard</h1>
+    <p>GRANGIN | CETEN</p>
+    <input id="t" type="password" placeholder="GitHub Personal Access Token">
+    <button onclick="login()">Sign In</button>
+    <div class="hint">
+      Get your token at<br>
+      <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>
+      Scope: <b>repo</b>
+    </div>
+  </div>
 </div>
 
-<div id="app" class="app">
-  <div class="hdr">
-    <div><h1>Ceten Admin</h1><small>Content Management System</small></div>
-    <button onclick="out()">Logout</button>
-  </div>
-
-  <div class="info">
-    <strong>How to use:</strong> Fill the form below, click Save. The content will be written as Markdown files to the GitHub repository. After saving, wait ~2 minutes for GitHub Actions to deploy your changes to the live site.
-  </div>
-
-  <div class="tabs">
-    <div class="tab a" onclick="sw('products')">Products</div>
-    <div class="tab" onclick="sw('news')">News</div>
-    <div class="tab" onclick="sw('images')">Images</div>
-  </div>
-  <div id="msg"></div>
-
-  <!-- Products Form -->
-  <form id="fProducts" class="a" onsubmit="return saveProd()">
-    <div class="row">
-      <div class="fg"><label>Product Name *</label><input id="pTitle" required placeholder="NMRV050 Worm Gearbox"></div>
-      <div class="fg"><label>Slug (auto if empty)</label><input id="pSlug" placeholder="nrmv050-worm-gearbox"></div>
+<!-- DASHBOARD -->
+<div id="dash" class="dashboard">
+  <aside class="sidebar">
+    <div class="brand" style="font-size:20px;font-weight:800;color:#fff;padding:0 20px 24px">⚙️ Ceten</div>
+    <nav>
+      <a href="#" class="active" data-page="products"><span class="icon">📦</span> Products</a>
+      <a href="#" data-page="news"><span class="icon">📰</span> News</a>
+      <a href="#" data-page="media"><span class="icon">🖼️</span> Media</a>
+      <a href="#" data-page="settings"><span class="icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="user">
+      <div class="avatar">A</div>
+      <span id="userName">Admin</span>
     </div>
-    <div class="row">
-      <div class="fg"><label>Category *</label><select id="pCat" required><option value="">Select...</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select></div>
-      <div class="fg"><label>Subcategory</label><input id="pSub" placeholder="worm-gearboxes"></div>
-    </div>
-    <div class="fg"><label>Description *</label><textarea id="pExcerpt" required placeholder="Brief product description..."></textarea></div>
-    <div class="row">
-      <div class="fg"><label>Features (one per line)</label><textarea id="pFeat" placeholder="Precision CNC machined&#10;Hardened steel gears&#10;ISO certified"></textarea></div>
-      <div class="fg"><label>Specs (Name: Value, one per line)</label><textarea id="pSpec" placeholder="Size: 025-150&#10;Ratio: 5:1 to 100:1&#10;Material: Aluminum Alloy"></textarea></div>
-    </div>
-    <div class="fg"><label>Image URL (copy from Images tab after upload)</label><input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg"></div>
-    <button type="submit" class="btn">Save Product</button>
-  </form>
+  </aside>
 
-  <!-- News Form -->
-  <form id="fNews" onsubmit="return saveNewsF()">
-    <div class="fg"><label>Title *</label><input id="nTitle" required placeholder="Article title"></div>
-    <div class="row">
-      <div class="fg"><label>Category</label><select id="nCat"><option>Product Knowledge</option><option>Selection Guide</option><option>Technical Guide</option><option>Industry News</option><option>Company News</option></select></div>
-      <div class="fg"><label>Date</label><input id="nDate" type="date"></div>
-    </div>
-    <div class="fg"><label>Excerpt</label><textarea id="nExcerpt" placeholder="Short summary..."></textarea></div>
-    <div class="fg"><label>Body (Markdown format)</label><textarea id="nBody" rows="8" placeholder="Write your article in Markdown..."></textarea></div>
-    <button type="submit" class="btn">Save Article</button>
-  </form>
+  <main class="main">
+    <!-- Products Page -->
+    <div id="page-products" class="tab-content active">
+      <div class="main-header">
+        <h1>Product Management</h1>
+        <p>Create and manage product listings</p>
+      </div>
 
-  <!-- Images Form -->
-  <form id="fImages" onsubmit="return false">
-    <div class="info">
-      <strong>Image upload:</strong> For now, place product images in the <code>public/images/products/</code> folder on your computer, then tell me to build and push. Or send images to me directly and I'll handle it.
+      <!-- Product Editor Card -->
+      <div class="card">
+        <div class="tabs">
+          <button class="tab-btn active" data-panel="basic">Basic Info</button>
+          <button class="tab-btn" data-panel="content">Content</button>
+          <button class="tab-btn" data-panel="seo">SEO</button>
+        </div>
+
+        <!-- Basic Info Panel -->
+        <div id="panel-basic" class="tab-content active">
+          <div class="form-row">
+            <div class="field">
+              <label>Product Name <span class="req">*</span></label>
+              <input id="pTitle" placeholder="NMRV050 Worm Gearbox">
+            </div>
+            <div class="field">
+              <label>URL Slug <span class="req">*</span></label>
+              <input id="pSlug" placeholder="auto-generated-from-title">
+              <div class="helper">Leave empty for auto-generate</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Category <span class="req">*</span></label>
+              <select id="pCat"><option value="">Select...</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select>
+            </div>
+            <div class="field">
+              <label>Subcategory</label>
+              <select id="pSub"><option value="">None</option><optgroup label="Gearboxes"><option>worm-gearboxes</option><option>helical-gearboxes</option><option>bevel-gearboxes</option><option>right-angle-gearboxes</option><option>screw-jacks</option><option>speed-variators</option><option>industrial-gearboxes</option></optgroup><optgroup label="Gear Motors"><option>ac-gear-motors</option><option>worm-gear-motors</option><option>helical-gear-motors</option><option>bevel-gear-motors</option></optgroup><optgroup label="AC Motors"><option>single-phase-ac-motors</option><option>three-phase-ac-motors</option></optgroup><optgroup label="Gears"><option>spur-gears</option><option>helical-gears</option><option>bevel-gears</option><option>worm-gears</option><option>custom-gears</option></optgroup><optgroup label="Sprockets"><option>roller-chain-sprockets</option><option>double-pitch-sprockets</option><option>idler-sprockets</option><option>custom-sprockets</option></optgroup><optgroup label="Pulleys"><option>timing-pulleys</option><option>v-belt-pulleys</option><option>custom-pulleys</option></optgroup><optgroup label="Transmission Shafts"><option>gear-shafts</option><option>spline-shafts</option><option>linear-shafts</option><option>custom-shafts</option></optgroup><optgroup label="Sheet Metal"><option>sheet-metal-enclosures</option><option>stamping-parts</option><option>welding-parts</option><option>laser-cut-sheet-metal-parts</option><option>bent-sheet-metal-parts</option><option>custom-metal-fabrication</option></optgroup></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Panel -->
+        <div id="panel-content" class="tab-content">
+          <div class="field">
+            <label>Short Description <span class="req">*</span></label>
+            <textarea id="pExcerpt" rows="3" placeholder="Concise product description for listings and search results (recommended 120-160 characters)"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Key Features</label>
+              <textarea id="pFeat" rows="4" placeholder="One feature per line"></textarea>
+              <div class="helper">Each line becomes a bullet point</div>
+            </div>
+            <div class="field">
+              <label>Technical Specifications</label>
+              <textarea id="pSpec" rows="4" placeholder="Name: Value&#10;Size: 025-150&#10;Ratio: 5:1 to 100:1"></textarea>
+              <div class="helper">Name: Value format, one per line</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Panel -->
+        <div id="panel-seo" class="tab-content">
+          <div class="field">
+            <label>Meta Title</label>
+            <input id="pMetaTitle" placeholder="Leave empty to use product name">
+            <div class="helper">Recommended: 50-60 characters</div>
+          </div>
+          <div class="field">
+            <label>Meta Description</label>
+            <textarea id="pMetaDesc" rows="2" placeholder="Leave empty to use short description"></textarea>
+            <div class="helper">Recommended: 120-160 characters</div>
+          </div>
+          <div class="field">
+            <label>Meta Keywords</label>
+            <input id="pKeywords" placeholder="comma, separated, keywords">
+          </div>
+          <div class="field">
+            <label>Display Order</label>
+            <input id="pOrder" type="number" value="0" style="width:120px">
+            <div class="helper">Higher numbers appear first</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Image -->
+      <div class="card">
+        <h3>Product Image</h3>
+        <div class="card-grid">
+          <div>
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgFile').click()">
+              <div class="icon">📁</div>
+              <p>Click to upload product image<br><small>JPG, PNG, WebP — Max 5MB</small></p>
+              <div class="preview"><img id="imgPreview" src="" alt="Preview"></div>
+            </div>
+            <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="previewImage()">
+          </div>
+          <div>
+            <div class="field">
+              <label>Image URL</label>
+              <input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg" readonly>
+              <div class="helper">Auto-filled after upload</div>
+            </div>
+            <button class="btn btn-secondary" onclick="uploadNow()">📤 Upload Image</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-primary" onclick="saveProd()">💾 Save & Publish</button>
+        <button class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
+      </div>
+      <div class="helper" style="margin-top:8px">Changes deploy to live site in ~2 minutes via GitHub Actions</div>
     </div>
-    <p style="font-size:13px;color:var(--g);margin-top:8px">
-      Once uploaded, the image URL will be: <code>/woshidahuaidan/images/products/your-file.jpg</code>
-    </p>
-  </form>
+
+    <!-- News Page -->
+    <div id="page-news" class="tab-content">
+      <div class="main-header">
+        <h1>News & Articles</h1>
+        <p>Publish blog posts and industry news</p>
+      </div>
+      <div class="card">
+        <div class="form-row">
+          <div class="field"><label>Title <span class="req">*</span></label><input id="nTitle" placeholder="Article title"></div>
+          <div class="field"><label>Category</label><select id="nCat"><option>Product Knowledge</option><option>Selection Guide</option><option>Technical Guide</option><option>Industry News</option><option>Company News</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Date</label><input id="nDate" type="date"></div>
+          <div class="field"><label>Featured Image URL</label><input id="nImg" placeholder="/woshidahuaidan/images/news/file.jpg"></div>
+        </div>
+        <div class="field"><label>Excerpt</label><textarea id="nExcerpt" rows="2" placeholder="Brief summary for listing pages"></textarea></div>
+        <div class="field"><label>Content (Markdown) <span class="req">*</span></label><textarea id="nBody" rows="12" placeholder="## Heading&#10;&#10;Your article content here. **Bold** and *italic* supported.&#10;&#10;1. Numbered list&#10;2. Item two&#10;&#10;- Bullet point&#10;- Another one"></textarea></div>
+        <button class="btn btn-primary" onclick="saveNews()">💾 Publish Article</button>
+      </div>
+    </div>
+
+    <!-- Media Page -->
+    <div id="page-media" class="tab-content">
+      <div class="main-header">
+        <h1>Media Library</h1>
+        <p>Upload and manage images</p>
+      </div>
+      <div class="card">
+        <div class="card-grid">
+          <div>
+            <div class="upload-zone" id="mediaUpload" onclick="document.getElementById('mediaFile').click()">
+              <div class="icon">📁</div>
+              <p>Drop images here or click to browse<br><small>JPG, PNG, WebP</small></p>
+            </div>
+            <input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()">
+          </div>
+          <div>
+            <h3 style="font-size:14px;margin-bottom:8px">Uploaded Files</h3>
+            <div id="mediaList" style="font-size:12px;color:var(--g)">Upload images to see them here</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="page-settings" class="tab-content">
+      <div class="main-header">
+        <h1>Site Settings</h1>
+        <p>Manage company information</p>
+      </div>
+      <div class="card">
+        <div class="form-row">
+          <div class="field"><label>Company Name</label><input id="sCompany" value="Zhejiang Guangjin Intelligent Technology Co., Ltd."></div>
+          <div class="field"><label>Brand</label><input id="sBrand" value="GRANGIN | CETEN"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Phone</label><input id="sPhone" value="+86-18057543143"></div>
+          <div class="field"><label>Email</label><input id="sEmail" value="info@ggn-gear.com"></div>
+        </div>
+        <div class="field"><label>Address</label><input id="sAddress" value="No. 862, Sanjie High-tech Park, Shengzhou City, Zhejiang, China"></div>
+        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+      </div>
+    </div>
+  </main>
 </div>
+
+<div id="toast" style="display:none"></div>
 
 <script>
-var K = '';
-var R = 'shijiediyihaokan/woshidahuaidan';
-var A = 'https://api.github.com';
+var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 
-// Simple password hash check - "ceten2026!"
-function go(){
-  var p = document.getElementById('pw').value;
-  // Accept either the password or a GitHub token
-  if(p.length < 10){ document.getElementById('e').textContent='Wrong password'; return; }
-  
-  // Try as GitHub token first, then fallback
-  fetch(A+'/user',{headers:{'Authorization':'token '+p}})
-    .then(function(r){return r.json()})
-    .then(function(d){
-      if(d.login){
-        K = p;
-        document.getElementById('loginBox').style.display='none';
-        document.getElementById('app').classList.add('on');
-      } else {
-        // Maybe it's the admin password - try with stored token
-        // For demo, use a simple check
-        if(p === 'ceten2026!' || p === 'Ceten2026!' || p === 'admin123'){
-          K = 'ghp_placeholder'; // Real token set separately
-          document.getElementById('loginBox').style.display='none';
-          document.getElementById('app').classList.add('on');
-          document.getElementById('msg').innerHTML='<div class="msg bad">Need GitHub token configured. Use a real token for saving.</div>';
-        } else {
-          document.getElementById('e').textContent='Invalid. Use GitHub token from Settings > Developer settings > Personal access tokens';
-        }
-      }
+// Login
+function login(){
+  K=document.getElementById('t').value.trim();
+  if(!K) return toast('Please enter a token','error');
+  fetch(A+'/user',{headers:{'Authorization':'token '+K}}).then(function(r){return r.json()}).then(function(d){
+    if(d.login){ document.getElementById('loginPage').style.display='none'; document.getElementById('dash').classList.add('on'); document.getElementById('userName').textContent=d.login; }
+    else toast('Invalid token','error');
+  });
+}
+
+// Toast
+function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
+
+// Navigation
+document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');}});
+
+// Form tabs
+document.querySelectorAll('.tab-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('#page-products .tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('panel-'+this.dataset.panel).classList.add('active');}});
+
+// Image preview
+function previewImage(){var f=document.getElementById('imgFile').files[0];if(!f) return;var r=new FileReader();r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file')};r.readAsDataURL(f);}
+
+// Upload image
+function uploadNow(){
+  var f=document.getElementById('imgFile').files[0];
+  if(!f) return toast('Select an image first','error');
+  var r=new FileReader();
+  r.onload=function(ev){
+    var b64=ev.target.result.split(',')[1];
+    var path='public/images/products/'+f.name;
+    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('pImg').value=url; toast('Uploaded: '+url,'success'); }
+      else toast(d.message,'error');
     });
-}
-function out(){ K=''; document.getElementById('loginBox').style.display='block'; document.getElementById('app').classList.remove('on'); }
-function sw(n){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('a')}); event.target.classList.add('a');
-  document.querySelectorAll('form').forEach(function(f){f.classList.remove('a')});
-  document.getElementById('f'+(n.charAt(0).toUpperCase()+n.slice(1))).classList.add('a');
-}
-function show(m,s){ document.getElementById('msg').innerHTML='<div class="msg '+(s?'ok':'bad')+'">'+m+'</div>'; }
-
-function buildFrontmatter(t,c,sc,ex,fe,sp,im){
-  var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
-  if(sc) fm+='subcategory: "'+sc+'"\n';
-  fm+='excerpt: "'+ex.replace(/"/g,'\\"')+'"\n';
-  if(im) fm+='image: "'+im+'"\n';
-  if(fe){ var fl=fe.split('\n').filter(function(l){return l.trim()}); if(fl.length){ fm+='features:\n'; fl.forEach(function(l){fm+='  - "'+l.replace(/"/g,'\\"')+'"\n'}); } }
-  if(sp){ var sl=sp.split('\n').filter(function(l){return l.includes(':')}); if(sl.length){ fm+='specs:\n'; sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'\n    value: "'+p.slice(1).join(':').trim()+'"\n'}); } }
-  fm+='order: 0\npublished: true\n---\n';
-  return fm;
+  };
+  r.readAsDataURL(f);
 }
 
-function saveProd(){
-  if(K.length<10){ show('Please login with a valid GitHub token first','bad'); return false; }
+// Upload media
+function uploadMedia(){
+  var f=document.getElementById('mediaFile').files[0];
+  if(!f) return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    var b64=ev.target.result.split(',')[1];
+    var path='public/images/products/'+f.name;
+    fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
+    .then(function(r){return r.json()}).then(function(d){
+      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0">✅ '+url+'</div>'; toast('Uploaded!','success'); }
+      else toast(d.message,'error');
+    });
+  };
+  r.readAsDataURL(f);
+}
+
+// Build frontmatter
+function buildFM(){
   var t=document.getElementById('pTitle').value;
   var s=document.getElementById('pSlug').value||t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  var fm=buildFrontmatter(t,document.getElementById('pCat').value,document.getElementById('pSub').value,document.getElementById('pExcerpt').value,document.getElementById('pFeat').value,document.getElementById('pSpec').value,document.getElementById('pImg').value);
-  send('src/content/products/'+s+'.md',fm,'Add product: '+t);
-  return false;
+  var c=document.getElementById('pCat').value;
+  var sc=document.getElementById('pSub').value;
+  var ex=document.getElementById('pExcerpt').value.replace(/"/g,'\\"');
+  var im=document.getElementById('pImg').value;
+  var fe=document.getElementById('pFeat').value;
+  var sp=document.getElementById('pSpec').value;
+  var o=parseInt(document.getElementById('pOrder').value)||0;
+
+  var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
+  if(sc) fm+='subcategory: "'+sc+'"\n';
+  fm+='excerpt: "'+ex+'"\n';
+  if(im) fm+='image: "'+im+'"\n';
+  if(fe.trim()){ var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/"/g,'\\"')+'"\n'});}
+  if(sp.trim()){ var sl=sp.split('\n').filter(function(l){return l.includes(':')});fm+='specs:\n';sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'\n    value: "'+p.slice(1).join(':').trim()+'"\n'});}
+  fm+='order: '+o+'\npublished: true\n---\n';
+  return {slug:s,content:fm};
 }
 
-function saveNewsF(){
-  if(K.length<10){ show('Please login with a valid GitHub token first','bad'); return false; }
+// Save product
+function saveProd(){
+  if(!K) return toast('Login first','error');
+  var t=document.getElementById('pTitle').value;
+  var c=document.getElementById('pCat').value;
+  var ex=document.getElementById('pExcerpt').value;
+  if(!t||!c||!ex) return toast('Fill required fields: Name, Category, Description','error');
+  var d=buildFM();
+  send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
+}
+
+// Save news
+function saveNews(){
+  if(!K) return toast('Login first','error');
   var t=document.getElementById('nTitle').value;
+  if(!t) return toast('Title required','error');
   var d=document.getElementById('nDate').value||new Date().toISOString().split('T')[0];
-  var ex=document.getElementById('nExcerpt').value;
+  var ex=document.getElementById('nExcerpt').value.replace(/"/g,'\\"');
   var bd=document.getElementById('nBody').value;
+  var im=document.getElementById('nImg').value;
   var sl=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   var dt=new Date(d);
   var fs=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+'-'+sl;
-  var fm='---\ntitle: "'+t+'"\ndate: "'+d+'"\ncategory: "'+document.getElementById('nCat').value+'"\nexcerpt: "'+ex.replace(/"/g,'\\"')+'"\npublished: true\n---\n'+bd;
+  var fm='---\ntitle: "'+t+'"\ndate: "'+d+'"\ncategory: "'+document.getElementById('nCat').value+'"\nexcerpt: "'+ex+'"\n';
+  if(im) fm+='image: "'+im+'"\n';
+  fm+='published: true\n---\n'+bd;
   send('src/content/news/'+fs+'.md',fm,'Add article: '+t);
-  return false;
 }
 
-function send(path,content,msg){
-  var b=unescape(encodeURIComponent(content));
-  fetch(A+'/repos/'+R+'/contents/'+path,{
-    method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},
-    body:JSON.stringify({message:msg,content:btoa(b),branch:'main'})
-  }).then(function(r){return r.json()}).then(function(d){
-    if(d.content){ show('Saved! Deploying to live site in ~2 minutes.','ok'); }
-    else { show('Error: '+d.message,'bad'); }
-  });
+// Save settings  
+function saveSettings(){
+  if(!K) return toast('Login first','error');
+  var d=JSON.stringify({phone:document.getElementById('sPhone').value,email:document.getElementById('sEmail').value,address:document.getElementById('sAddress').value,companyName:document.getElementById('sCompany').value},null,2);
+  send('src/data/settings.json',d,'Update site settings');
+}
+
+// Send to GitHub
+function send(path,content,message){
+  var b64=btoa(unescape(encodeURIComponent(content)));
+  fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
+  .then(function(r){return r.json()}).then(function(d){if(d.content) toast('Saved! Deploying...','success');else toast(d.message,'error');});
+}
+
+function resetForm(){
+  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pOrder'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('pOrder').value='0';
+  document.getElementById('uploadZone').classList.remove('has-file');
+  document.getElementById('imgPreview').src='';
+  toast('Form reset','success');
 }
 </script>
 </body>
