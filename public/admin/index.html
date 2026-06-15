@@ -178,7 +178,6 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
             <button class="mod-btn" onclick="openModule('features')">✅ Features</button>
             <button class="mod-btn" onclick="openModule('specs')">📊 Specs</button>
             <button class="mod-btn" onclick="openModule('faq')">❓ FAQ</button>
-            <button class="mod-btn" onclick="openModule('faqSchema')">📋 FAQ Schema</button>
             <button class="mod-btn" onclick="openModule('cta')">📧 CTA</button>
           </div>
           <div class="viz-preview" id="vizPreview"></div>
@@ -305,7 +304,11 @@ function renderVizModule(m, idx) {
   }
   else if(m.type==='faq'){
     h=''; var qs=m.items||[];
-    for(var i=0;i<qs.length;i++){h+='<p style="font-weight:bold;color:#ce1132;font-size:15px;margin:15px 0 5px 0;">Q: '+qs[i].q+'</p><p style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">'+qs[i].a+'</p>';}
+    if(qs.length>1) h+='<div itemscope itemtype="https://schema.org/FAQPage">';
+    for(var i=0;i<qs.length;i++){
+      h+='<div itemscope itemtype="https://schema.org/Question" style="margin:12px 0;"><p itemprop="name" style="font-weight:bold;color:#ce1132;font-size:15px;margin:15px 0 5px 0;">Q: '+qs[i].q+'</p><div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer"><div itemprop="text" style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">'+qs[i].a+'</div></div></div>';
+    }
+    if(qs.length>1) h+='</div>';
   }
   else if(m.type==='faqSchema'){
     h='<div itemscope itemtype="https://schema.org/FAQPage">'; var qs=m.items||[];
