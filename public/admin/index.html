@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceten Admin - Content Management</title>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</head>
+<body>
+  <script>
+    // Initialize Decap CMS with config
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'shijiediyihaokan/woshidahuaidan',
+          branch: 'main',
+        },
+        media_folder: 'public/images/products',
+        public_folder: '/woshidahuaidan/images/products',
+        site_url: 'https://shijiediyihaokan.github.io/woshidahuaidan',
+        display_url: 'https://shijiediyihaokan.github.io/woshidahuaidan',
+        logo_url: '/woshidahuaidan/images/logo.png',
+        locale: 'en',
+        show_preview_links: true,
+        
+        collections: [
+          {
+            name: 'products',
+            label: 'Products',
+            label_singular: 'Product',
+            folder: 'src/content/products',
+            create: true,
+            slug: '{{slug}}',
+            editor: { preview: false },
+            fields: [
+              { label: 'Title', name: 'title', widget: 'string' },
+              {
+                label: 'Category', name: 'category', widget: 'select',
+                options: ['Gearboxes','Gear Motors','AC Motors','Gears','Sprockets','Pulleys','Transmission Shafts','Sheet Metal Fabrication']
+              },
+              {
+                label: 'Subcategory', name: 'subcategory', widget: 'select',
+                options: [
+                  'worm-gearboxes','helical-gearboxes','bevel-gearboxes','right-angle-gearboxes','screw-jacks','speed-variators','industrial-gearboxes',
+                  'ac-gear-motors','worm-gear-motors','helical-gear-motors','bevel-gear-motors',
+                  'single-phase-ac-motors','three-phase-ac-motors',
+                  'spur-gears','helical-gears','bevel-gears','worm-gears','custom-gears',
+                  'roller-chain-sprockets','double-pitch-sprockets','idler-sprockets','custom-sprockets',
+                  'timing-pulleys','v-belt-pulleys','custom-pulleys',
+                  'gear-shafts','spline-shafts','linear-shafts','custom-shafts',
+                  'sheet-metal-enclosures','stamping-parts','welding-parts','laser-cut-sheet-metal-parts','bent-sheet-metal-parts','custom-metal-fabrication'
+                ],
+                required: false
+              },
+              { label: 'Excerpt', name: 'excerpt', widget: 'text' },
+              { label: 'Image', name: 'image', widget: 'image', required: false },
+              { label: 'Publish', name: 'published', widget: 'boolean', default: true },
+              { label: 'Order', name: 'order', widget: 'number', default: 0, value_type: 'int' },
+              {
+                label: 'Features', name: 'features', widget: 'list',
+                field: { label: 'Feature', name: 'feature', widget: 'string' }
+              },
+              {
+                label: 'Specifications', name: 'specs', widget: 'list',
+                fields: [
+                  { label: 'Name', name: 'name', widget: 'string' },
+                  { label: 'Value', name: 'value', widget: 'string' }
+                ]
+              }
+            ],
+            // Template for new products
+            extension: 'md',
+            format: 'frontmatter',
+            create: true,
+            slug: '{{slug}}',
+          },
+          {
+            name: 'news',
+            label: 'News & Articles',
+            label_singular: 'Article',
+            folder: 'src/content/news',
+            create: true,
+            slug: '{{year}}-{{month}}-{{day}}-{{slug}}',
+            editor: { preview: false },
+            fields: [
+              { label: 'Title', name: 'title', widget: 'string' },
+              { label: 'Date', name: 'date', widget: 'datetime', format: 'YYYY-MM-DD' },
+              { label: 'Category', name: 'category', widget: 'select', options: ['Product Knowledge','Selection Guide','Technical Guide','Industry News','Company News'] },
+              { label: 'Excerpt', name: 'excerpt', widget: 'text' },
+              { label: 'Image', name: 'image', widget: 'image', required: false },
+              { label: 'Body', name: 'body', widget: 'markdown' },
+              { label: 'Publish', name: 'published', widget: 'boolean', default: true },
+            ],
+            extension: 'md',
+            format: 'frontmatter',
+          },
+          {
+            name: 'settings',
+            label: 'Site Settings',
+            files: [
+              {
+                name: 'general',
+                label: 'General',
+                file: 'src/data/settings.json',
+                fields: [
+                  { label: 'Phone', name: 'phone', widget: 'string' },
+                  { label: 'Email', name: 'email', widget: 'string' },
+                  { label: 'Address', name: 'address', widget: 'string', required: false },
+                  { label: 'Company Name', name: 'companyName', widget: 'string' },
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    });
+  </script>
+</body>
+</html>
