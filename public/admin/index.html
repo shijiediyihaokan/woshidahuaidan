@@ -423,9 +423,9 @@ function openModule(type, idx){
   }
   else if(type==='table'){
     var rows=data.rows||[['Header 1','Header 2'],['Row 1','Data'],['Row 2','Data']], cols=data.cols||2, style=data.style||'striped', color=data.color||'#ce1132';
-    html='<h3>Table</h3><div class="form-row"><div class="field"><label>Style</label><select id="mTableStyle"><option value="striped"'+(style==='striped'?' selected':'')+'>Striped</option><option value="plain"'+(style==='plain'?' selected':'')+'>Plain</option><option value="dark"'+(style==='dark'?' selected':'')+'>Dark Header</option></select></div><div class="field"><label>Header Color</label><input type="color" id="mTableColor" value="'+color+'"></div></div><div class="form-row"><div class="field"><label>Columns (2-6)</label><input type="number" id="mTableCols" value="'+cols+'" min="2" max="6" onchange="rebuildTable()" style="width:80px"></div><div class="field"><label>Rows (2-20)</label><input type="number" id="mTableRows" value="'+rows.length+'" min="2" max="20" onchange="rebuildTable()" style="width:80px"></div></div><div id="tableGrid" style="overflow-x:auto;margin-top:8px">';
+    html='<h3>Table</h3><div class="form-row"><div class="field"><label>Style</label><select id="mTableStyle"><option value="striped"'+(style==='striped'?' selected':'')+'>Striped</option><option value="plain"'+(style==='plain'?' selected':'')+'>Plain</option><option value="dark"'+(style==='dark'?' selected':'')+'>Dark Header</option></select></div><div class="field"><label>Header Color</label><input type="color" id="mTableColor" value="'+color+'" onchange="addRecentColor(this.value)"><div id="recentColorsTable" style="display:flex;gap:4px;margin-top:4px"></div></div></div><div class="form-row"><div class="field"><label>Columns (2-6)</label><input type="number" id="mTableCols" value="'+cols+'" min="2" max="6" onchange="rebuildTable()" style="width:80px"></div><div class="field"><label>Rows (2-20)</label><input type="number" id="mTableRows" value="'+rows.length+'" min="2" max="20" onchange="rebuildTable()" style="width:80px"></div></div><div id="tableGrid" style="overflow-x:auto;margin-top:8px">';
     html+=buildTableGrid(rows,cols);
-    html+='</div>';
+    html+='</div>';setTimeout(function(){renderRecentColors('recentColorsTable');},100);
   }
   else if(type==='cta'){
     html='<h3>Call to Action</h3><div class="field"><label>Title</label><input id="mCtaTitle" value="'+(data.title||'Need a Custom Solution?')+'"></div><div class="field"><label>Text</label><textarea id="mCtaText" rows="2">'+(data.text||'Send us your drawings — quote within 12 hours.')+'</textarea></div><div class="form-row"><div class="field"><label>Email</label><input id="mCtaEmail" value="'+(data.email||'info@ggn-gear.com')+'"></div><div class="field"><label>Phone</label><input id="mCtaPhone" value="'+(data.phone||'+86-18057543143')+'"></div></div>';
@@ -793,6 +793,27 @@ function rebuildTable(){
   for(var r=0;r<rows;r++){var row=[];for(var c=0;c<cols;c++){row.push('');}data.push(row);}
   document.getElementById('tableGrid').innerHTML=buildTableGrid(data,cols);
 }
+
+/* ====== COLOR MEMORY ====== */
+function addRecentColor(color){
+  var colors=JSON.parse(localStorage.getItem('ggn_colors')||'[]');
+  colors=colors.filter(function(c){return c!==color});
+  colors.unshift(color);
+  if(colors.length>5) colors=colors.slice(0,5);
+  localStorage.setItem('ggn_colors',JSON.stringify(colors));
+  renderRecentColors();
+}
+function renderRecentColors(containerId){
+  var el=document.getElementById(containerId||'recentColorsTable');
+  if(!el) return;
+  var colors=JSON.parse(localStorage.getItem('ggn_colors')||'[]');
+  var html='';
+  colors.forEach(function(c){
+    html+='<span onclick="document.getElementById(\'mTableColor\').value=\''+c+'\';addRecentColor(\''+c+'\')" style="width:22px;height:22px;background:'+c+';border-radius:4px;cursor:pointer;border:1px solid #ddd" title="'+c+'"></span>';
+  });
+  el.innerHTML=html;
+}
+// Auto-render when modal opens
 </script>
 </body>
 </html>
