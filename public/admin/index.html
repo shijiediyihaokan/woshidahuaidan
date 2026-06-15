@@ -8,7 +8,6 @@
 :root{--r:#ce1132;--d:#1a1a1a;--g:#6b7280;--l:#f3f4f6;--b:#2563eb;--w:#fff}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min-height:100vh}
-/* Login */
 .login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%)}
 .login-card{background:#fff;padding:48px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:420px;text-align:center}
 .login-card .logo{width:180px;margin-bottom:24px}
@@ -21,12 +20,10 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .login-card .hint{font-size:12px;color:var(--g);margin-top:16px;line-height:1.6}
 .login-card .hint a{color:var(--r)}
 
-/* Dashboard */
 .dashboard{display:none}
 .dashboard.on{display:flex;min-height:100vh}
 .sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10}
 .sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px}
-.sidebar .brand img{height:32px}
 .sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
 .sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.05);border-left-color:var(--r)}
 .sidebar nav a .icon{font-size:16px;width:20px;text-align:center}
@@ -38,12 +35,10 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .main-header h1{font-size:28px;font-weight:800}
 .main-header p{color:var(--g);font-size:14px;margin-top:4px}
 
-/* Cards */
 .card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:24px;margin-bottom:24px}
 .card h3{font-size:16px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
 .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 
-/* Form */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 .field{margin-bottom:20px}
@@ -54,7 +49,6 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .field textarea{resize:vertical;min-height:100px}
 .field .helper{font-size:11px;color:var(--g);margin-top:4px}
 
-/* Image upload */
 .upload-zone{border:2px dashed #d1d5db;border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
 .upload-zone:hover{border-color:var(--r);background:#fef2f2}
 .upload-zone .icon{font-size:40px;margin-bottom:8px}
@@ -64,34 +58,36 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .upload-zone.has-file .icon,.upload-zone.has-file p{display:none}
 .upload-zone.has-file .preview{display:block}
 
-/* Buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
 .btn-primary{background:var(--r);color:#fff}
 .btn-primary:hover{background:#a80d28}
 .btn-secondary{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
 .btn-secondary:hover{background:#e5e7eb}
 .btn-sm{padding:6px 12px;font-size:12px}
+.btn-xs{padding:4px 8px;font-size:11px;border-radius:6px}
 
-/* Tags */
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#f3f4f6;border-radius:20px;font-size:12px;font-weight:500}
-.tag .remove{cursor:pointer;color:var(--g);font-size:14px;line-height:1}
-.tag .remove:hover{color:var(--r)}
+/* Module buttons */
+.modules-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding:10px;background:#fafafa;border-radius:8px;border:1px solid #eee}
+.modules-bar .mod-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:#fff;border:1px solid #d1d5db;border-radius:6px;font-size:12px;cursor:pointer;transition:.2s;white-space:nowrap}
+.modules-bar .mod-btn:hover{background:var(--r);color:#fff;border-color:var(--r)}
+.modules-bar .mod-btn:active{transform:scale(.97)}
+.modules-bar .mod-sep{width:1px;background:#d1d5db;margin:2px 4px;align-self:stretch}
 
-/* Table */
+.detail-editor{display:grid;grid-template-columns:1fr auto}
+@media(max-width:1200px){.detail-editor{grid-template-columns:1fr}}
+
+table{font-size:14px}
 .table{width:100%;border-collapse:collapse}
 .table th{text-align:left;padding:12px;font-size:11px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e5e7eb}
 .table td{padding:12px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .table tr:hover td{background:#fafafa}
 
-/* Tabs */
 .tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:2px solid #e5e7eb}
 .tab-btn{padding:10px 20px;font-size:14px;font-weight:500;color:var(--g);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
 .tab-btn.active{color:var(--r);border-bottom-color:var(--r)}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* Toast */
 .toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;z-index:100;animation:slideIn .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.15)}
 .toast.success{background:#059669;color:#fff}
 .toast.error{background:var(--r);color:#fff}
@@ -137,9 +133,14 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
   <main class="main">
     <!-- Products Page -->
     <div id="page-products" class="tab-content active">
-      <div class="main-header">
-        <h1>Product Management</h1>
-        <p>Create and manage product listings</p>
+      <div class="main-header" style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <h1>Product Management</h1>
+          <p>Create and manage product listings</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar Product</button>
+        </div>
       </div>
 
       <!-- Product Editor Card -->
@@ -147,6 +148,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         <div class="tabs">
           <button class="tab-btn active" data-panel="basic">Basic Info</button>
           <button class="tab-btn" data-panel="content">Content</button>
+          <button class="tab-btn" data-panel="detail">🆕 Detail Page</button>
           <button class="tab-btn" data-panel="seo">SEO</button>
         </div>
 
@@ -195,6 +197,40 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           </div>
         </div>
 
+        <!-- Detail Page Panel (NEW) -->
+        <div id="panel-detail" class="tab-content">
+          <div class="field">
+            <label>Detail Page Content <span style="color:var(--r);font-weight:normal">(HTML/Markdown)</span></label>
+            <div class="modules-bar">
+              <span style="font-size:11px;color:var(--g);font-weight:600;padding:4px 0">模块:</span>
+              <div class="mod-sep"></div>
+              <button class="mod-btn" onclick="addMod('title')">📌 标题</button>
+              <button class="mod-btn" onclick="addMod('text')">📝 正文</button>
+              <button class="mod-btn" onclick="addMod('leftimg')">🖼️ 左图右文</button>
+              <button class="mod-btn" onclick="addMod('rightimg')">🖼️ 右图左文</button>
+              <div class="mod-sep"></div>
+              <button class="mod-btn" onclick="addMod('2imgs')">1行2图</button>
+              <button class="mod-btn" onclick="addMod('3imgs')">1行3图</button>
+              <button class="mod-btn" onclick="addMod('4imgs')">1行4图</button>
+              <button class="mod-btn" onclick="addMod('6imgs')">1行6图</button>
+              <div class="mod-sep"></div>
+              <button class="mod-btn" onclick="addMod('features')">✅ 特性列表</button>
+              <button class="mod-btn" onclick="addMod('specs')">📊 参数表格</button>
+              <button class="mod-btn" onclick="addMod('faq')">❓ FAQ</button>
+              <button class="mod-btn" onclick="addMod('cta')">📧 询盘CTA</button>
+            </div>
+            <textarea id="pBody" rows="18" placeholder='Use the modules above or write HTML/Markdown directly.
+
+Example:
+## Features Of This Product
+
+<模块按钮点击后会自动插入模板>
+
+The body content is rendered as full detail page content.'></textarea>
+            <div class="helper">模块按钮在正文中插入排版模板，然后替换图片URL和文字</div>
+          </div>
+        </div>
+
         <!-- SEO Panel -->
         <div id="panel-seo" class="tab-content">
           <div class="field">
@@ -221,7 +257,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
       <!-- Product Image -->
       <div class="card">
-        <h3>Product Image</h3>
+        <h3>🖼️ Upload Main Image</h3>
         <div class="card-grid">
           <div>
             <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgFile').click()">
@@ -230,6 +266,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
               <div class="preview"><img id="imgPreview" src="" alt="Preview"></div>
             </div>
             <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="previewImage()">
+            <button class="btn btn-secondary" style="margin-top:10px;width:100%" onclick="uploadNow()">📤 Upload Main Image</button>
           </div>
           <div>
             <div class="field">
@@ -237,14 +274,19 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
               <input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg" readonly>
               <div class="helper">Auto-filled after upload</div>
             </div>
-            <button class="btn btn-secondary" onclick="uploadNow()">📤 Upload Image</button>
+            <div class="field">
+              <label>Or Paste Image URL Directly</label>
+              <input id="pImgManual" placeholder="https://... or /woshidahuaidan/images/..." oninput="document.getElementById('pImg').value=this.value">
+              <div class="helper">Manual override for external images</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Action -->
+      <!-- Actions -->
       <div style="display:flex;gap:12px">
         <button class="btn btn-primary" onclick="saveProd()">💾 Save & Publish</button>
+        <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar Product</button>
         <button class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
       </div>
       <div class="helper" style="margin-top:8px">Changes deploy to live site in ~2 minutes via GitHub Actions</div>
@@ -266,7 +308,25 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <div class="field"><label>Featured Image URL</label><input id="nImg" placeholder="/woshidahuaidan/images/news/file.jpg"></div>
         </div>
         <div class="field"><label>Excerpt</label><textarea id="nExcerpt" rows="2" placeholder="Brief summary for listing pages"></textarea></div>
-        <div class="field"><label>Content (Markdown) <span class="req">*</span></label><textarea id="nBody" rows="12" placeholder="## Heading&#10;&#10;Your article content here. **Bold** and *italic* supported.&#10;&#10;1. Numbered list&#10;2. Item two&#10;&#10;- Bullet point&#10;- Another one"></textarea></div>
+        
+        <!-- News module buttons -->
+        <div class="field">
+          <label>Content (Markdown/HTML) <span class="req">*</span></label>
+          <div class="modules-bar">
+            <span style="font-size:11px;color:var(--g);font-weight:600;padding:4px 0">模块:</span>
+            <div class="mod-sep"></div>
+            <button class="mod-btn" onclick="addModN('lead')">📝 导语</button>
+            <button class="mod-btn" onclick="addModN('heading')">📌 小标题</button>
+            <button class="mod-btn" onclick="addModN('textimg')">🖼️ 正文+配图</button>
+            <button class="mod-btn" onclick="addModN('leftimg')">🖼️ 左图右文</button>
+            <button class="mod-btn" onclick="addModN('list')">📋 要点列表</button>
+            <button class="mod-btn" onclick="addModN('highlight')">💡 重点强调</button>
+            <button class="mod-btn" onclick="addModN('steps')">🔢 步骤流程</button>
+            <button class="mod-btn" onclick="addModN('3imgs')">1行3图</button>
+            <button class="mod-btn" onclick="addModN('compare')">📊 对比表格</button>
+          </div>
+          <textarea id="nBody" rows="14" placeholder="## Heading&#10;&#10;Your article content here. **Bold** and *italic* supported.&#10;&#10;Use the module buttons above for layout templates."></textarea>
+        </div>
         <button class="btn btn-primary" onclick="saveNews()">💾 Publish Article</button>
       </div>
     </div>
@@ -321,7 +381,48 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <script>
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 
-// Login
+/* ====== MODULE TEMPLATES ====== */
+var MODS = {
+  title: '\n## Section Title\n\n',
+  text: '\n<div style="font-size:14px;line-height:1.8;color:#444;margin:15px 0;">\nYour text content here.\n</div>\n',
+  leftimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:45%;vertical-align:top;padding-right:15px;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n</tr></table>\n',
+  rightimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">Sub Title</strong><br>Description text here.</td>\n<td style="width:45%;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n</tr></table>\n',
+  '2imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:50%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n</tr></table>\n',
+  '3imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:33.33%;padding:5px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n</tr></table>\n',
+  '4imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 1</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 2</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 3</p></td>\n<td style="width:25%;padding:4px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:12px;color:#666;margin:4px 0 0;">Label 4</p></td>\n</tr></table>\n',
+  '6imgs': '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">1</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">2</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">3</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">4</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">5</p></td>\n<td style="width:16.66%;padding:3px;text-align:center;vertical-align:top;"><img src="IMAGE-URL" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:11px;color:#666;margin:3px 0 0;">6</p></td>\n</tr></table>\n',
+  features: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0;"><tr>\n<td style="width:36px;vertical-align:top;padding:10px 0;"><span style="display:inline-block;width:36px;height:36px;background:#ce1132;color:#fff;text-align:center;line-height:36px;border-radius:50%;font-weight:bold;font-size:16px;">1</span></td>\n<td style="vertical-align:top;padding:10px 0 10px 10px;font-size:14px;line-height:1.6;"><strong>Feature Name</strong> — Description</td>\n</tr></table>\n',
+  specs: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><td style="padding:10px 12px;border:1px solid #ddd;background:#f5f5f5;font-weight:bold;width:200px;">Parameter</td><td style="padding:10px 12px;border:1px solid #ddd;">Value</td></tr>\n<tr><td style="padding:10px 12px;border:1px solid #ddd;background:#f5f5f5;font-weight:bold;">Parameter</td><td style="padding:10px 12px;border:1px solid #ddd;">Value</td></tr>\n</table>\n',
+  faq: '\n<p style="font-weight:bold;color:#ce1132;font-size:15px;margin:15px 0 5px 0;">Q: Question here?</p>\n<p style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;">Answer here.</p>\n',
+  cta: '\n<div style="background:#ce1132;color:#fff;padding:25px 30px;border-radius:8px;text-align:center;margin:30px 0;">\n<h3 style="color:#fff;margin:0 0 10px;font-size:20px;">Need a Custom Solution?</h3>\n<p style="margin:5px 0;font-size:14px;">Send us your drawings — quote within 12 hours.</p>\n<p style="margin:5px 0;font-size:14px;">📧 info@ggn-gear.com | 📞 +86-18057543143</p>\n<a href="mailto:info@ggn-gear.com" style="display:inline-block;background:#fff;color:#ce1132;padding:10px 30px;border-radius:25px;font-weight:bold;text-decoration:none;margin-top:10px;">Send Inquiry Now</a>\n</div>\n'
+};
+
+/* News modules */
+var MODSN = {
+  lead: '\n<p style="font-size:16px;color:#666;line-height:1.8;border-left:4px solid #2c3e50;padding-left:15px;margin:20px 0;font-style:italic;">Lead paragraph / article summary</p>\n',
+  heading: '\n## Section Heading\n\n',
+  textimg: '\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">Paragraph text.</p>\n<img src="IMAGE-URL" style="width:100%;border-radius:6px;margin:15px 0;" />\n<p style="font-size:14px;line-height:1.9;color:#444;margin:12px 0;">More text.</p>\n',
+  leftimg: '\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:20px 0;"><tr>\n<td style="width:40%;vertical-align:top;padding-right:15px;"><img src="IMAGE-URL" style="width:100%;border-radius:6px;"></td>\n<td style="width:60%;vertical-align:top;font-size:14px;line-height:1.9;color:#444;"><strong style="font-size:16px;color:#2c3e50;">Sub Title</strong><br>Text content.</td>\n</tr></table>\n',
+  list: '\n**List Title**\n<ul style="font-size:14px;line-height:1.8;color:#444;padding-left:20px;margin:12px 0;">\n<li style="margin:6px 0;"><strong>Point</strong> — Description</li>\n<li style="margin:6px 0;"><strong>Point</strong> — Description</li>\n</ul>\n',
+  highlight: '\n<div style="background:#f0f4f8;border-left:4px solid #2c3e50;padding:15px 20px;margin:15px 0;font-size:14px;color:#555;line-height:1.7;border-radius:0 6px 6px 0;">\n<strong>⚠ Key Point:</strong> Important content here.\n</div>\n',
+  steps: '\n**Step Title**\n\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:12px 0;"><tr>\n<td style="width:32px;vertical-align:top;padding:8px 0;"><span style="display:inline-block;width:32px;height:32px;background:#2c3e50;color:#fff;text-align:center;line-height:32px;border-radius:50%;font-weight:bold;font-size:14px;">1</span></td>\n<td style="vertical-align:top;padding:8px 0 8px 12px;font-size:14px;line-height:1.7;color:#444;"><strong>Step</strong> — Description</td>\n</tr></table>\n',
+  '3imgs': MODS['3imgs'],
+  compare: '\n**Comparison Title**\n\n<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin:15px 0;font-size:14px;">\n<tr><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:left;">Option A</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:center;width:10%;font-size:18px;">VS</th><th style="background:#2c3e50;color:#fff;padding:10px 12px;text-align:left;">Option B</th></tr>\n<tr><td style="padding:10px 12px;border:1px solid #ddd;">Description A</td><td style="padding:10px 12px;border:1px solid #ddd;text-align:center;font-weight:bold;color:#ce1132;">VS</td><td style="padding:10px 12px;border:1px solid #ddd;">Description B</td></tr>\n</table>\n'
+};
+
+function addMod(key){ insertAtCursor('pBody', MODS[key] || ''); toast('✅ '+key+' inserted','success'); }
+function addModN(key){ insertAtCursor('nBody', MODSN[key] || ''); toast('✅ '+key+' inserted','success'); }
+
+function insertAtCursor(id, text) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var start = el.selectionStart, end = el.selectionEnd;
+  el.value = el.value.substring(0, start) + text + el.value.substring(end);
+  el.focus();
+  el.selectionStart = el.selectionEnd = start + text.length;
+}
+
+/* Login */
 function login(){
   K=document.getElementById('t').value.trim();
   if(!K) return toast('Please enter a token','error');
@@ -331,19 +432,18 @@ function login(){
   });
 }
 
-// Toast
-function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
+function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},2500);}
 
-// Navigation
+/* Navigation */
 document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');}});
 
-// Form tabs
+/* Form tabs */
 document.querySelectorAll('.tab-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('#page-products .tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('panel-'+this.dataset.panel).classList.add('active');}});
 
-// Image preview
+/* Image preview */
 function previewImage(){var f=document.getElementById('imgFile').files[0];if(!f) return;var r=new FileReader();r.onload=function(e){document.getElementById('imgPreview').src=e.target.result;document.getElementById('uploadZone').classList.add('has-file')};r.readAsDataURL(f);}
 
-// Upload image
+/* Upload image */
 function uploadNow(){
   var f=document.getElementById('imgFile').files[0];
   if(!f) return toast('Select an image first','error');
@@ -353,14 +453,13 @@ function uploadNow(){
     var path='public/images/products/'+f.name;
     fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:'main'})})
     .then(function(r){return r.json()}).then(function(d){
-      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('pImg').value=url; toast('Uploaded: '+url,'success'); }
+      if(d.content){ var url='/woshidahuaidan/images/products/'+f.name; document.getElementById('pImg').value=url; document.getElementById('pImgManual').value=url; toast('Uploaded: '+url,'success'); }
       else toast(d.message,'error');
     });
   };
   r.readAsDataURL(f);
 }
 
-// Upload media
 function uploadMedia(){
   var f=document.getElementById('mediaFile').files[0];
   if(!f) return;
@@ -377,29 +476,42 @@ function uploadMedia(){
   r.readAsDataURL(f);
 }
 
-// Build frontmatter
+/* Add Similar Product */
+function addSimilar(){
+  document.getElementById('pTitle').value = '[COPY] ' + document.getElementById('pTitle').value;
+  document.getElementById('pSlug').value = '';
+  var bodyEl = document.getElementById('pBody');
+  if(bodyEl) bodyEl.value = bodyEl.value;
+  toast('📋 Form populated! Change product name and save.','success');
+  document.getElementById('pTitle').focus();
+  document.getElementById('pTitle').select();
+}
+
+/* Build frontmatter */
 function buildFM(){
   var t=document.getElementById('pTitle').value;
   var s=document.getElementById('pSlug').value||t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   var c=document.getElementById('pCat').value;
   var sc=document.getElementById('pSub').value;
-  var ex=document.getElementById('pExcerpt').value.replace(/"/g,'\\"');
+  var ex=document.getElementById('pExcerpt').value.replace(/\"/g,'\\\"');
   var im=document.getElementById('pImg').value;
   var fe=document.getElementById('pFeat').value;
   var sp=document.getElementById('pSpec').value;
   var o=parseInt(document.getElementById('pOrder').value)||0;
+  var body = (document.getElementById('pBody')||{}).value || '';
 
   var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
   if(sc) fm+='subcategory: "'+sc+'"\n';
   fm+='excerpt: "'+ex+'"\n';
   if(im) fm+='image: "'+im+'"\n';
-  if(fe.trim()){ var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/"/g,'\\"')+'"\n'});}
-  if(sp.trim()){ var sl=sp.split('\n').filter(function(l){return l.includes(':')});fm+='specs:\n';sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'\n    value: "'+p.slice(1).join(':').trim()+'"\n'});}
+  if(fe.trim()){ var fl=fe.split('\n').filter(function(l){return l.trim()});fm+='features:\n';fl.forEach(function(l){fm+='  - "'+l.replace(/\"/g,'\\\"')+'"\n'});}
+  if(sp.trim()){ var sl=sp.split('\n').filter(function(l){return l.includes(':')});fm+='specs:\n';sl.forEach(function(l){var p=l.split(':');fm+='  - name: "'+p[0].trim()+'\"\n    value: "'+p.slice(1).join(':').trim()+'"\n'});}
   fm+='order: '+o+'\npublished: true\n---\n';
+  if(body.trim()) fm+=body;
   return {slug:s,content:fm};
 }
 
-// Save product
+/* Save product */
 function saveProd(){
   if(!K) return toast('Login first','error');
   var t=document.getElementById('pTitle').value;
@@ -410,13 +522,13 @@ function saveProd(){
   send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
 }
 
-// Save news
+/* Save news */
 function saveNews(){
   if(!K) return toast('Login first','error');
   var t=document.getElementById('nTitle').value;
   if(!t) return toast('Title required','error');
   var d=document.getElementById('nDate').value||new Date().toISOString().split('T')[0];
-  var ex=document.getElementById('nExcerpt').value.replace(/"/g,'\\"');
+  var ex=document.getElementById('nExcerpt').value.replace(/\"/g,'\\\"');
   var bd=document.getElementById('nBody').value;
   var im=document.getElementById('nImg').value;
   var sl=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -428,14 +540,13 @@ function saveNews(){
   send('src/content/news/'+fs+'.md',fm,'Add article: '+t);
 }
 
-// Save settings  
 function saveSettings(){
   if(!K) return toast('Login first','error');
   var d=JSON.stringify({phone:document.getElementById('sPhone').value,email:document.getElementById('sEmail').value,address:document.getElementById('sAddress').value,companyName:document.getElementById('sCompany').value},null,2);
   send('src/data/settings.json',d,'Update site settings');
 }
 
-// Send to GitHub
+/* Send to GitHub */
 function send(path,content,message){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
@@ -443,7 +554,7 @@ function send(path,content,message){
 }
 
 function resetForm(){
-  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pOrder'].forEach(function(id){document.getElementById(id).value='';});
+  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgManual','pBody'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('pOrder').value='0';
   document.getElementById('uploadZone').classList.remove('has-file');
   document.getElementById('imgPreview').src='';
