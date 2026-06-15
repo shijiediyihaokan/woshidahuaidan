@@ -1,122 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ceten Admin - Content Management</title>
-  <script src="/woshidahuaidan/admin/decap-cms.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceten Admin</title>
+<style>
+  :root { --r: #ce1132; --d: #1a1a1a; --g: #6b7280; --l: #f3f4f6; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,system-ui,sans-serif;background:#f9fafb;color:#111827}
+  .login{max-width:400px;margin:100px auto;background:#fff;padding:40px;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
+  .login h1{font-size:24px;margin-bottom:8px}
+  .login .sub{font-size:14px;color:var(--g);margin-bottom:24px}
+  .login input,.login textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;margin-bottom:12px}
+  .login button{width:100%;padding:12px;background:var(--r);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+  .err{color:var(--r);font-size:13px;margin-top:8px}
+  .app{display:none;max-width:1000px;margin:20px auto;padding:20px}
+  .app.on{display:block}
+  .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+  .hdr h1{font-size:22px}
+  .hdr button{padding:8px 16px;background:var(--r);color:#fff;border:none;border-radius:6px;cursor:pointer}
+  .tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid #e5e7eb}
+  .tab{padding:10px 20px;cursor:pointer;font-size:14px;font-weight:500;color:var(--g);border-bottom:2px solid transparent;margin-bottom:-2px}
+  .tab.a{color:var(--r);border-bottom-color:var(--r)}
+  form{display:none}
+  form.a{display:block}
+  .fg{margin-bottom:16px}
+  label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+  textarea{resize:vertical;min-height:80px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .msg{padding:10px 16px;border-radius:8px;font-size:14px;margin-bottom:16px}
+  .msg.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+  .msg.bad{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .btn{padding:12px 32px;background:var(--r);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+  small{font-size:12px;color:var(--g)}
+</style>
 </head>
 <body>
-  <script>
-    // Initialize Decap CMS with config
-    CMS.init({
-      config: {
-        backend: {
-          name: 'github',
-          repo: 'shijiediyihaokan/woshidahuaidan',
-          branch: 'main',
-          base_url: 'https://api.decapcms.org',
-          auth_endpoint: 'auth',
-        },
-        media_folder: 'public/images/products',
-        public_folder: '/images/products',
-        site_url: 'https://shijiediyihaokan.github.io/woshidahuaidan',
-        display_url: 'https://shijiediyihaokan.github.io/woshidahuaidan',
-        logo_url: '/woshidahuaidan/images/logo.png',
-        locale: 'en',
-        show_preview_links: true,
-        
-        collections: [
-          {
-            name: 'products',
-            label: 'Products',
-            label_singular: 'Product',
-            folder: 'src/content/products',
-            create: true,
-            slug: '{{slug}}',
-            editor: { preview: false },
-            fields: [
-              { label: 'Title', name: 'title', widget: 'string' },
-              {
-                label: 'Category', name: 'category', widget: 'select',
-                options: ['Gearboxes','Gear Motors','AC Motors','Gears','Sprockets','Pulleys','Transmission Shafts','Sheet Metal Fabrication']
-              },
-              {
-                label: 'Subcategory', name: 'subcategory', widget: 'select',
-                options: [
-                  'worm-gearboxes','helical-gearboxes','bevel-gearboxes','right-angle-gearboxes','screw-jacks','speed-variators','industrial-gearboxes',
-                  'ac-gear-motors','worm-gear-motors','helical-gear-motors','bevel-gear-motors',
-                  'single-phase-ac-motors','three-phase-ac-motors',
-                  'spur-gears','helical-gears','bevel-gears','worm-gears','custom-gears',
-                  'roller-chain-sprockets','double-pitch-sprockets','idler-sprockets','custom-sprockets',
-                  'timing-pulleys','v-belt-pulleys','custom-pulleys',
-                  'gear-shafts','spline-shafts','linear-shafts','custom-shafts',
-                  'sheet-metal-enclosures','stamping-parts','welding-parts','laser-cut-sheet-metal-parts','bent-sheet-metal-parts','custom-metal-fabrication'
-                ],
-                required: false
-              },
-              { label: 'Excerpt', name: 'excerpt', widget: 'text' },
-              { label: 'Image', name: 'image', widget: 'image', required: false },
-              { label: 'Publish', name: 'published', widget: 'boolean', default: true },
-              { label: 'Order', name: 'order', widget: 'number', default: 0, value_type: 'int' },
-              {
-                label: 'Features', name: 'features', widget: 'list',
-                field: { label: 'Feature', name: 'feature', widget: 'string' }
-              },
-              {
-                label: 'Specifications', name: 'specs', widget: 'list',
-                fields: [
-                  { label: 'Name', name: 'name', widget: 'string' },
-                  { label: 'Value', name: 'value', widget: 'string' }
-                ]
-              }
-            ],
-            // Template for new products
-            extension: 'md',
-            format: 'frontmatter',
-            create: true,
-            slug: '{{slug}}',
-          },
-          {
-            name: 'news',
-            label: 'News & Articles',
-            label_singular: 'Article',
-            folder: 'src/content/news',
-            create: true,
-            slug: '{{year}}-{{month}}-{{day}}-{{slug}}',
-            editor: { preview: false },
-            fields: [
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Date', name: 'date', widget: 'datetime', format: 'YYYY-MM-DD' },
-              { label: 'Category', name: 'category', widget: 'select', options: ['Product Knowledge','Selection Guide','Technical Guide','Industry News','Company News'] },
-              { label: 'Excerpt', name: 'excerpt', widget: 'text' },
-              { label: 'Image', name: 'image', widget: 'image', required: false },
-              { label: 'Body', name: 'body', widget: 'markdown' },
-              { label: 'Publish', name: 'published', widget: 'boolean', default: true },
-            ],
-            extension: 'md',
-            format: 'frontmatter',
-          },
-          {
-            name: 'settings',
-            label: 'Site Settings',
-            files: [
-              {
-                name: 'general',
-                label: 'General',
-                file: 'src/data/settings.json',
-                fields: [
-                  { label: 'Phone', name: 'phone', widget: 'string' },
-                  { label: 'Email', name: 'email', widget: 'string' },
-                  { label: 'Address', name: 'address', widget: 'string', required: false },
-                  { label: 'Company Name', name: 'companyName', widget: 'string' },
-                ]
-              }
-            ]
-          }
-        ]
-      }
+
+<div id="loginBox" class="login">
+  <h1>Ceten Admin</h1>
+  <p class="sub">GRANGIN | CETEN Content Management</p>
+  <input id="t" type="password" placeholder="GitHub Personal Access Token">
+  <button onclick="go()">Login</button>
+  <p class="err" id="e"></p>
+  <p class="sub" style="margin-top:16px">Get token: github.com/settings/tokens (scope: <b>repo</b>)</p>
+</div>
+
+<div id="app" class="app">
+  <div class="hdr">
+    <div><h1>Ceten Admin</h1><small id="who"></small></div>
+    <button onclick="out()">Logout</button>
+  </div>
+  <div class="tabs">
+    <div class="tab a" onclick="sw('products')">Products</div>
+    <div class="tab" onclick="sw('news')">News</div>
+    <div class="tab" onclick="sw('images')">Images</div>
+  </div>
+  <div id="msg"></div>
+
+  <form id="fProducts" class="a" onsubmit="return saveProd()">
+    <div class="row">
+      <div class="fg"><label>Product Name *</label><input id="pTitle" required placeholder="NMRV050 Worm Gearbox"></div>
+      <div class="fg"><label>Slug (auto if empty)</label><input id="pSlug" placeholder="nrmv050-worm-gearbox"></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Category *</label><select id="pCat" required><option value="">Select...</option><option value="Gearboxes">Gearboxes</option><option value="Gear Motors">Gear Motors</option><option value="AC Motors">AC Motors</option><option value="Gears">Gears</option><option value="Sprockets">Sprockets</option><option value="Pulleys">Pulleys</option><option value="Transmission Shafts">Transmission Shafts</option><option value="Sheet Metal Fabrication">Sheet Metal Fabrication</option></select></div>
+      <div class="fg"><label>Subcategory</label><input id="pSub" placeholder="worm-gearboxes"></div>
+    </div>
+    <div class="fg"><label>Description *</label><textarea id="pExcerpt" required></textarea></div>
+    <div class="row">
+      <div class="fg"><label>Features (one per line)</label><textarea id="pFeat" placeholder="Precision CNC machined&#10;Hardened steel gears"></textarea></div>
+      <div class="fg"><label>Specs (Name: Value, one per line)</label><textarea id="pSpec" placeholder="Size: 025-150&#10;Ratio: 5:1 to 100:1"></textarea></div>
+    </div>
+    <div class="fg"><label>Image (upload first in Images tab)</label><input id="pImg" placeholder="/woshidahuaidan/images/products/file.jpg"></div>
+    <button type="submit" class="btn">Save Product</button>
+  </form>
+
+  <form id="fNews" onsubmit="return saveNewsF()">
+    <div class="fg"><label>Title *</label><input id="nTitle" required></div>
+    <div class="row">
+      <div class="fg"><label>Category</label><select id="nCat"><option>Product Knowledge</option><option>Selection Guide</option><option>Technical Guide</option><option>Industry News</option><option>Company News</option></select></div>
+      <div class="fg"><label>Date</label><input id="nDate" type="date"></div>
+    </div>
+    <div class="fg"><label>Excerpt</label><textarea id="nExcerpt"></textarea></div>
+    <div class="fg"><label>Body (Markdown)</label><textarea id="nBody" rows="6"></textarea></div>
+    <button type="submit" class="btn">Save Article</button>
+  </form>
+
+  <form id="fImages" onsubmit="return upImg()">
+    <div class="fg"><label>Select Image</label><input id="imgFile" type="file" accept="image/*" required></div>
+    <button type="submit" class="btn">Upload</button>
+    <p id="imgUrl" style="margin-top:8px;font-size:13px;color:var(--g)"></p>
+  </form>
+</div>
+
+<script>
+var K = '';
+var R = 'shijiediyihaokan/woshidahuaidan';
+var B = 'main';
+var A = 'https://api.github.com';
+
+function go(){
+  K = document.getElementById('t').value.trim();
+  if(!K) return;
+  fetch(A+'/user',{headers:{'Authorization':'token '+K}})
+    .then(r=>r.json()).then(d=>{
+      if(d.login){
+        document.getElementById('loginBox').style.display='none';
+        document.getElementById('app').classList.add('on');
+        document.getElementById('who').textContent=' @'+d.login;
+      } else { document.getElementById('e').textContent='Invalid token'; }
     });
-  </script>
+}
+function out(){ K=''; document.getElementById('loginBox').style.display='block'; document.getElementById('app').classList.remove('on'); }
+function sw(n){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('a')); event.target.classList.add('a');
+  document.querySelectorAll('form').forEach(f=>f.classList.remove('a'));
+  document.getElementById('f'+(n.charAt(0).toUpperCase()+n.slice(1))).classList.add('a');
+}
+function show(m,s){ document.getElementById('msg').innerHTML='<div class="msg '+(s?'ok':'bad')+'">'+m+'</div>'; }
+
+function saveProd(){
+  var t=document.getElementById('pTitle').value;
+  var s=document.getElementById('pSlug').value||t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  var c=document.getElementById('pCat').value;
+  var sc=document.getElementById('pSub').value;
+  var ex=document.getElementById('pExcerpt').value.replace(/"/g,'\"');
+  var fe=(document.getElementById('pFeat').value||'').split('\n').filter(function(l){return l.trim()}).map(function(l){return'  - "'+l.replace(/"/g,'\"')+'"'}).join('\n');
+  var sp=(document.getElementById('pSpec').value||'').split('\n').filter(function(l){return l.includes(':')}).map(function(l){var p=l.split(':');return'  - name: "'+p[0].trim()+'\n    value: "'+p.slice(1).join(':').trim()+'"'}).join('\n');
+  var im=document.getElementById('pImg').value;
+  var fm='---\ntitle: "'+t+'"\ncategory: "'+c+'"\n';
+  if(sc) fm+='subcategory: "'+sc+'"\n';
+  fm+='excerpt: "'+ex+'"\n';
+  if(im) fm+='image: "'+im+'"\n';
+  fm+='features:\n'+fe+'\n';
+  fm+='specs:\n'+sp+'\n';
+  fm+='order: 0\npublished: true\n---\n';
+  var path='src/content/products/'+s+'.md';
+  send(path,fm,'Add product: '+t);
+  return false;
+}
+
+function saveNewsF(){
+  var t=document.getElementById('nTitle').value;
+  var c=document.getElementById('nCat').value;
+  var d=document.getElementById('nDate').value||new Date().toISOString().split('T')[0];
+  var ex=document.getElementById('nExcerpt').value.replace(/"/g,'\"');
+  var bd=document.getElementById('nBody').value;
+  var sl=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  var dt=new Date(d);
+  var fs=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+'-'+sl;
+  var fm='---\ntitle: "'+t+'"\ndate: "'+d+'"\ncategory: "'+c+'"\nexcerpt: "'+ex+'"\npublished: true\n---\n'+bd;
+  send('src/content/news/'+fs+'.md',fm,'Add article: '+t);
+  return false;
+}
+
+function upImg(){
+  var f=document.getElementById('imgFile').files[0];
+  if(!f) return false;
+  var r=new FileReader();
+  r.onload=function(ev){
+    var b64=ev.target.result.split(',')[1];
+    var path='public/images/products/'+f.name;
+    fetch(A+'/repos/'+R+'/contents/'+path,{
+      method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},
+      body:JSON.stringify({message:'Upload '+f.name,content:b64,branch:B})
+    }).then(function(r){return r.json()}).then(function(d){
+      if(d.content){
+        var url='/woshidahuaidan/images/products/'+f.name;
+        document.getElementById('imgUrl').textContent='Uploaded: '+url;
+        document.getElementById('pImg').value=url;
+      } else { document.getElementById('imgUrl').textContent='Error: '+d.message; }
+    });
+  };
+  r.readAsDataURL(f);
+  return false;
+}
+
+function send(path,content,msg){
+  var b=unescape(encodeURIComponent(content));
+  fetch(A+'/repos/'+R+'/contents/'+path,{
+    method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},
+    body:JSON.stringify({message:msg,content:btoa(b),branch:B})
+  }).then(function(r){return r.json()}).then(function(d){
+    if(d.content){ show('Saved! Deploy in ~2 min.','ok'); }
+    else { show('Error: '+d.message,'bad'); }
+  });
+}
+</script>
 </body>
 </html>
