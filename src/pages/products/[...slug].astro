@@ -1,8 +1,9 @@
 ---
 // ============================================================
-// products/[...slug].astro — Product detail page
+// products/[...slug].astro — SEO-optimized product detail
 // ============================================================
 import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -21,19 +22,51 @@ const allProducts = await getCollection('products', ({ data }) => data.published
 const related = allProducts
   .filter(p => p.data.category === category && p.id !== product.id)
   .slice(0, 3);
+
+// Build page-specific meta
+const pageDescription = excerpt.slice(0, 160);
+const pageKeywords = `${title}, ${category}, China manufacturer, industrial ${category.toLowerCase()}, transmission parts, GRANGIN`;
+const productUrl = new URL(`/woshidahuaidan/products/${product.id}/`, Astro.site).href;
+
+// Product structured data
+const productSchema = {
+  name: title,
+  description: excerpt,
+  image: image || undefined,
+  category: category,
+  sku: product.id,
+  brand: 'GRANGIN',
+  offers: {
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+  },
+};
+
+// Breadcrumb structured data
+const breadcrumb = {
+  items: [
+    { name: 'Home', url: new URL('/woshidahuaidan/', Astro.site).href },
+    { name: 'Products', url: new URL('/woshidahuaidan/products/', Astro.site).href },
+    { name: category, url: new URL(`/woshidahuaidan/products/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`, Astro.site).href },
+    { name: title, url: productUrl },
+  ],
+};
 ---
 
-<Layout title={title} description={excerpt} image={image}>
+<Layout title={title} description={pageDescription} image={image} keywords={pageKeywords} pageType="product">
   
+  <!-- Structured Data -->
+  <SEO product={productSchema} breadcrumb={breadcrumb} pageType="productMultiple" />
+
   <!-- Breadcrumb -->
   <div class="bg-steel-50 border-b border-steel-200">
     <div class="container-page py-3">
-      <nav class="flex items-center gap-2 text-sm text-steel-500">
+      <nav class="flex items-center gap-2 text-sm text-steel-500" aria-label="Breadcrumb">
         <a href="/woshidahuaidan/" class="hover:text-brand-600 transition-colors">Home</a>
         <span>/</span>
         <a href="/woshidahuaidan/products/" class="hover:text-brand-600 transition-colors">Products</a>
         <span>/</span>
-        <a href={`/products/?category=${category.toLowerCase().replace(/\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
+        <a href={`/woshidahuaidan/products/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
         <span>/</span>
         <span class="text-steel-800 font-medium">{title}</span>
       </nav>
@@ -41,36 +74,29 @@ const related = allProducts
   </div>
 
   <!-- Product Hero -->
-  <section class="section-py bg-white">
+  <section class="section-py bg-white" itemscope itemtype="https://schema.org/Product">
     <div class="container-page">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <!-- Image Gallery -->
+        <!-- Image -->
         <div>
           <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
             {image ? (
-              <img src={image} alt={title} class="w-full h-full object-cover" />
+              <img src={image} alt={title} itemprop="image" class="w-full h-full object-cover" />
             ) : (
               <div class="text-center p-8">
-                <div class="text-7xl mb-3">⚙️</div>
-                <span class="tag tag-red text-sm">{category}</span>
+                <div class="text-7xl mb-3" aria-hidden="true">⚙️</div>
+                <span class="tag tag-red text-sm" itemprop="category">{category}</span>
               </div>
             )}
           </div>
-          <!-- Thumbnail row -->
-          <div class="flex gap-3 mt-3">
-            <div class="w-20 h-16 bg-brand-100 rounded border-2 border-brand-500 flex items-center justify-center text-xs font-semibold text-brand-700">Main</div>
-            <div class="w-20 h-16 bg-steel-100 rounded border border-steel-200 flex items-center justify-center text-xs text-steel-400">View 2</div>
-            <div class="w-20 h-16 bg-steel-100 rounded border border-steel-200 flex items-center justify-center text-xs text-steel-400">View 3</div>
-          </div>
         </div>
 
-        <!-- Product Info -->
+        <!-- Info -->
         <div>
-          <span class="tag tag-red mb-3">{category}</span>
-          <h1 class="text-3xl sm:text-4xl font-black text-steel-900 mt-2 mb-4">{title}</h1>
-          <p class="text-steel-500 leading-relaxed mb-6">{excerpt}</p>
+          <span class="tag tag-red mb-3" itemprop="category">{category}</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-steel-900 mt-2 mb-4" itemprop="name">{title}</h1>
+          <p class="text-steel-500 leading-relaxed mb-6" itemprop="description">{excerpt}</p>
 
-          <!-- Key Specs Summary -->
           {specs && specs.length > 0 && (
             <div class="grid grid-cols-2 gap-3 mb-6">
               {specs.slice(0, 4).map((spec) => (
@@ -82,15 +108,16 @@ const related = allProducts
             </div>
           )}
 
-          <!-- Stock & Actions -->
           <div class="flex items-center gap-4 mb-2">
             <span class="flex items-center gap-1.5 text-green-600 font-semibold text-sm">
               <span class="w-2 h-2 bg-green-500 rounded-full"></span> In Stock
             </span>
-            <span class="text-xs text-steel-400">Ready for immediate shipment</span>
+            <link itemprop="availability" href="https://schema.org/InStock">
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-3 mt-6">
+          <div class="flex flex-col sm:flex-row gap-3 mt-6" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+            <meta itemprop="priceCurrency" content="USD">
+            <meta itemprop="availability" content="https://schema.org/InStock">
             <a href="/woshidahuaidan/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
             <a href="mailto:info@ggn-gear.com" class="btn-outline text-base px-8 py-3">Email Inquiry</a>
           </div>
@@ -99,11 +126,10 @@ const related = allProducts
     </div>
   </section>
 
-  <!-- Features & Specs Tabs -->
+  <!-- Features & Specs -->
   <section class="section-py bg-steel-50">
     <div class="container-page">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Features -->
         <div class="lg:col-span-2">
           <h2 class="text-2xl font-bold text-steel-900 mb-6">Product Details</h2>
           
@@ -121,7 +147,6 @@ const related = allProducts
             </div>
           )}
 
-          <!-- Full Specs Table -->
           {specs && specs.length > 0 && (
             <div>
               <h3 class="text-lg font-semibold text-steel-800 mb-4">Technical Specifications</h3>
@@ -141,9 +166,7 @@ const related = allProducts
           )}
         </div>
 
-        <!-- Sidebar -->
         <div>
-          <!-- Inquiry Card -->
           <div class="bg-brand-600 text-white rounded-lg p-6 sticky top-24">
             <h3 class="text-lg font-bold mb-3">Get a Quote</h3>
             <p class="text-sm text-brand-100 mb-4">Need pricing or technical details? Our engineers will respond within 24 hours.</p>
@@ -163,16 +186,12 @@ const related = allProducts
         <h2 class="text-2xl font-bold text-steel-900 mb-6">Related Products</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {related.map((p) => (
-            <a href={`/products/${p.id}/`} class="card-base group">
+            <a href={`/woshidahuaidan/products/${p.id}/`} class="card-base group">
               <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
-                {p.data.image ? (
-                  <img src={p.data.image} alt={p.data.title} class="w-full h-full object-cover" />
-                ) : (
-                  <div class="text-center">
-                    <div class="text-4xl mb-1">⚙️</div>
-                    <span class="tag tag-red">{p.data.category}</span>
-                  </div>
-                )}
+                <div class="text-center">
+                  <div class="text-4xl mb-1">⚙️</div>
+                  <span class="tag tag-red">{p.data.category}</span>
+                </div>
               </div>
               <div class="p-4">
                 <h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors text-sm">{p.data.title}</h3>
@@ -185,13 +204,10 @@ const related = allProducts
     </section>
   )}
 
-  <!-- CTA -->
   <section class="py-16 bg-dark-900 text-white text-center">
     <div class="container-page">
       <h2 class="text-2xl sm:text-3xl font-black mb-3">Need a <span class="text-brand-400">Custom Solution</span>?</h2>
-      <p class="text-steel-400 max-w-xl mx-auto mb-6">
-        We provide OEM/ODM services. Tell us your specifications and we'll deliver the right product.
-      </p>
+      <p class="text-steel-400 max-w-xl mx-auto mb-6">We provide OEM/ODM services. Tell us your specifications.</p>
       <a href="/woshidahuaidan/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
     </div>
   </section>

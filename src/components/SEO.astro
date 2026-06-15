@@ -1,0 +1,109 @@
+---
+// ============================================================
+// SEO.astro — JSON-LD Structured Data Components
+// ============================================================
+export interface OrganizationSchema {
+  name: string;
+  url: string;
+  logo?: string;
+  description: string;
+  email: string;
+  telephone: string;
+  address: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    postalCode?: string;
+    addressCountry: string;
+  };
+  sameAs?: string[];
+}
+
+export interface ProductSchema {
+  name: string;
+  description: string;
+  image?: string;
+  category: string;
+  sku?: string;
+  brand?: string;
+  offers?: {
+    price?: string;
+    priceCurrency?: string;
+    availability?: string;
+  };
+}
+
+export interface BreadcrumbSchema {
+  items: { name: string; url: string }[];
+}
+
+export interface ArticleSchema {
+  headline: string;
+  description: string;
+  image?: string;
+  datePublished: string;
+  dateModified?: string;
+  author?: string;
+}
+
+const { 
+  organization, 
+  product, 
+  breadcrumb, 
+  article,
+  pageType = 'organization'
+} = Astro.props as {
+  organization?: OrganizationSchema;
+  product?: ProductSchema;
+  breadcrumb?: BreadcrumbSchema;
+  article?: ArticleSchema;
+  pageType?: string;
+};
+---
+
+<!-- Organization Schema -->
+{organization && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    ...organization,
+    sameAs: organization.sameAs || [],
+  })} />
+)}
+
+<!-- Product Schema -->
+{product && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    ...product,
+    brand: product.brand ? { "@type": "Brand", name: product.brand } : undefined,
+    offers: product.offers ? {
+      "@type": "Offer",
+      ...product.offers,
+    } : undefined,
+  })} />
+)}
+
+<!-- BreadcrumbList Schema -->
+{breadcrumb && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumb.items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  })} />
+)}
+
+<!-- Article Schema -->
+{article && (
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    ...article,
+  })} />
+)}

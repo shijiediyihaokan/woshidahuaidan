@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /search/
 
-Sitemap: https://ggn-gear.com/sitemap-index.xml
+Sitemap: https://shijiediyihaokan.github.io/woshidahuaidan/sitemap-index.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 10
