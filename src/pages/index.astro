@@ -3,197 +3,195 @@ import Layout from '../layouts/Layout.astro';
 import { categoryTree } from '../data/categories';
 
 const stats = [
-  { value: '10,000+', label: 'Factory Area (m²)' },
-  { value: '20+', label: 'Years Experience' },
-  { value: '100+', label: 'Team Members' },
-  { value: '25,000+', label: 'Monthly Output (pcs)' },
+  { value: '20+', label: 'Years Experience', desc: 'In power transmission' },
+  { value: '10,000㎡', label: 'Factory Area', desc: 'Advanced facility' },
+  { value: '25,000+', label: 'Monthly Output', desc: 'Pieces per month' },
+  { value: '50+', label: 'Countries Served', desc: 'Global reach' },
 ];
 
-const qualityFeatures = [
-  { title: 'Expert Customization', desc: 'Accommodates diverse sizes and quantity requirements. Chief Engineer with 30+ years in automation expertise. Average engineering team tenure exceeding 15 years. Comprehensive 3D custom design blueprints provided.', icon: '🎯' },
-  { title: 'Reliable Custom Service', desc: '12-hour response guarantee for all inquiries. Prompt quotation and customized solution feedback. Seamless collaboration between sales and technical teams.', icon: '⏱️' },
-  { title: 'Rapid Delivery Assurance', desc: 'Priority fast-track for urgent orders. Optimized production scheduling coordination. Strict adherence to precision, hardness and quality standards.', icon: '🚀' },
+const advantages = [
+  {
+    title: 'Engineering Excellence',
+    desc: 'Chief Engineer with 30+ years of automation expertise. Engineering team averaging 15+ years of experience. Comprehensive 3D design blueprints for every project.',
+    icon: `<svg class="w-10 h-10" fill="none" stroke="#CE1132" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
+  },
+  {
+    title: 'Quality Assurance',
+    desc: 'ISO 9001, 45001, 14001 certified. 25+ dedicated QC professionals. Three-stage manual inspection process. Coordinate measuring machines and gear profile testers.',
+    icon: `<svg class="w-10 h-10" fill="none" stroke="#CE1132" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`
+  },
+  {
+    title: 'Rapid Response',
+    desc: '12-hour guaranteed response for all inquiries. Priority fast-track for urgent orders. Optimized production scheduling. Export-grade packaging for safe delivery.',
+    icon: `<svg class="w-10 h-10" fill="none" stroke="#CE1132" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`
+  },
+  {
+    title: 'Custom Manufacturing',
+    desc: 'Full OEM/ODM support with 35+ materials. CNC machining, laser cutting, sheet metal fabrication. One-to-one design solutions tailored to your exact specifications.',
+    icon: `<svg class="w-10 h-10" fill="none" stroke="#CE1132" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>`
+  },
 ];
-
-const categories = categoryTree;
 
 const industries = [
-  { name: 'Grain & Oil Equipment', desc: 'Reliable power transmission for grain processing and oil extraction machinery.', icon: '🌾' },
-  { name: 'Lifting Equipment', desc: 'Safety-rated components for cranes, hoists, and material lifting systems.', icon: '🏗️' },
-  { name: 'Mining Equipment', desc: 'Heavy-duty gears and sprockets for demanding mining and quarrying operations.', icon: '⛏️' },
-  { name: 'Tobacco Equipment', desc: 'Precision components for tobacco processing and packaging production lines.', icon: '🚬' },
-  { name: 'Aircraft Manufacturing', desc: 'High-precision CNC machined parts meeting aerospace-grade tolerances.', icon: '✈️' },
-  { name: 'Automotive', desc: 'Custom gears and shafts for automotive assembly and component manufacturing.', icon: '🚗' },
-  { name: 'Conveying Equipment', desc: 'Sprockets, chains, and drive components for conveyor systems of all types.', icon: '📦' },
-  { name: 'Elevators', desc: 'Precision gear components for passenger and freight elevator drive systems.', icon: '🛗' },
-  { name: 'Garment Factories', desc: 'Custom mechanical parts for textile and garment manufacturing machinery.', icon: '👕' },
-  { name: 'Mechanical Manufacturing', desc: 'Broad range of transmission parts for general mechanical equipment manufacturing.', icon: '🏭' },
-  { name: 'Mould Equipment', desc: 'Precision-machined components for injection moulding and die-casting equipment.', icon: '🔧' },
-  { name: 'Railway', desc: 'Durable power transmission parts for railway maintenance and track equipment.', icon: '🚂' },
-  { name: 'Shipyard', desc: 'Large-scale custom gears and shafts for marine and shipbuilding applications.', icon: '🚢' },
+  'Grain & Oil', 'Lifting', 'Mining', 'Tobacco', 'Aircraft',
+  'Automotive', 'Conveying', 'Elevator', 'Textile', 'Manufacturing',
+  'Mould', 'Railway', 'Marine',
 ];
 
 const testimonials = [
-  { text: 'GRANGIN has been our trusted partner for custom gears. Their quality is consistent and their engineering team is highly professional.', name: 'Peter Schneider', country: 'Germany' },
-  { text: 'We rely on GRANGIN for our sprocket and chain needs. Fast delivery, competitive pricing, and excellent customer support.', name: 'William Jones', country: 'United Kingdom' },
-  { text: 'Their CNC machining capabilities are outstanding. Complex custom parts delivered with precision and on schedule.', name: 'Thomas Schmidt', country: 'Germany' },
-  { text: 'GRANGIN is our go-to supplier for transmission components. One-to-one design solutions and strict quality control — they never disappoint.', name: 'Juan García', country: 'Spain' },
+  { text: 'GRANGIN has been our trusted partner for custom transmission components. Consistent quality and highly professional engineering support.', name: 'Peter Schneider', role: 'Germany' },
+  { text: 'We source sprockets and chains from GRANGIN. Fast delivery, competitive pricing, and excellent customer service.', name: 'William Jones', role: 'United Kingdom' },
+  { text: 'Outstanding CNC machining capabilities. Complex custom parts delivered with precision and on schedule.', name: 'Thomas Schmidt', role: 'Germany' },
+  { text: 'Our go-to supplier for power transmission. One-to-one design solutions and rigorous quality control.', name: 'Juan García', role: 'Spain' },
 ];
 
-const blogPosts = [
-  { title: 'Are Worm Gearboxes Self-Locking?', date: 'Jun 05, 2026', href: '/news/are-worm-gearboxes-self-locking/' },
-  { title: 'Top 10 China Worm Gear Motor Manufacturers In 2026', date: 'May 19, 2026', href: '/news/top-10-worm-gear-motor-manufacturers/' },
-  { title: 'Top 10 China AC Gear Motor Manufacturers In 2026', date: 'May 19, 2026', href: '/news/top-10-ac-gear-motor-manufacturers/' },
+const newsItems = [
+  { title: 'Are Worm Gearboxes Self-Locking?', date: '2026-06-05', href: '/woshidahuaidan/news/are-worm-gearboxes-self-locking/' },
+  { title: 'Top 10 China Worm Gear Motor Manufacturers', date: '2026-05-19', href: '/woshidahuaidan/news/top-10-worm-gear-motor-manufacturers/' },
+  { title: 'Understanding Gearbox Efficiency Ratings', date: '2026-05-15', href: '/woshidahuaidan/news/gearbox-efficiency/' },
 ];
 ---
 
-<Layout title="Home" description="Zhejiang Guangjin Intelligent Technology Co., Ltd. — China professional manufacturer of gears, sprockets, belt pulleys, gear motors & CNC machined parts. 20+ years experience, ISO 9001/45001/14001 certified.">
+<Layout title="Home" description="Ceten by GRANGIN — Professional manufacturer of industrial gears, sprockets, gearboxes, and CNC machined parts. ISO 9001 certified. Custom manufacturing with 20+ years experience.">
   
-  <!-- Hero -->
-  <section class="relative bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-white overflow-hidden" style="min-height: 500px;">
-    <div class="absolute inset-0 opacity-20">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(206,17,50,0.3),transparent_50%)]"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_rgba(206,17,50,0.2),transparent_40%)]"></div>
+  <!-- ============ HERO ============ -->
+  <section class="relative bg-dark-900 text-white overflow-hidden" style="min-height: 520px;">
+    <!-- Background pattern -->
+    <div class="absolute inset-0">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_40%,_rgba(206,17,50,0.15),transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_60%,_rgba(206,17,50,0.1),transparent_40%)]"></div>
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><circle cx=%2230%22 cy=%2230%22 r=%221%22 fill=%22white%22/></svg>')"></div>
     </div>
-    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect width=%2240%22 height=%2240%22 fill=%22none%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>')"></div>
-    
+
     <div class="relative container-page py-20 sm:py-28 lg:py-36">
       <div class="max-w-3xl">
-        <p class="text-brand-400 font-semibold text-lg mb-3 animate-fade-in-up">20+ Years Focus on Transmission Industry</p>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-6 animate-fade-in-up">
-          CNC Professional Customized<br>
-          <span class="text-brand-400">Mechanical Parts</span> Manufacturer
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-600/20 border border-brand-500/30 rounded-full text-brand-300 text-xs font-semibold mb-6">
+          <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+          ISO 9001 · 45001 · 14001 Certified Manufacturer
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-6">
+          Precision Power Transmission<br>
+          <span class="text-brand-400">Components & Solutions</span>
         </h1>
-        <p class="text-lg sm:text-xl text-steel-300 max-w-2xl leading-relaxed mb-8 animate-fade-in-up">
-          High Precision, High Hardness, Good Materials. Professional Supplier in Gear Motor — One-to-one Design Solutions, Strict Control of Production Quality Inspection, Professional Export Packaging.
+        <p class="text-lg text-steel-300 max-w-2xl leading-relaxed mb-8">
+          Custom gears, sprockets, gearboxes, and CNC machined parts — engineered for reliability. 
+          20+ years of manufacturing excellence serving customers in 50+ countries.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up">
-          <a href="/woshidahuaidan/products/" class="btn-primary text-base px-8 py-3.5">Browse Products →</a>
-          <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5">Request Quote</a>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/woshidahuaidan/product-category/gearboxes/" class="btn-primary text-base px-8 py-3.5">Explore Products</a>
+          <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5">Get a Quote</a>
         </div>
       </div>
     </div>
-
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
-      <span class="w-3 h-3 rounded-full bg-brand-600"></span>
-      <span class="w-3 h-3 rounded-full bg-white/30"></span>
-      <span class="w-3 h-3 rounded-full bg-white/30"></span>
-      <span class="w-3 h-3 rounded-full bg-white/30"></span>
-    </div>
   </section>
 
-  <!-- Certifications Bar -->
+  <!-- ============ STATS ============ -->
   <section class="bg-white border-b border-steel-200">
-    <div class="container-page py-4">
-      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-steel-500">
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full"></span> ISO 9001:2015 Certified</span>
-        <span class="text-steel-300">|</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full"></span> ISO 45001 Certified</span>
-        <span class="text-steel-300">|</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full"></span> ISO 14001 Certified</span>
-        <span class="text-steel-300">|</span>
-        <span>🏆 National High-Tech Enterprise (2022)</span>
-        <span class="text-steel-300">|</span>
-        <span>🏅 Science & Technology Little Giant (2023)</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="bg-steel-50 border-b border-steel-200">
-    <div class="container-page py-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        {stats.map((stat) => (
-          <div class="group">
-            <div class="text-3xl sm:text-4xl font-black text-brand-600 group-hover:scale-110 transition-transform duration-300">{stat.value}</div>
-            <div class="mt-2 text-sm text-steel-500 font-medium">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Choose GRANGIN -->
-  <section class="section-py bg-white">
     <div class="container-page">
-      <h2 class="section-title">Why Choose <span class="text-brand-600">GRANGIN</span></h2>
-      <p class="section-subtitle">
-        China Custom Automation Parts Supplier Specializing in CNC Machining, Precision Manufacturing, Fast Delivery & OEM Solutions
-      </p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {qualityFeatures.map((feature) => (
-          <div class="card-base p-8">
-            <div class="text-4xl mb-4">{feature.icon}</div>
-            <h3 class="text-lg font-bold text-steel-900 mb-3">{feature.title}</h3>
-            <p class="text-sm text-steel-500 leading-relaxed">{feature.desc}</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-steel-100">
+        {stats.map((stat, i) => (
+          <div class="py-8 px-4 text-center group">
+            <div class="text-3xl sm:text-4xl font-black text-brand-600 mb-1 group-hover:scale-110 transition-transform duration-300">{stat.value}</div>
+            <div class="text-sm font-semibold text-steel-800">{stat.label}</div>
+            <div class="text-xs text-steel-400 mt-1">{stat.desc}</div>
           </div>
         ))}
-      </div>
-      <!-- Extra feature card -->
-      <div class="mt-6 card-base p-8 text-center">
-        <div class="text-4xl mb-3">💎</div>
-        <h3 class="text-lg font-bold text-steel-900 mb-2">High-Value Solutions</h3>
-        <p class="text-sm text-steel-500 leading-relaxed max-w-2xl mx-auto">Direct manufacturer with specialized technical strength. 25+ QC professionals enforcing rigorous quality control. Continuously refined production processes — custom cost efficiency for clients.</p>
       </div>
     </div>
   </section>
 
-  <!-- Product Categories -->
+  <!-- ============ WHY CHOOSE US ============ -->
   <section class="section-py bg-steel-50">
     <div class="container-page">
-      <h2 class="section-title">Product <span class="text-brand-600">Categories</span></h2>
-      <p class="section-subtitle">
-        GRANGIN is a leading Chinese manufacturer of custom automation components. Fully supports customized drawings and 35+ materials.
-      </p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {categories.map((cat) => (
-          <a href={`/woshidahuaidan/product-category/${cat.slug}`} class="flex items-center gap-3 p-3.5 bg-white rounded-lg border border-steel-200 hover:border-brand-300 hover:shadow-md transition-all group">
-            <span class="text-xl shrink-0">{cat.icon}</span>
-            <div>
-              <span class="text-sm font-medium text-steel-700 group-hover:text-brand-600 transition-colors leading-tight">{cat.name}</span>
-              {cat.subcategories && (
-                <p class="text-[10px] text-steel-400 mt-0.5">{cat.subcategories.length} subcategories ›</p>
-              )}
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-black text-steel-900 mb-3">
+          Why Choose <span class="text-brand-600">GRANGIN</span>
+        </h2>
+        <p class="text-steel-500 text-lg max-w-2xl mx-auto">
+          A nationally recognized high-tech enterprise with proven manufacturing capabilities and ISO-certified quality systems.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {advantages.map((adv) => (
+          <div class="card-base p-6 group hover:border-brand-300">
+            <div class="mb-4 w-12 h-12 bg-brand-50 rounded-lg flex items-center justify-center group-hover:bg-brand-100 transition-colors">
+              <span set:html={adv.icon} />
             </div>
+            <h3 class="text-base font-bold text-steel-900 mb-2">{adv.title}</h3>
+            <p class="text-sm text-steel-500 leading-relaxed">{adv.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCT CATEGORIES ============ -->
+  <section class="section-py bg-white">
+    <div class="container-page">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-black text-steel-900 mb-3">
+          Product <span class="text-brand-600">Categories</span>
+        </h2>
+        <p class="text-steel-500 text-lg max-w-2xl mx-auto">
+          Comprehensive range of power transmission components and custom manufacturing services.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {categoryTree.map((cat) => (
+          <a href={`/woshidahuaidan/product-category/${cat.slug}`} class="card-base p-5 group text-center hover:border-brand-300">
+            <span class="text-3xl block mb-3">{cat.icon}</span>
+            <h3 class="text-sm font-bold text-steel-800 group-hover:text-brand-600 transition-colors">{cat.name}</h3>
+            {cat.subcategories && (
+              <p class="text-xs text-steel-400 mt-1.5">{cat.subcategories.length} product types</p>
+            )}
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Industries -->
-  <section class="section-py bg-white">
-    <div class="container-page">
-      <h2 class="section-title">Industrial <span class="text-brand-600">Applications</span></h2>
-      <p class="section-subtitle">
-        Reliable Power Transmission Components and Drive Solutions for diverse industries worldwide.
+  <!-- ============ INDUSTRIES ============ -->
+  <section class="section-py bg-dark-900 text-white">
+    <div class="container-page text-center">
+      <h2 class="text-3xl sm:text-4xl font-black mb-3">
+        Industries <span class="text-brand-400">We Serve</span>
+      </h2>
+      <p class="text-steel-400 text-lg max-w-2xl mx-auto mb-10">
+        Reliable power transmission solutions for diverse industrial applications worldwide.
       </p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
         {industries.map((ind) => (
-          <div class="card-base p-4 text-center group">
-            <div class="text-2xl mb-2">{ind.icon}</div>
-            <h4 class="text-xs font-bold text-steel-800">{ind.name}</h4>
-          </div>
+          <span class="px-4 py-2.5 bg-dark-800 border border-dark-700 rounded-lg text-sm font-medium text-steel-300 hover:border-brand-500/50 hover:text-white transition-colors">
+            {ind}
+          </span>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="section-py bg-dark-900 text-white">
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="section-py bg-white">
     <div class="container-page">
-      <h2 class="text-3xl font-black text-center mb-3">What Our <span class="text-brand-400">Customers Say</span></h2>
-      <p class="text-steel-400 text-center max-w-xl mx-auto mb-10">
-        Multi-awarded as "Integrity Enterprise" and "Grade-A Taxpayer" by authorities. Trusted partner for transmission components worldwide.
-      </p>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-black text-steel-900 mb-3">
+          Trusted by <span class="text-brand-600">Customers Worldwide</span>
+        </h2>
+        <p class="text-steel-500 text-lg max-w-2xl mx-auto">
+          Multi-awarded as "Integrity Enterprise" and "Grade-A Taxpayer" by authorities.
+        </p>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {testimonials.map((t) => (
-          <div class="bg-dark-800 rounded-lg p-6 border border-dark-700">
-            <div class="text-brand-400 text-2xl mb-3">"</div>
-            <p class="text-sm text-steel-300 leading-relaxed mb-4">{t.text}</p>
-            <div class="border-t border-dark-700 pt-3">
-              <p class="text-sm font-semibold text-white">{t.name}</p>
-              <p class="text-xs text-steel-500">{t.country}</p>
+          <div class="bg-steel-50 rounded-xl p-6 border border-steel-100">
+            <div class="flex gap-1 mb-3">
+              {[1,2,3,4,5].map(() => <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}
+            </div>
+            <p class="text-sm text-steel-600 leading-relaxed mb-4">"{t.text}"</p>
+            <div class="border-t border-steel-200 pt-3">
+              <p class="text-sm font-bold text-steel-800">{t.name}</p>
+              <p class="text-xs text-steel-400">{t.role}</p>
             </div>
           </div>
         ))}
@@ -201,33 +199,39 @@ const blogPosts = [
     </div>
   </section>
 
-  <!-- News -->
+  <!-- ============ NEWS ============ -->
   <section class="section-py bg-steel-50">
     <div class="container-page">
-      <h2 class="section-title">Latest <span class="text-brand-600">News</span></h2>
-      <p class="section-subtitle">Industry insights and technical guides from our engineering team.</p>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-black text-steel-900 mb-3">
+          Latest <span class="text-brand-600">Insights</span>
+        </h2>
+        <p class="text-steel-500 text-lg">Technical guides and industry updates from our engineering team.</p>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        {blogPosts.map((post) => (
-          <a href={post.href} class="card-base p-6 group">
-            <p class="text-xs text-steel-400 mb-2">{post.date}</p>
-            <h4 class="font-bold text-steel-800 group-hover:text-brand-600 transition-colors mb-2">{post.title}</h4>
-            <span class="text-sm font-semibold text-brand-600">Read More →</span>
+        {newsItems.map((item) => (
+          <a href={item.href} class="card-base p-6 group">
+            <p class="text-xs text-steel-400 mb-2">{new Date(item.date).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</p>
+            <h3 class="font-bold text-steel-800 group-hover:text-brand-600 transition-colors mb-2 leading-snug">{item.title}</h3>
+            <span class="text-sm font-semibold text-brand-600">Read Article →</span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="py-16 sm:py-20 bg-brand-600 text-white">
-    <div class="container-page text-center">
-      <h2 class="text-3xl sm:text-4xl font-black mb-4">Ask the Experts</h2>
-      <p class="text-brand-100 text-lg max-w-2xl mx-auto mb-8">
-        12-hour response guarantee. Send us your drawings or specifications and we'll provide tailored solutions with 3D custom design blueprints.
+  <!-- ============ CTA ============ -->
+  <section class="py-20 bg-gradient-to-br from-brand-700 to-brand-600 text-white text-center">
+    <div class="container-page max-w-2xl">
+      <h2 class="text-3xl sm:text-4xl font-black mb-4">Start Your Project Today</h2>
+      <p class="text-brand-100 text-lg mb-8 leading-relaxed">
+        Send us your drawings or specifications. Our engineering team responds within 12 hours with a tailored solution and 3D design blueprint.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Get in Touch</a>
-        <a href="mailto:info@ggn-gear.com" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-white text-white font-bold rounded-lg hover:bg-white/10 transition-colors text-base">info@ggn-gear.com</a>
+        <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Request a Quote</a>
+        <a href="mailto:info@ggn-gear.com" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-white/60 text-white font-semibold rounded-lg hover:bg-white/10 hover:border-white transition-all text-base">
+          info@ggn-gear.com
+        </a>
       </div>
     </div>
   </section>
