@@ -172,6 +172,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
             <button class="mod-btn" onclick="openModule('h2')">📌 H2</button>
             <button class="mod-btn" onclick="openModule('h3')">📌 H3</button>
             <button class="mod-btn" onclick="openModule('text')">📝 Text</button>
+            <button class="mod-btn" onclick="openModule('image')">🖼️ Image</button>
             <button class="mod-btn" onclick="openModule('leftimg')">🖼️ L-Img</button>
             <button class="mod-btn" onclick="openModule('rightimg')">🖼️ R-Img</button>
             <div class="mod-sep"></div>
@@ -332,6 +333,9 @@ function renderVizModule(m, idx) {
     for(var i=0;i<qs.length;i++){h+='<div itemscope itemtype="https://schema.org/Question" style="margin:15px 0;"><h3 itemprop="name" style="font-weight:bold;color:#ce1132;font-size:16px;">Q'+(i+1)+': '+qs[i].q+'</h3><div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer"><div itemprop="text" style="font-size:14px;color:#555;line-height:1.7;padding-left:10px;border-left:3px solid #eee;"><p>'+qs[i].a+'</p></div></div></div>';}
     h+='</div>';
   }
+  else if(m.type==='image'){
+    h='<div style="margin:15px 0;text-align:center;"><img src="'+(m.url||'IMAGE-URL')+'" alt="'+(m.alt||'')+'" style="max-width:100%;border-radius:6px;"></div>';
+  }
   else if(m.type==='cta'){
     h='<div style="background:#ce1132;color:#fff;padding:25px 30px;border-radius:8px;text-align:center;margin:30px 0;"><h3 style="color:#fff;margin:0 0 10px;font-size:20px;">'+m.title+'</h3><p style="margin:5px 0;font-size:14px;">'+m.text+'</p><p style="margin:5px 0;font-size:14px;">📧 '+m.email+' | 📞 '+m.phone+'</p><a href="mailto:'+m.email+'" style="display:inline-block;background:#fff;color:#ce1132;padding:10px 30px;border-radius:25px;font-weight:bold;text-decoration:none;margin-top:10px;">Send Inquiry Now</a></div>';
   }
@@ -371,6 +375,15 @@ function openModule(type, idx){
   }
   else if(type==='text'){
     html='<h3>Text Block</h3><div class="field"><label>Content</label><textarea id="mText" rows="4">'+(data.text||'')+'</textarea></div>';
+  }
+  else if(type==='image'){
+    html='<h3>Image</h3><div class="field"><label>Image</label><div class="upload-widget" id="mImgWidget">'
+      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>'
+        :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+      +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
+      +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.url||'')+'"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
   }
   else if(type==='leftimg'||type==='rightimg'){
     html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3>'
@@ -443,6 +456,20 @@ function saveModule(type){
   var data={type:type};
   if(type==='h2'||type==='h3'){data.text=document.getElementById('mText').value;data.style=document.getElementById('mStyle').value;data.color=document.getElementById('mColor').value;}
   else if(type==='text'){data.text=document.getElementById('mText').value;}
+  else if(type==='image'){
+    html='<h3>Image</h3><div class="field"><label>Image</label><div class="upload-widget" id="mImgWidget">'
+      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>'
+        :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+      +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
+      +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.url||'')+'"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
+  }
+  else if(type==='image'){
+    data.url=document.getElementById('mImgUrl').value;
+    data.fileName=document.getElementById('mImgName').value;
+    data.alt=document.getElementById('mAlt').value;
+  }
   else if(type==='leftimg'||type==='rightimg'){
     data.img=document.getElementById('mImgUrl').value;
     data.fileName=document.getElementById('mImgName').value;
