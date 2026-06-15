@@ -496,7 +496,6 @@ function saveModule(type){
   else if(type==='cta'){data.title=document.getElementById('mCtaTitle').value;data.text=document.getElementById('mCtaText').value;data.email=document.getElementById('mCtaEmail').value;data.phone=document.getElementById('mCtaPhone').value;}
 
   if(editingIdx>=0){vizData[editingIdx]=data;}else{vizData.push(data);}
-  console.log('SAVED module:',JSON.stringify(data));
   closeModal(); renderAll(); toast('✅ Module '+(editingIdx>=0?'updated':'added'),'success');
 }
 
