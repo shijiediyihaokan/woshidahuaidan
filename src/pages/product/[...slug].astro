@@ -22,12 +22,12 @@ const pageDescription = excerpt.slice(0, 160);
 const pageKeywords = `${title}, ${category}, ${subcategory || ''}, China manufacturer, transmission parts, GRANGIN`;
 
 const catSlug = category.toLowerCase().replace(/\s+/g, '-');
-const productUrl = new URL(`/woshidahuaidan/product/${product.id}/`, Astro.site).href;
+const productUrl = new URL(`/product/${product.id}/`, Astro.site).href;
 
 const breadcrumb = {
   items: [
-    { name: 'Home', url: new URL('/woshidahuaidan/', Astro.site).href },
-    { name: category, url: new URL(`/woshidahuaidan/product-category/${catSlug}/`, Astro.site).href },
+    { name: 'Home', url: new URL('/', Astro.site).href },
+    { name: category, url: new URL(`/product-category/${catSlug}/`, Astro.site).href },
     { name: title, url: productUrl },
   ],
 };
@@ -40,9 +40,9 @@ const breadcrumb = {
   <div class="bg-steel-50 border-b border-steel-200">
     <div class="container-page py-3">
       <nav class="flex items-center gap-2 text-sm text-steel-500">
-        <a href="/woshidahuaidan/" class="hover:text-brand-600">Home</a><span>/</span>
-        <a href="/woshidahuaidan/product-category/" class="hover:text-brand-600">Products</a><span>/</span>
-        <a href={`/woshidahuaidan/product-category/${catSlug}/`} class="hover:text-brand-600">{category}</a><span>/</span>
+        <a href="/" class="hover:text-brand-600">Home</a><span>/</span>
+        <a href="/product-category/" class="hover:text-brand-600">Products</a><span>/</span>
+        <a href={`/product-category/${catSlug}/`} class="hover:text-brand-600">{category}</a><span>/</span>
         <span class="text-steel-800 font-medium">{title}</span>
       </nav>
     </div>
@@ -65,7 +65,7 @@ const breadcrumb = {
           )}
           <span class="flex items-center gap-1.5 text-green-600 font-semibold text-sm"><span class="w-2 h-2 bg-green-500 rounded-full"></span> In Stock</span>
           <div class="flex flex-col sm:flex-row gap-3 mt-6">
-            <a href="/woshidahuaidan/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
+            <a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
             <a href="mailto:info@ggn-gear.com" class="btn-outline text-base px-8 py-3">Email Inquiry</a>
           </div>
         </div>
@@ -89,17 +89,17 @@ const breadcrumb = {
             </div>
           )}
         </div>
-        <div><div class="bg-brand-600 text-white rounded-lg p-6 sticky top-24"><h3 class="text-lg font-bold mb-3">Get a Quote</h3><p class="text-sm text-brand-100 mb-4">Need pricing or technical details? Our engineers respond within 24 hours.</p><a href="/woshidahuaidan/contact/" class="block text-center bg-white text-brand-600 font-bold py-2.5 rounded hover:bg-brand-50 transition-colors text-sm">Contact Us →</a></div></div>
+        <div><div class="bg-brand-600 text-white rounded-lg p-6 sticky top-24"><h3 class="text-lg font-bold mb-3">Get a Quote</h3><p class="text-sm text-brand-100 mb-4">Need pricing or technical details? Our engineers respond within 24 hours.</p><a href="/contact/" class="block text-center bg-white text-brand-600 font-bold py-2.5 rounded hover:bg-brand-50 transition-colors text-sm">Contact Us →</a></div></div>
       </div>
     </div>
   </section>
 
   {related.length > 0 && (
     <section class="section-py bg-white"><div class="container-page"><h2 class="text-2xl font-bold text-steel-900 mb-6">Related Products</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {related.map(p => (<a href={`/woshidahuaidan/product/${p.id}/`} class="card-base group"><div class="aspect-[4/3] bg-steel-100 flex items-center justify-center"><div class="text-center"><div class="text-4xl mb-1">⚙️</div><span class="tag tag-red">{p.data.category}</span></div></div><div class="p-4"><h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors text-sm">{p.data.title}</h3><p class="text-xs text-steel-500 mt-1 line-clamp-2">{p.data.excerpt}</p></div></a>))}
+      {related.map(p => (<a href={`/product/${p.id}/`} class="card-base group"><div class="aspect-[4/3] bg-steel-100 flex items-center justify-center"><div class="text-center"><div class="text-4xl mb-1">⚙️</div><span class="tag tag-red">{p.data.category}</span></div></div><div class="p-4"><h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors text-sm">{p.data.title}</h3><p class="text-xs text-steel-500 mt-1 line-clamp-2">{p.data.excerpt}</p></div></a>))}
     </div></div></section>
   )}
 
-  <section class="py-16 bg-dark-900 text-white text-center"><div class="container-page"><h2 class="text-2xl sm:text-3xl font-black mb-3">Need a <span class="text-brand-400">Custom Solution</span>?</h2><p class="text-steel-400 max-w-xl mx-auto mb-6">We provide OEM/ODM services. Tell us your specifications.</p><a href="/woshidahuaidan/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a></div></section>
+  <section class="py-16 bg-dark-900 text-white text-center"><div class="container-page"><h2 class="text-2xl sm:text-3xl font-black mb-3">Need a <span class="text-brand-400">Custom Solution</span>?</h2><p class="text-steel-400 max-w-xl mx-auto mb-6">We provide OEM/ODM services. Tell us your specifications.</p><a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a></div></section>
 
 </Layout>

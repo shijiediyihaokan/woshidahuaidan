@@ -46,9 +46,9 @@ const testimonials = [
 ];
 
 const newsItems = [
-  { title: 'Are Worm Gearboxes Self-Locking?', date: '2026-06-05', href: '/woshidahuaidan/news/are-worm-gearboxes-self-locking/' },
-  { title: 'Top 10 China Worm Gear Motor Manufacturers', date: '2026-05-19', href: '/woshidahuaidan/news/top-10-worm-gear-motor-manufacturers/' },
-  { title: 'Understanding Gearbox Efficiency Ratings', date: '2026-05-15', href: '/woshidahuaidan/news/gearbox-efficiency/' },
+  { title: 'Are Worm Gearboxes Self-Locking?', date: '2026-06-05', href: '/news/are-worm-gearboxes-self-locking/' },
+  { title: 'Top 10 China Worm Gear Motor Manufacturers', date: '2026-05-19', href: '/news/top-10-worm-gear-motor-manufacturers/' },
+  { title: 'Understanding Gearbox Efficiency Ratings', date: '2026-05-15', href: '/news/gearbox-efficiency/' },
 ];
 ---
 
@@ -78,8 +78,8 @@ const newsItems = [
           20+ years of manufacturing excellence serving customers in 50+ countries.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/woshidahuaidan/product-category/gearboxes/" class="btn-primary text-base px-8 py-3.5">Explore Products</a>
-          <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5">Get a Quote</a>
+          <a href="/product-category/gearboxes/" class="btn-primary text-base px-8 py-3.5">Explore Products</a>
+          <a href="/contact/" class="btn-white text-base px-8 py-3.5">Get a Quote</a>
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@ const newsItems = [
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {categoryTree.map((cat) => (
-          <a href={`/woshidahuaidan/product-category/${cat.slug}`} class="card-base p-5 group text-center hover:border-brand-300">
+          <a href={`/product-category/${cat.slug}`} class="card-base p-5 group text-center hover:border-brand-300">
             <span class="text-3xl block mb-3">{cat.icon}</span>
             <h3 class="text-sm font-bold text-steel-800 group-hover:text-brand-600 transition-colors">{cat.name}</h3>
             {cat.subcategories && (
@@ -228,7 +228,7 @@ const newsItems = [
         Send us your drawings or specifications. Our engineering team responds within 12 hours with a tailored solution and 3D design blueprint.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/woshidahuaidan/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Request a Quote</a>
+        <a href="/contact/" class="btn-white text-base px-8 py-3.5 font-bold">Request a Quote</a>
         <a href="mailto:info@ggn-gear.com" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-white/60 text-white font-semibold rounded-lg hover:bg-white/10 hover:border-white transition-all text-base">
           info@ggn-gear.com
         </a>

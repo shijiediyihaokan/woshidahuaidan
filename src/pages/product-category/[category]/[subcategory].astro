@@ -18,15 +18,15 @@ const { category, subcategory } = Astro.params as { category: string; subcategor
 const cat = getCategory(category);
 const sc = getSubCategory(category, subcategory);
 
-if (!cat || !sc) return Astro.redirect('/woshidahuaidan/products/');
+if (!cat || !sc) return Astro.redirect('/products/');
 
 const allProducts = await getCollection('products', ({ data }) => data.published);
 const products = allProducts.filter(p => p.data.category === cat.name && p.data.subcategory === subcategory);
 
 const breadcrumb = { items: [
-  { name: 'Home', url: new URL('/woshidahuaidan/', Astro.site).href },
-  { name: cat.name, url: new URL(`/woshidahuaidan/product-category/${category}/`, Astro.site).href },
-  { name: sc.name, url: new URL(`/woshidahuaidan/product-category/${category}/${subcategory}/`, Astro.site).href },
+  { name: 'Home', url: new URL('/', Astro.site).href },
+  { name: cat.name, url: new URL(`/product-category/${category}/`, Astro.site).href },
+  { name: sc.name, url: new URL(`/product-category/${category}/${subcategory}/`, Astro.site).href },
 ]};
 ---
 
@@ -36,8 +36,8 @@ const breadcrumb = { items: [
   <section class="bg-dark-900 text-white py-12 sm:py-16">
     <div class="container-page">
       <nav class="flex items-center gap-2 text-sm text-steel-400 mb-3">
-        <a href="/woshidahuaidan/" class="hover:text-white">Home</a><span>/</span>
-        <a href={`/woshidahuaidan/product-category/${category}/`} class="hover:text-white">{cat.name}</a><span>/</span>
+        <a href="/" class="hover:text-white">Home</a><span>/</span>
+        <a href={`/product-category/${category}/`} class="hover:text-white">{cat.name}</a><span>/</span>
         <span class="text-white font-semibold">{sc.name}</span>
       </nav>
       <h1 class="text-3xl sm:text-4xl font-black">{sc.name}</h1>
@@ -50,7 +50,7 @@ const breadcrumb = { items: [
       {products.length > 0 ? (
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {products.map(p => (
-            <a href={`/woshidahuaidan/product/${p.id}/`} class="card-base group flex flex-col">
+            <a href={`/product/${p.id}/`} class="card-base group flex flex-col">
               <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
                 <div class="text-center p-4"><div class="text-5xl mb-2">⚙️</div><span class="tag tag-red">{p.data.category}</span></div>
               </div>
@@ -64,7 +64,7 @@ const breadcrumb = { items: [
           ))}
         </div>
       ) : (
-        <div class="text-center py-16"><div class="text-6xl mb-4">📦</div><h3 class="text-xl font-bold text-steel-700 mb-2">Coming Soon</h3><p class="text-steel-500"><a href="/woshidahuaidan/contact/" class="text-brand-600 font-semibold">Contact us</a> for custom orders.</p></div>
+        <div class="text-center py-16"><div class="text-6xl mb-4">📦</div><h3 class="text-xl font-bold text-steel-700 mb-2">Coming Soon</h3><p class="text-steel-500"><a href="/contact/" class="text-brand-600 font-semibold">Contact us</a> for custom orders.</p></div>
       )}
     </div>
   </section>

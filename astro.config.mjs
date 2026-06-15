@@ -6,8 +6,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://shijiediyihaokan.github.io',
-  base: '/woshidahuaidan/',
+  site: 'https://www.cetendrive.com',
+  base: '/',
 
   vite: {
     plugins: [tailwindcss()],
