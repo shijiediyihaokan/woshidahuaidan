@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Product Knowledge",
+        "Selection Guide",
+        "Technical Guide",
+        "Industry News",
+        "Company News"
+      ]
+    },
+    "excerpt": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "published": {
+      "default": true,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "date",
+    "category",
+    "excerpt"
+  ]
+}

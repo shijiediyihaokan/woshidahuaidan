@@ -24,6 +24,9 @@
     "image": {
       "type": "string"
     },
+    "imageAlt": {
+      "type": "string"
+    },
     "excerpt": {
       "type": "string"
     },
@@ -60,6 +63,18 @@
     "published": {
       "default": true,
       "type": "boolean"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": "string"
     },
     "$schema": {
       "type": "string"

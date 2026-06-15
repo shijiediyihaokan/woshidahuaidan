@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { categoryTree } from '../data/categories';
+import { getCollection } from 'astro:content';
+
+// Count products per category
+const products = await getCollection('products', ({ data }) => data.published);
+const catCounts: Record<string,number> = {};
+products.forEach(p => { const c = p.data.category; catCounts[c] = (catCounts[c]||0)+1; });
+const populatedCats = categoryTree.filter(cat => catCounts[cat.name] > 0);
+
+// Load news
+const newsArticles = await getCollection('news', ({ data }) => data.published);
+const latestNews = newsArticles.sort((a,b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()).slice(0, 3);
 
 const stats = [
   { value: '20+', label: 'Years Experience', desc: 'In power transmission' },
@@ -45,11 +56,6 @@ const testimonials = [
   { text: 'Our go-to supplier for power transmission. One-to-one design solutions and rigorous quality control.', name: 'Juan García', role: 'Spain' },
 ];
 
-const newsItems = [
-  { title: 'Are Worm Gearboxes Self-Locking?', date: '2026-06-05', href: '/news/are-worm-gearboxes-self-locking/' },
-  { title: 'Top 10 China Worm Gear Motor Manufacturers', date: '2026-05-19', href: '/news/top-10-worm-gear-motor-manufacturers/' },
-  { title: 'Understanding Gearbox Efficiency Ratings', date: '2026-05-15', href: '/news/gearbox-efficiency/' },
-];
 ---
 
 <Layout title="Home" description="Ceten by GRANGIN — Professional manufacturer of industrial gears, sprockets, gearboxes, and CNC machined parts. ISO 9001 certified. Custom manufacturing with 20+ years experience.">
@@ -139,13 +145,11 @@ const newsItems = [
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {categoryTree.map((cat) => (
+        {populatedCats.map((cat) => (
           <a href={`/product-category/${cat.slug}`} class="card-base p-5 group text-center hover:border-brand-300">
             <span class="text-3xl block mb-3">{cat.icon}</span>
             <h3 class="text-sm font-bold text-steel-800 group-hover:text-brand-600 transition-colors">{cat.name}</h3>
-            {cat.subcategories && (
-              <p class="text-xs text-steel-400 mt-1.5">{cat.subcategories.length} product types</p>
-            )}
+            <p class="text-xs text-steel-400 mt-1.5">{catCounts[cat.name]} products</p>
           </a>
         ))}
       </div>
@@ -209,13 +213,15 @@ const newsItems = [
         <p class="text-steel-500 text-lg">Technical guides and industry updates from our engineering team.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        {newsItems.map((item) => (
-          <a href={item.href} class="card-base p-6 group">
-            <p class="text-xs text-steel-400 mb-2">{new Date(item.date).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</p>
-            <h3 class="font-bold text-steel-800 group-hover:text-brand-600 transition-colors mb-2 leading-snug">{item.title}</h3>
+        {latestNews.length > 0 ? latestNews.map((item) => (
+          <a href={`/news/${item.id}/`} class="card-base p-6 group">
+            <p class="text-xs text-steel-400 mb-2">{new Date(item.data.date).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</p>
+            <h3 class="font-bold text-steel-800 group-hover:text-brand-600 transition-colors mb-2 leading-snug">{item.data.title}</h3>
             <span class="text-sm font-semibold text-brand-600">Read Article →</span>
           </a>
-        ))}
+        )) : (
+          <div class="col-span-3 text-center text-steel-400 py-8"><p>News articles coming soon. Check back for technical guides and industry updates.</p></div>
+        )}
       </div>
     </div>
   </section>
