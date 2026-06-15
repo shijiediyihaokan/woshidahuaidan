@@ -67,7 +67,17 @@ import { categoryTree } from '../data/categories';
             <a href="/woshidahuaidan/custom-manufacturing/materials/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Materials</a>
           </div>
         </div>
-        <a href="/woshidahuaidan/knowledge-center/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Knowledge Center</a>
+        <!-- Knowledge Center dropdown -->
+        <div class="relative group h-full flex items-center">
+          <a href="/woshidahuaidan/knowledge-center/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">Knowledge Center ▾</a>
+          <div class="absolute top-full left-0 mt-0 w-48 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <a href="/woshidahuaidan/knowledge-center/product-knowledge/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Product Knowledge</a>
+            <a href="/woshidahuaidan/knowledge-center/selection-guide/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Selection Guide</a>
+            <a href="/woshidahuaidan/knowledge-center/technical-guide/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Technical Guide</a>
+            <a href="/woshidahuaidan/knowledge-center/industry-news/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">Industry News</a>
+            <a href="/woshidahuaidan/knowledge-center/company-news/" class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600">Company News</a>
+          </div>
+        </div>
         <a href="/woshidahuaidan/about/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">About Us</a>
         <a href="/woshidahuaidan/contact/" class="px-3 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 h-full flex items-center">Contact</a>
       </nav>
