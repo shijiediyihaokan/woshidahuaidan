@@ -183,6 +183,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
             <button class="mod-btn" onclick="openModule('features')">✅ Features</button>
             <button class="mod-btn" onclick="openModule('specs')">📊 Specs</button>
             <button class="mod-btn" onclick="openModule('faq')">❓ FAQ</button>
+            <button class="mod-btn" onclick="openModule('table')">📋 Table</button>
             <button class="mod-btn" onclick="openModule('cta')">📧 CTA</button>
           </div>
           <div class="viz-preview" id="vizPreview"></div>
@@ -403,6 +404,12 @@ function openModule(type, idx){
     for(var i=0;i<items.length;i++){html+='<div style="margin-bottom:12px;padding:10px;background:#fafafa;border-radius:6px"><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">Q'+(i+1)+'</span><input placeholder="Question" value="'+(items[i].q||'')+'" data-field="fq" data-idx="'+i+'"></div><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">A</span><input placeholder="Answer" value="'+(items[i].a||'')+'" data-field="fa" data-idx="'+i+'"></div></div>';}
     html+='</div><button class="btn btn-sm btn-secondary" onclick="addFaqRow()" style="margin-top:8px">+ Add Q&A</button>';
   }
+  else if(type==='table'){
+    var rows=data.rows||[['Header 1','Header 2'],['Row 1','Data'],['Row 2','Data']], cols=data.cols||2, style=data.style||'striped', color=data.color||'#ce1132';
+    html='<h3>Table</h3><div class="form-row"><div class="field"><label>Style</label><select id="mTableStyle"><option value="striped"'+(style==='striped'?' selected':'')+'>Striped</option><option value="plain"'+(style==='plain'?' selected':'')+'>Plain</option><option value="dark"'+(style==='dark'?' selected':'')+'>Dark Header</option></select></div><div class="field"><label>Header Color</label><input type="color" id="mTableColor" value="'+color+'"></div></div><div class="form-row"><div class="field"><label>Columns (2-6)</label><input type="number" id="mTableCols" value="'+cols+'" min="2" max="6" onchange="rebuildTable()" style="width:80px"></div><div class="field"><label>Rows (2-20)</label><input type="number" id="mTableRows" value="'+rows.length+'" min="2" max="20" onchange="rebuildTable()" style="width:80px"></div></div><div id="tableGrid" style="overflow-x:auto;margin-top:8px">';
+    html+=buildTableGrid(rows,cols);
+    html+='</div>';
+  }
   else if(type==='cta'){
     html='<h3>Call to Action</h3><div class="field"><label>Title</label><input id="mCtaTitle" value="'+(data.title||'Need a Custom Solution?')+'"></div><div class="field"><label>Text</label><textarea id="mCtaText" rows="2">'+(data.text||'Send us your drawings — quote within 12 hours.')+'</textarea></div><div class="form-row"><div class="field"><label>Email</label><input id="mCtaEmail" value="'+(data.email||'info@ggn-gear.com')+'"></div><div class="field"><label>Phone</label><input id="mCtaPhone" value="'+(data.phone||'+86-18057543143')+'"></div></div>';
   }
@@ -446,6 +453,14 @@ function saveModule(type){
   else if(type==='faq'||type==='faqSchema'){
     data.items=[];var qs=document.querySelectorAll('#modal [data-field=fq]'), as=document.querySelectorAll('#modal [data-field=fa]');
     for(var i=0;i<qs.length;i++){if(qs[i].value||as[i].value) data.items.push({q:qs[i].value,a:as[i].value});}
+  }
+  else if(type==='table'){
+    data.style=document.getElementById('mTableStyle').value;
+    data.color=document.getElementById('mTableColor').value;
+    data.cols=parseInt(document.getElementById('mTableCols').value)||2;
+    var nRows=parseInt(document.getElementById('mTableRows').value)||2, nCols=data.cols;
+    data.rows=[];
+    for(var r=0;r<nRows;r++){var row=[];for(var c=0;c<nCols;c++){var cell=document.getElementById('mTCell'+r+'_'+c);row.push(cell?cell.value:'');}data.rows.push(row);}
   }
   else if(type==='cta'){data.title=document.getElementById('mCtaTitle').value;data.text=document.getElementById('mCtaText').value;data.email=document.getElementById('mCtaEmail').value;data.phone=document.getElementById('mCtaPhone').value;}
 
@@ -738,6 +753,28 @@ function resetForm(){
   document.getElementById('pOrder').value='0';
   document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
   vizData=[];renderAll();checkSeoTitle();checkMetaDesc();toast('Reset','success');
+}
+
+/* ====== TABLE BUILDER HELPER ====== */
+function buildTableGrid(rows, cols){
+  var h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-size:13px;">';
+  for(var r=0;r<rows.length;r++){
+    h+='<tr>';
+    for(var c=0;c<cols;c++){
+      var isHeader=r===0, cellVal=(rows[r]&&rows[r][c]?rows[r][c]:'').replace(/"/g,'&quot;');
+      h+='<td style="padding:2px"><input id="mTCell'+r+'_'+c+'" value="'+cellVal+'" placeholder="'+(isHeader?'Header '+(c+1):'Cell')+'" style="width:100%;padding:8px;border:1px solid #ddd;font-size:12px;'+(isHeader?'font-weight:bold;background:#f0f0f0':'')+'"></td>';
+    }
+    h+='</tr>';
+  }
+  h+='</table>';
+  return h;
+}
+function rebuildTable(){
+  var cols=parseInt(document.getElementById('mTableCols').value)||2;
+  var rows=parseInt(document.getElementById('mTableRows').value)||2;
+  var data=[];
+  for(var r=0;r<rows;r++){var row=[];for(var c=0;c<cols;c++){row.push('');}data.push(row);}
+  document.getElementById('tableGrid').innerHTML=buildTableGrid(data,cols);
 }
 </script>
 </body>
