@@ -2,6 +2,7 @@
 import { categoryTree } from '../data/categories';
 ---
 
+<!-- Top Bar -->
 <div class="bg-dark-800 text-steel-300 text-xs">
   <div class="container-page">
     <div class="flex items-center justify-between h-9">
@@ -11,39 +12,54 @@ import { categoryTree } from '../data/categories';
       </div>
       <div class="flex items-center gap-3">
         <form action="/woshidahuaidan/search/" class="hidden sm:flex items-center">
-          <input type="text" name="q" placeholder="Search products..." class="w-32 lg:w-40 bg-dark-700 text-white text-xs px-2 py-1 rounded border-0 focus:outline-none focus:ring-1 focus:ring-brand-500">
+          <input type="text" name="q" placeholder="Search..." class="w-32 lg:w-40 bg-dark-700 text-white text-xs px-2 py-1 rounded border-0 focus:outline-none focus:ring-1 focus:ring-brand-500">
           <button type="submit" class="text-steel-400 hover:text-white ml-1">🔍</button>
         </form>
-        <button class="hover:text-white transition-colors">🌐 English</button>
+        <button class="hover:text-white">🌐 EN</button>
         <a href="/woshidahuaidan/contact/" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1 rounded text-xs font-semibold transition-colors">Contact Now！</a>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Main Navigation -->
 <header class="sticky top-0 z-50 bg-white border-b border-steel-200 shadow-sm">
   <div class="container-page">
     <div class="flex items-center justify-between h-16">
       <a href="/woshidahuaidan/" class="flex items-center gap-2 shrink-0">
         <span class="text-2xl font-black text-brand-600 tracking-tight">GRANGIN</span>
       </a>
+
       <nav class="hidden lg:flex items-center gap-0 h-full">
-        <a href="/woshidahuaidan/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">HOME</a>
-        {categoryTree.map((cat) => (
-          <div class="relative group h-full flex items-center">
-            <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">
-              {cat.name.toUpperCase()} ▾
-            </a>
-            {cat.subcategories && cat.subcategories.length > 0 && (
-              <div class="absolute top-full left-0 mt-0 w-52 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+        <a href="/woshidahuaidan/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Home</a>
+
+        <!-- Products dropdown -->
+        <div class="relative group h-full flex items-center">
+          <a href="/woshidahuaidan/products/" class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full">Products ▾</a>
+          <div class="absolute top-full left-0 mt-0 w-64 bg-white border border-steel-200 rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 max-h-[80vh] overflow-y-auto">
+            {categoryTree.map((cat) => (
+              <div>
+                <a href={`/woshidahuaidan/products/?category=${cat.slug}`} class="block px-4 py-2.5 text-sm font-bold text-steel-800 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100 flex items-center gap-2">
+                  <span>{cat.icon}</span> {cat.name}
+                </a>
                 {cat.subcategories.map((sc) => (
-                  <a href={`/woshidahuaidan/products/?category=${cat.slug}&sub=${sc.slug}`} class="block px-4 py-2.5 text-sm text-steel-600 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-100">{sc.name}</a>
+                  <a href={`/woshidahuaidan/products/?category=${cat.slug}&sub=${sc.slug}`} class="block pl-10 pr-4 py-2 text-sm text-steel-500 hover:bg-brand-50 hover:text-brand-600 border-b border-steel-50">
+                    {sc.name}
+                  </a>
                 ))}
               </div>
-            )}
+            ))}
           </div>
-        ))}
+        </div>
+
+        <a href="/woshidahuaidan/applications/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Applications</a>
+        <a href="/woshidahuaidan/custom-manufacturing/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Custom Manufacturing</a>
+        <a href="/woshidahuaidan/knowledge-center/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">Knowledge Center</a>
+        <a href="/woshidahuaidan/about/" class="px-3 py-2 text-sm font-semibold text-steel-700 hover:text-brand-600 h-full flex items-center">About Us</a>
+        <a href="/woshidahuaidan/contact/" class="px-3 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 h-full flex items-center">Contact</a>
       </nav>
+
+      <!-- Mobile menu button -->
       <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-steel-600 hover:bg-steel-100" aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -51,16 +67,20 @@ import { categoryTree } from '../data/categories';
         </svg>
       </button>
     </div>
+
+    <!-- Mobile Nav -->
     <div id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-steel-100 mt-2 pt-2">
-      <a href="/woshidahuaidan/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">HOME</a>
-      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">ALL PRODUCTS</a>
-      <a href="/woshidahuaidan/about/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">ABOUT</a>
-      <a href="/woshidahuaidan/news/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">NEWS</a>
-      <a href="/woshidahuaidan/contact/" class="block px-4 py-3 text-sm font-semibold text-steel-700">CONTACT</a>
-      <a href="/woshidahuaidan/contact/" class="block mt-3 mx-4 py-3 bg-brand-600 text-white text-sm font-bold rounded text-center">Contact Now！</a>
+      <a href="/woshidahuaidan/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">Home</a>
+      <a href="/woshidahuaidan/products/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">Products</a>
+      <a href="/woshidahuaidan/applications/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">Applications</a>
+      <a href="/woshidahuaidan/custom-manufacturing/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">Custom Manufacturing</a>
+      <a href="/woshidahuaidan/knowledge-center/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">Knowledge Center</a>
+      <a href="/woshidahuaidan/about/" class="block px-4 py-3 text-sm font-semibold text-steel-700 border-b border-steel-50">About Us</a>
+      <a href="/woshidahuaidan/contact/" class="block px-4 py-3 text-sm font-semibold text-brand-600">Contact</a>
     </div>
   </div>
 </header>
+
 <script>
   const btn=document.getElementById('mobile-menu-btn'),menu=document.getElementById('mobile-menu'),o=document.getElementById('menu-icon-open'),c=document.getElementById('menu-icon-close');
   btn?.addEventListener('click',()=>{menu?.classList.toggle('hidden');o?.classList.toggle('hidden');c?.classList.toggle('hidden')});
