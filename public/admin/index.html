@@ -383,7 +383,7 @@ function openModule(type, idx){
       +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
       +'<div class="field" style="margin-bottom:8px"><label>Image URL <small style="font-weight:normal;color:var(--g)">(paste if upload fails)</small></label><input id="mImgUrlManual" placeholder="https://... or /woshidahuaidan/images/..." value="'+(data.img||'')+'" oninput="document.getElementById(\'mImgUrl\').value=this.value" style="padding:6px;font-size:12px"></div>'
       +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
-      +'<input type="hidden" id="mImgUrl" value="'+(data.url||'')+'"></div>'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"></div>'
       +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
   }
   else if(type==='leftimg'||type==='rightimg'){
@@ -464,7 +464,7 @@ function saveModule(type){
         :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
       +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
       +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
-      +'<input type="hidden" id="mImgUrl" value="'+(data.url||'')+'"></div>'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"></div>'
       +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
   }
   else if(type==='image'){
