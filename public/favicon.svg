@@ -1,20 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#fff"/>
-  <!-- CETEN green gear -->
+  <rect width="32" height="32" rx="4" fill="#fff"/>
+  <!-- CETEN hexagon monogram -->
   <g transform="translate(16,16)">
-    <circle cx="0" cy="0" r="11" fill="none" stroke="#4ade80" stroke-width="2"/>
-    <!-- 8 gear teeth -->
-    <line x1="0" y1="-12" x2="0" y2="-9.5" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="8.5" y1="-8.5" x2="6.7" y2="-6.7" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="12" y1="0" x2="9.5" y2="0" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="8.5" y1="8.5" x2="6.7" y2="6.7" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="0" y1="12" x2="0" y2="9.5" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="-8.5" y1="8.5" x2="-6.7" y2="6.7" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="-12" y1="0" x2="-9.5" y2="0" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <line x1="-8.5" y1="-8.5" x2="-6.7" y2="-6.7" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
-    <!-- Inner ring -->
-    <circle cx="0" cy="0" r="6.5" fill="none" stroke="#4ade80" stroke-width="1.5"/>
-    <!-- Center dot -->
-    <circle cx="0" cy="0" r="2" fill="#4ade80"/>
+    <!-- Left navy C band (outer hex left half) -->
+    <path d="M-10,-4 L-10,4 L-4,10 L-2,8 L0,10 L2,8 L-4,2 L-4,-4 L-2,-6 L0,-4 L2,-6 L-4,-10 L-4,-2 Z" fill="#1a2a5e"/>
+    <!-- Right green E band (outer hex right half with notches) -->
+    <path d="M0,10 L2,8 L4,10 L10,4 L10,-4 L4,-10 L2,-8 L0,-10 L0,-6 L-2,-4 L0,-2 L6,-4 L6,4 L0,2 L-2,4 Z" fill="#4ade80"/>
   </g>
 </svg>
