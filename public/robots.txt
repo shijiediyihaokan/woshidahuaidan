@@ -5,4 +5,4 @@ Disallow: /search/
 Sitemap: https://cetendrive.com/sitemap-index.xml
 
 # Crawl-delay for polite crawling
-Crawl-delay: 10
+Crawl-delay: 2

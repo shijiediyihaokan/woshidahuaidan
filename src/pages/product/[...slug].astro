@@ -16,7 +16,7 @@ const { product } = Astro.props as { product: CollectionEntry<'products'> };
 const { title, category, subcategory, excerpt, features, specs, image, imageAlt, metaTitle, metaDescription, keywords, gallery } = product.data;
 const pageDescription = metaDescription || excerpt?.slice(0, 155) || '';
 const pageKeywords = keywords || `${title}, ${category}, China manufacturer, GRANGIN`;
-const pageTitle = metaTitle || `${title} | GRANGIN`;
+const pageTitle = metaTitle || title;
 
 // Parse gallery if present
 let galleryImages: Array<{url:string,alt?:string,name?:string}> = [];
