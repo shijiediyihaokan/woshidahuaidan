@@ -74,7 +74,7 @@ const breadcrumb = {
           <div class="flex gap-2 mt-3 flex-wrap" id="galleryThumbs">
             {galleryImages.map((img, i) => (
               <div class="w-16 h-16 rounded border-2 cursor-pointer overflow-hidden {i===0?'border-brand-500':'border-steel-200'}" data-src={img.url} data-alt={img.alt || img.name || `Image ${i+1}`} onclick="document.getElementById('mainImg').src=this.dataset.src;document.getElementById('mainImg').alt=this.dataset.alt;this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('border-brand-500'));this.classList.add('border-brand-500')">
-                <img src={webp(img.url)} alt={img.alt || img.name || `Image ${i+1}`} class="w-full h-full object-cover" loading="lazy" width="64" height="64" />
+                <img src={webp(img.url)} alt={img.alt || title + ' detail image ' + (i+1)} class="w-full h-full object-cover" loading="lazy" width="64" height="64" />
               </div>
             ))}
           </div>

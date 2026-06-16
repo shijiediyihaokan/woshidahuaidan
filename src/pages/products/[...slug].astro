@@ -81,7 +81,7 @@ const breadcrumb = {
         <div>
           <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
             {image ? (
-              <img src={image} alt={title} itemprop="image" class="w-full h-full object-cover" />
+              <img src={image} alt={imageAlt || title + ' product photo'} itemprop="image" class="w-full h-full object-cover" width="800" height="600" loading="lazy" />
             ) : (
               <div class="text-center p-8">
                 <div class="text-7xl mb-3" aria-hidden="true">⚙️</div>
