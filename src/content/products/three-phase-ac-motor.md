@@ -1,5 +1,5 @@
 ---
-title: "Three-Phase AC Induction Motors Manufacturer"
+title: "Three-Phase AC Induction Motors"
 category: "AC Motors"
 subcategory: "three-phase-ac-motors"
 excerpt: "IEC standard three-phase asynchronous motors 0.18kW-315kW, IE2/IE3/IE4 efficiency. Aluminum/cast iron frame, B3/B5/B14/B35 mounting. For pumps, fans, compressors, conveyors, and industrial machinery."

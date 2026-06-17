@@ -1,5 +1,5 @@
 ---
-title: "Custom Helical Gears Manufacturer"
+title: "Helical Gears"
 category: "Gears"
 subcategory: "helical-gears"
 excerpt: "High-precision helical gears with helix angle 15-45°. Quieter operation than spur gears, higher load capacity. Made from 20CrMnTi, 40Cr, 42CrMo. ISO 9001 certified, export-ready packaging."

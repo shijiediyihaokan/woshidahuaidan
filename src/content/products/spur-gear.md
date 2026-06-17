@@ -1,5 +1,5 @@
 ---
-title: "Custom Spur Gears Manufacturer"
+title: "Spur Gears"
 category: "Gears"
 subcategory: "spur-gears"
 excerpt: "Precision spur gears manufactured from 20CrMnTi, 45# steel, and stainless steel with module 0.5-20. Ideal for conveyors, pumps, and power transmission. ISO 9001 certified factory."

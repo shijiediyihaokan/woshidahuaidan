@@ -1,5 +1,5 @@
 ---
-title: "Custom Bevel Gears Manufacturer"
+title: "Bevel Gears"
 category: "Gears"
 subcategory: "bevel-gears"
 excerpt: "Precision straight and spiral bevel gears for 90° power transmission. Module 1-16, ratios 1:1 to 6:1. Materials: 20CrMnTi, 40Cr, 42CrMo. CNC machined with Gleason-type tooth profiles."
