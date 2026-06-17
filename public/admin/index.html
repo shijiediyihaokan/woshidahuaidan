@@ -829,5 +829,280 @@ function renderRecentColors(containerId){
 }
 // Auto-render when modal opens
 </script>
+
+<script>
+
+/* ====== VISION RECOGNITION ====== */
+var visionMode='fast', recognitionQueue=[], recognitionCache={};
+var VO_URL='https://ark.cn-beijing.volces.com/api/v3/chat/completions';
+var VO_MODEL='doubao-seed-2-0-lite-260428';
+try{var saved=localStorage.getItem('ggn_vision_cache');if(saved)recognitionCache=JSON.parse(saved);}catch(e){}
+
+function getVoKey(){return document.getElementById('voKey').value||localStorage.getItem('vo_key')||'';}
+
+/* Login hook: save Volcengine key */
+var origLogin=login;login=function(){
+  var k=document.getElementById('voKey').value;if(k)localStorage.setItem('vo_key',k);
+  if(document.getElementById('visionPanel'))document.getElementById('visionPanel').style.display='block';
+  origLogin();
+};
+
+/* Mode toggle */
+function setVisionMode(mode){
+  visionMode=mode;
+  document.getElementById('modeFast').className=mode==='fast'?'active':'';
+  document.getElementById('modeDeep').className=mode==='deep'?'active':'';
+}
+
+var FAST_PROMPT='Identify this industrial product image. Output ONLY valid JSON, no markdown, no explanation:\n{\n  "product_type": "exact product type in English",\n  "category": "one of: Gearboxes, Gear Motors, AC Motors, Gears, Sprockets, Pulleys, Transmission Shafts, Sheet Metal Fabrication",\n  "subcategory": "one of: worm-gearboxes, helical-gearboxes, bevel-gearboxes, right-angle-gearboxes, screw-jacks, speed-variators, industrial-gearboxes, or empty string",\n  "alt_text": "descriptive alt text under 125 chars",\n  "image_title": "short title under 60 chars",\n  "filename": "seo-friendly filename, lowercase hyphens, .jpg extension",\n  "main_image_suitable": true,\n  "quality_notes": "brief quality assessment in 1 sentence"\n}';
+
+var DEEP_PROMPT='Analyze this industrial technical image in detail. Output ONLY valid JSON:\n{\n  "product_type": "exact product type",\n  "product_structure": "component breakdown",\n  "visible_text": "any text or markings visible",\n  "possible_model": "likely model number if discernible",\n  "material_clues": "visible material indicators",\n  "drawing_notes": "dimensions or drawing info if visible",\n  "uncertainty_notes": "what is ambiguous",\n  "alt_text": "descriptive alt text",\n  "filename": "seo filename",\n  "category": "best category match",\n  "subcategory": "best subcategory match"\n}';
+
+/* Image optimization: resize + compress */
+function optimizeImage(file, maxDim){maxDim=maxDim||1024;
+  return new Promise(function(resolve,reject){
+    var img=new Image(),url=URL.createObjectURL(file);
+    img.onload=function(){
+      URL.revokeObjectURL(url);
+      var w=img.width,h=img.height;
+      if(w<=maxDim&&h<=maxDim&&file.size<200*1024){
+        /* Already small enough */
+        var reader=new FileReader();
+        reader.onload=function(e){resolve({dataUrl:e.target.result,width:w,height:h,size:file.size,optimized:false});};
+        reader.readAsDataURL(file);return;
+      }
+      var scale=Math.min(maxDim/w,maxDim/h,1);
+      var nw=Math.round(w*scale),nh=Math.round(h*scale);
+      var canvas=document.createElement('canvas');canvas.width=nw;canvas.height=nh;
+      var ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,nw,nh);
+      var mime=file.type==='image/png'?'image/jpeg':'image/jpeg';
+      var quality=0.8;
+      canvas.toBlob(function(blob){
+        var reader=new FileReader();
+        reader.onload=function(e){resolve({dataUrl:e.target.result,width:nw,height:nh,size:blob.size,optimized:true});};
+        reader.readAsDataURL(blob);
+      },mime,quality);
+    };
+    img.onerror=function(){reject(new Error('Image load failed'));};
+    img.src=url;
+  });
+}
+
+/* Cache key */
+function cacheKey(fileName,fileSize){return fileName+'::'+fileSize;}
+
+/* Main recognition entry */
+function recognizeGalleryImage(index,mode){
+  if(!galleryImages[index])return;
+  var img=galleryImages[index],fileObj=img._file;
+  if(!fileObj){toast('No original file for recognition','error');return;}
+  var key=cacheKey(fileObj.name,fileObj.size);
+  if(recognitionCache[key]){showSuggestions(index,recognitionCache[key]);return;}
+  var voKey=getVoKey();if(!voKey){toast('Set Volcengine API Key first','error');return;}
+  document.getElementById('visionPanel').style.display='block';
+  var id='rec_'+Date.now()+'_'+index;
+  recognitionQueue.push({id:id,index:index,fileName:fileObj.name,status:'pending',mode:mode||visionMode});
+  renderVisionQueue();
+  /* Defer to next tick — non-blocking */
+  setTimeout(function(){processRecognition(id,fileObj,index,mode||visionMode);},50);
+}
+
+async function processRecognition(id,fileObj,index,mode){
+  var item=recognitionQueue.find(function(q){return q.id===id;});if(!item)return;
+  item.status='processing';renderVisionQueue();
+  var startTime=Date.now();
+  try{
+    /* Step 1: Optimize */
+    var opt=await optimizeImage(fileObj,mode==='deep'?1280:1024);
+    /* Step 2: Call API */
+    var base64=opt.dataUrl.split(',')[1];
+    var controller=new AbortController();
+    var timeout=setTimeout(function(){controller.abort();},55000);
+    var resp=await fetch(VO_URL,{
+      method:'POST',signal:controller.signal,
+      headers:{'Authorization':'Bearer '+getVoKey(),'Content-Type':'application/json'},
+      body:JSON.stringify({model:VO_MODEL,max_tokens:mode==='deep'?500:300,
+        messages:[{role:'user',content:[
+          {type:'image_url',image_url:{url:'data:image/jpeg;base64,'+base64}},
+          {type:'text',text:mode==='fast'?FAST_PROMPT:DEEP_PROMPT}
+        ]}]
+      })
+    });
+    clearTimeout(timeout);
+    var elapsed=((Date.now()-startTime)/1000).toFixed(1);
+    if(!resp.ok){throw new Error('API '+resp.status+': '+resp.statusText);}
+    var data=await resp.json();
+    var content=data.choices&&data.choices[0]&&data.choices[0].message.content;
+    if(!content)throw new Error('Empty API response');
+    /* Parse JSON from response */
+    var result=parseVisionJSON(content);
+    result._meta={mode:mode,elapsed:elapsed+'s',optSize:opt.size,origSize:fileObj.size};
+    /* Cache */
+    var key=cacheKey(fileObj.name,fileObj.size);
+    recognitionCache[key]=result;
+    try{localStorage.setItem('ggn_vision_cache',JSON.stringify(recognitionCache));}catch(e){}
+    item.status='completed';item.result=result;
+    renderVisionQueue();
+    showSuggestions(index,result);
+  }catch(e){
+    item.status='failed';item.error=e.message;
+    renderVisionQueue();
+    console.error('Vision recognition failed:',e);
+  }
+}
+
+function parseVisionJSON(text){
+  try{return JSON.parse(text);}catch(e){}
+  /* Try to extract JSON block */
+  var m=text.match(/\{[\s\S]*\}/);
+  if(m){try{return JSON.parse(m[0]);}catch(e2){}}
+  return {error:'parse_failed',raw:text.substring(0,200)};
+}
+
+/* Render recognition queue in sidebar */
+function renderVisionQueue(){
+  var el=document.getElementById('visionQueue');if(!el)return;
+  if(recognitionQueue.length===0){el.innerHTML='';return;}
+  var html='';
+  recognitionQueue.forEach(function(item){
+    var sc=item.status;
+    var spinner=sc==='processing'?'<span style="animation:pulse 1s infinite">⏳</span>':'';
+    html+='<div class="vision-item">';
+    if(galleryImages[item.index]&&galleryImages[item.index].dataUrl){
+      html+='<img class="vi-thumb" src="'+galleryImages[item.index].dataUrl+'">';
+    }
+    html+='<span class="vi-name">'+item.fileName+'</span>';
+    html+='<span class="vision-status '+sc+'">'+spinner+' '+sc+'</span>';
+    if(sc==='failed')html+='<span class="vision-retry" onclick="recognizeGalleryImage('+item.index+',\''+item.mode+'\')">↻ Retry</span>';
+    if(sc==='completed')html+='<span style="font-size:10px;color:var(--g)">'+((item.result&&item.result._meta&&item.result._meta.elapsed)||'')+'</span>';
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+/* Show suggestion panel */
+function showSuggestions(index,result){
+  var el=document.getElementById('suggestionPanel');if(!el)return;
+  var mode=result._meta&&result._meta.mode==='deep'?'deep':'fast';
+  var gimg=galleryImages[index];
+  var html='<div class="suggest-panel"><h4>🤖 AI Suggestions — '+mode.toUpperCase()+' MODE <span style="font-weight:normal;font-size:11px">(review before applying)</span></h4>';
+  if(result.error){html+='<p style="color:var(--r);font-size:13px">Recognition failed. Try Deep Mode or upload a clearer image.</p>';}
+  else{
+    if(mode==='fast'){
+      html+=suggestRow('Product Type',result.product_type||'','pTitle',result.product_type);
+      html+=suggestRow('Category',result.category||'','pCat',result.category);
+      html+=suggestRow('Subcategory',result.subcategory||'','pSub',result.subcategory);
+      html+=suggestRow('ALT Text',result.alt_text||'','pImgAlt',result.alt_text);
+      html+=suggestRow('Image Title',result.image_title||'',null,result.image_title);
+      if(result.filename&&gimg){html+=suggestRow('Filename',result.filename,'gimgName'+index,result.filename,true);}
+      html+=suggestRow('Main Image',result.main_image_suitable?'✅ Suitable':'⚠️ Check','',result.main_image_suitable?'Suitable as main product image':'May not be ideal as main image');
+      if(result.quality_notes)html+=suggestRow('Quality',result.quality_notes,'',result.quality_notes);
+    }else{
+      html+=suggestRow('Product Type',result.product_type||'','pTitle',result.product_type);
+      if(result.product_structure)html+=suggestRow('Structure',result.product_structure,'',result.product_structure);
+      if(result.visible_text)html+=suggestRow('Visible Text',result.visible_text,'',result.visible_text);
+      if(result.possible_model)html+=suggestRow('Model',result.possible_model,'',result.possible_model);
+      if(result.material_clues)html+=suggestRow('Material',result.material_clues,'',result.material_clues);
+      html+=suggestRow('Category',result.category||'','pCat',result.category);
+      html+=suggestRow('Subcategory',result.subcategory||'','pSub',result.subcategory);
+      html+=suggestRow('ALT Text',result.alt_text||'','pImgAlt',result.alt_text);
+      if(result.uncertainty_notes)html+=suggestRow('Notes',result.uncertainty_notes,'',result.uncertainty_notes);
+    }
+    html+='<div class="suggest-btns"><button class="dismiss" onclick="dismissSuggestions()">Dismiss</button><button class="apply-all" onclick="applyAllSuggestions('+index+')">✓ Apply All</button></div>';
+  }
+  html+='</div>';
+  el.innerHTML=html;
+  /* Store for applyAll */
+  el._result=result;el._index=index;
+}
+
+function suggestRow(label,value,targetId,targetVal,isGalleryName){
+  if(!value)return'';
+  var applyFn=targetId?'onclick="applySuggestion(\''+targetId+'\',\''+escapeAttr(targetVal||value)+'\','+(isGalleryName?'true':'false')+')"':'';
+  return'<div class="suggest-row"><span class="sr-label">'+label+':</span><span class="sr-value">'+value+'</span>'+(targetId?'<button class="sr-apply" '+applyFn+'>Apply</button>':'')+'</div>';
+}
+
+function escapeAttr(s){return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"');}
+
+/* Apply single suggestion */
+function applySuggestion(targetId,value,isGalleryName){
+  if(isGalleryName){
+    var idx=parseInt(targetId.replace('gimgName',''));
+    if(galleryImages[idx]){galleryImages[idx].name=value;renderGallery();toast('Filename updated','success');}
+    return;
+  }
+  var el=document.getElementById(targetId);
+  if(!el)return;
+  /* For select elements, try to match value */
+  if(el.tagName==='SELECT'){
+    var found=false;
+    for(var i=0;i<el.options.length;i++){
+      if(el.options[i].value.toLowerCase()===value.toLowerCase()||el.options[i].text.toLowerCase()===value.toLowerCase()){
+        el.value=el.options[i].value;found=true;break;
+      }
+    }
+    if(!found){el.value=value;}
+  }else{
+    el.value=value;
+    if(targetId==='pTitle')autoSlug();
+    if(targetId==='pImgAlt')updateGallery();
+  }
+  /* Visual feedback */
+  var btns=document.querySelectorAll('.sr-apply');
+  for(var j=0;j<btns.length;j++){if(btns[j].textContent==='Apply'&&btns[j].onclick&&btns[j].onclick.toString().includes(targetId))btns[j].className='sr-apply applied';}
+  toast('✓ Applied: '+value.substring(0,40),'success');
+}
+
+/* Apply all suggestions */
+function applyAllSuggestions(index){
+  var el=document.getElementById('suggestionPanel'),result=el._result;
+  if(!result)return;
+  var mode=result._meta&&result._meta.mode==='deep'?'deep':'fast';
+  if(result.product_type)document.getElementById('pTitle').value=result.product_type;
+  if(result.category){var cat=document.getElementById('pCat');for(var i=0;i<cat.options.length;i++){if(cat.options[i].value.toLowerCase()===result.category.toLowerCase()){cat.value=cat.options[i].value;break;}}}
+  if(result.subcategory){var sub=document.getElementById('pSub');for(var i=0;i<sub.options.length;i++){if(sub.options[i].value.toLowerCase()===result.subcategory.toLowerCase()){sub.value=sub.options[i].value;break;}}}
+  if(result.alt_text){document.getElementById('pImgAlt').value=result.alt_text;updateGallery();}
+  if(result.filename&&galleryImages[index]){galleryImages[index].name=result.filename;renderGallery();}
+  autoSlug();dismissSuggestions();
+  toast('All AI suggestions applied','success');
+}
+
+function dismissSuggestions(){
+  document.getElementById('suggestionPanel').innerHTML='';
+}
+
+/* Hook into gallery upload: add recognize button */
+var origRenderGallery=renderGallery;
+renderGallery=function(){
+  origRenderGallery();
+  /* Add recognize button to each gallery item */
+  var strip=document.getElementById('galleryStrip');
+  if(strip){
+    var items=strip.querySelectorAll('[data-vision-hooked]');
+    items.forEach(function(it){it.removeAttribute('data-vision-hooked');});
+    var btns=strip.querySelectorAll('button[onclick*="setMainImage"]');
+    btns.forEach(function(btn,i){
+      var voKey=getVoKey();
+      if(voKey){
+        var recBtn=document.createElement('button');
+        recBtn.textContent='🤖';
+        recBtn.title='AI recognize this image';
+        recBtn.style.cssText='position:absolute;top:4px;right:28px;background:rgba(37,99,235,.7);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:22px;text-align:center;z-index:5';
+        recBtn.setAttribute('data-vision-hooked','1');
+        recBtn.onclick=function(e){e.stopPropagation();recognizeGalleryImage(i,visionMode);};
+        btn.parentNode.appendChild(recBtn);
+      }
+    });
+  }
+};
+
+/* Auto-show vision panel on login if key is set */
+(function(){
+  setTimeout(function(){
+    if(getVoKey()&&K){var vp=document.getElementById('visionPanel');if(vp)vp.style.display='block';}
+  },500);
+})();
+
+</script>
 </body>
 </html>
