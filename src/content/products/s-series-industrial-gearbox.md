@@ -18,7 +18,9 @@ specs:
     value: "6.8:1 – 28,800:1"
   - name: "Output Torque"
     value: "Up to 4,200 N·m"
-order: 75
+metaTitle: "S Series Industrial Gearbox — Heavy Duty Parallel Shaft | GRANGIN"
+metaDescription: "S series heavy duty industrial gearbox S37-S167. Parallel shaft design. High torque capacity. For heavy machinery, conveyors, and demanding industrial applications."
+order: 100
 published: true
 ---
 

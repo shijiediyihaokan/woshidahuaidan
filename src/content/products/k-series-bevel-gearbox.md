@@ -20,7 +20,9 @@ specs:
     value: "Up to 50,000 N·m"
   - name: "Housing Material"
     value: "HT250 High-Strength Cast Iron"
-order: 85
+metaTitle: "K Series Helical Bevel Gearbox — Right Angle Drive | GRANGIN"
+metaDescription: "K series helical bevel gearbox K37-K187, 90° right angle drive. High efficiency helical-bevel design. IEC/NEMA motor input. For mixers, conveyors, and industrial drives."
+order: 100
 published: true
 ---
 

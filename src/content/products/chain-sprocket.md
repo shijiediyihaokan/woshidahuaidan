@@ -17,7 +17,9 @@ specs:
     value: "Pilot bore, Taper bushing, Finished bore"
   - name: "Material"
     value: "C45 Steel, 304SS, 316SS, POM Plastic"
-order: 70
+metaTitle: "Chain Sprockets — Simplex & Duplex Roller Chain | GRANGIN"
+metaDescription: "ANSI/ISO standard simplex and duplex roller chain sprockets. Hardened teeth, bore and keyway options. For conveyor, transmission, and industrial chain drives."
+order: 200
 published: true
 ---
 

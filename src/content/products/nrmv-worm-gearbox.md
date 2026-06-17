@@ -23,6 +23,8 @@ specs:
     value: "ADC12 Aluminum Alloy"
   - name: "Input Formats"
     value: "IEC Flange, NEMA Flange, Solid Shaft"
+metaTitle: "NMRV Worm Gearbox — Aluminum, Right Angle Drive | GRANGIN"
+metaDescription: "NMRV series worm gearbox 030-150, die-cast aluminum housing. Ratios 5:1-100:1. IEC motor input. Self-locking. For conveyors, packaging, and automation equipment."
 order: 100
 published: true
 ---

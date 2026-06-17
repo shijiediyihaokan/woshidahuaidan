@@ -20,7 +20,9 @@ specs:
     value: "Up to 18,000 N·m"
   - name: "Efficiency"
     value: "94%–96% per stage"
-order: 90
+metaTitle: "R Series Helical Gearbox — Inline, High Efficiency | GRANGIN"
+metaDescription: "R series inline helical gearbox R17-R167. Hardened helical gears for quiet, reliable operation. Ratios 1.4:1-28,000:1. For pumps, mixers, and industrial drives."
+order: 100
 published: true
 ---
 

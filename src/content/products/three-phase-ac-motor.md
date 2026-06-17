@@ -25,7 +25,9 @@ specs:
     value: "2, 4, 6, 8"
   - name: "Protection"
     value: "IP55"
-order: 85
+metaTitle: "Three-Phase AC Induction Motors — IEC Standard IE2/IE3/IE4 | GRANGIN"
+metaDescription: "IEC standard three-phase asynchronous motors 0.18kW-315kW, IE2/IE3/IE4. Aluminum/cast iron frame. B3/B5/B14 mounting. For pumps, fans, compressors, and industrial machinery."
+order: 100
 published: true
 ---
 
