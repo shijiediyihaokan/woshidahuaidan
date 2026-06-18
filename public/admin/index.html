@@ -202,7 +202,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
       <!-- Image Gallery Upload -->
       <div class="card">
-        <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(≤600KB each, drag to reorder)</small></h3>
+        <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(≤600KB each, drag to reorder)</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
         <div class="upload-zone" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
           <div class="icon">📁</div>
           <p>Click or drag images here<br><small>JPG, PNG, WebP — Max 600KB each. First image = main.</small></p>
@@ -755,6 +755,7 @@ function buildFM(){
   return {slug:s,content:fm};
 }
 
+var imgReused=false,existingSha=null;
 function saveProd(){
   if(!K)return toast('Login first','error');
   var t=document.getElementById('pTitle').value,s=document.getElementById('pSlug').value,c=document.getElementById('pCat').value,ex=document.getElementById('pExcerpt').value;
@@ -763,8 +764,39 @@ function saveProd(){
   if(s.length<2)return toast('❌ Slug too short','error');if(!c)return toast('❌ Category required','error');if(!ex)return toast('❌ Short Description required','error');
   if(mt&&(mt.length<50||mt.length>60))return toast('❌ SEO Title must be 50-60 chars (now '+mt.length+')','error');
   if(md&&(md.length<120||md.length>155))return toast('❌ Meta Description must be 120-155 chars (now '+md.length+')','error');
-  /* Auto-export viz to body before save */
-  var d=buildFM();send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
+  var path='src/content/products/'+s+'.md';
+  /* Check if product already exists for duplicate handling */
+  fetch(A+'/repos/'+R+'/contents/'+path,{headers:{'Authorization':'token '+K}}).then(function(r){return r.json()}).then(function(existing){
+    if(existing.sha){
+      /* DUPLICATE FOUND — reuse image, update content */
+      existingSha=existing.sha;imgReused=true;
+      document.getElementById('imgStatus').innerHTML='<span style="color:#2563eb">📎 Reused existing product image</span>';
+      /* Parse existing frontmatter to get image URL */
+      var exContent=atob(existing.content.replace(/\n/g,''));
+      var imgMatch=exContent.match(/image:\s*"([^"]+)"/);
+      if(imgMatch&&!document.getElementById('pImg').value){
+        document.getElementById('pImg').value=imgMatch[1];
+      }
+      var d=buildFM();
+      sendUpdate(path,d.content,'Update product: '+t,existingSha);
+    }else if(existing.message&&existing.message==='Not Found'){
+      /* NEW PRODUCT */
+      imgReused=false;existingSha=null;
+      document.getElementById('imgStatus').innerHTML='<span style="color:#059669">🆕 New image uploaded</span>';
+      var d=buildFM();
+      send('src/content/products/'+d.slug+'.md',d.content,'Add product: '+t);
+    }else{
+      /* API error, try normal save */
+      var d=buildFM();send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
+    }
+  }).catch(function(){
+    var d=buildFM();send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
+  });
+}
+function sendUpdate(path,content,message,sha){
+  var b64=btoa(unescape(encodeURIComponent(content)));
+  fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main',sha:sha})})
+  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('✅ Updated! Image reused.','success');else toast(d.message,'error');});
 }
 
 function saveNews(){
@@ -784,7 +816,7 @@ function resetForm(){
   var fields=['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'];fields.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';if(id==='pImgAlt'){el.dataset.autoAlt='1';}if(id==='pSlug'){el.dataset.auto='1';}}});
   document.getElementById('pOrder').value='0';
   document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
-  vizData=[];renderAll();checkSeoTitle();checkMetaDesc();toast('Reset','success');
+  vizData=[];renderAll();checkSeoTitle();checkMetaDesc();document.getElementById('imgStatus').innerHTML='';imgReused=false;existingSha=null;toast('Reset','success');
 }
 
 /* ====== TABLE BUILDER HELPER ====== */
