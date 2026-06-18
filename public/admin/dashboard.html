@@ -298,18 +298,11 @@ function renderVizModule(m, idx) {
   var h='';
   if(m.type==='h2') h=titleHTML(m.text,'h2',m.style,m.color);
   else if(m.type==='h3') h=titleHTML(m.text,'h3',m.style,m.color);
-  else if(m.type==='text') h='<div class="viz-module" id="viz-'+idx+'" style="position:relative;margin:8px 0"><div class="viz-actions" style="position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px"><button class="btn btn-xs" onclick="event.stopPropagation();editModule('+idx+')" style="font-size:10px">✏️</button><button class="btn btn-xs" onclick="event.stopPropagation();delModule('+idx+')" style="font-size:10px">✕</button><button class="btn btn-xs" onclick="event.stopPropagation();moveUp('+idx+')" style="font-size:10px">↑</button><button class="btn btn-xs" onclick="event.stopPropagation();moveDown('+idx+')" style="font-size:10px">↓</button></div><textarea oninput="vizData['+idx+'].data.text=this.value;" style="width:100%;min-height:80px;padding:12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;line-height:1.8;resize:vertical;font-family:inherit;color:#444" placeholder="输入正文内容...">'+m.text+'</textarea></div>';
+  else if(m.type==='text') h='<div class="viz-module" id="viz-'+"'+idx+'"+'"><div class="viz-actions" style="position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px"><button class="btn btn-xs" onclick="event.stopPropagation();editModule('+"'+idx+'"+')" style="font-size:10px">编辑</button><button class="btn btn-xs" onclick="event.stopPropagation();delModule('+"'+idx+'"+')" style="font-size:10px">删除</button><button class="btn btn-xs" onclick="event.stopPropagation();moveUp('+"'+idx+'"+')" style="font-size:10px">↑</button><button class="btn btn-xs" onclick="event.stopPropagation();moveDown('+"'+idx+'"+')" style="font-size:10px">↓</button></div><textarea oninput="vizData['+"'+idx+'"+'].data.text=this.value;" style="width:100%;min-height:80px;padding:12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;line-height:1.8;resize:vertical;font-family:inherit;color:#444" placeholder="输入正文内容...">'+m.text+'</textarea></div>';
   else if(m.type==='leftimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:45%;vertical-align:top;padding-right:15px;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td></tr></table>';
   else if(m.type==='rightimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td><td style="width:45%;vertical-align:top;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td></tr></table>';
 
-  else if(m.type==='2imgs'||m.type==='3imgs'||m.type==='4imgs'||m.type==='6imgs'){
-    var n=parseInt(m.type), w=(100/n).toFixed(2)+'%', pad=n>4?'3':'5', fs=n>4?'11':'12', imgs=m.imgs||[];
-    h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr>';
-    for(var i=0;i<n;i++){var item=imgs[i]||{url:'IMAGE-URL',alt:'ALT-TEXT',label:''+i};
-      h+='<td style="width:'+w+';padding:'+pad+'px;text-align:center;vertical-align:top;"><img src="'+item.url+'" alt="'+item.alt+'" style="width:100%;border-radius:4px;border:1px solid #eee;"><p style="font-size:'+fs+'px;color:#666;margin:'+(n>4?'3':'4')+'px 0 0;">'+item.label+'</p></td>';
-    }
-    h+='</tr></table>';
-  }
+  else if(m.type==='2imgs'||m.type==='3imgs'||m.type==='4imgs'||m.type==='6imgs'){var n3=parseInt(m.type),imgs=m.imgs||[],gh2='';gh2+='<div class="viz-module" id="viz-'+idx+'" style="position:relative;margin:8px 0;padding:8px;border:1px dashed #e5e7eb;border-radius:8px;background:#fafafa">';gh2+='<div class="viz-actions" style="top:4px;right:4px;z-index:5;display:flex;gap:4px"><span style="font-size:11px;color:var(--g);line-height:22px">'+n3+'图</span><button class="btn btn-xs" onclick="event.stopPropagation();delModule('+idx+')">✕</button><button class="btn btn-xs" onclick="event.stopPropagation();moveUp('+idx+')">↑</button><button class="btn btn-xs" onclick="event.stopPropagation();moveDown('+idx+')">↓</button></div>';gh2+='<table style="width:100%;margin:20px 0 0 0"><tr>';for(var j2=0;j2<n3;j2++){var item=imgs[j2]||{url:'',alt:'',label:''};gh2+='<td style="width:'+(100/n3).toFixed(0)+'%;padding:4px;vertical-align:top;text-align:center">';gh2+='<div class="upload-zone" style="padding:16px 8px;cursor:pointer;min-height:100px" onclick="var fi=document.createElement(\'input\');fi.type=\'file\';fi.accept=\'image/*\';fi.onchange=function(){if(this.files[0]){var r=new FileReader();r.onload=function(ev){vizData['+idx+'].data.imgs['+j2+']={url:ev.target.result,alt:vizData['+idx+'].data.imgs['+j2+']?vizData['+idx+'].data.imgs['+j2+'].alt:\'\',label:vizData['+idx+'].data.imgs['+j2+']?vizData['+idx+'].data.imgs['+j2+'].label:\'\'};renderAll();};r.readAsDataURL(this.files[0]);}};fi.click()">';gh2+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:120px;border-radius:4px">':'<div class="icon">📁</div><p style="font-size:11px">点击上传</p>');gh2+='</div>';gh2+='<input value="'+(item.url||'')+'" placeholder="URL" onchange="vizData['+idx+'].data.imgs['+j2+'].url=this.value;renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">';gh2+='<input value="'+(item.alt||'')+'" placeholder="ALT" onchange="vizData['+idx+'].data.imgs['+j2+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';gh2+='<input value="'+(item.label||'')+'" placeholder="标签" onchange="vizData['+idx+'].data.imgs['+j2+'].label=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';gh2+='</td>';}gh2+='</tr></table></div>';h=gh2;}
   else if(m.type==='features'){
     h=''; var items=m.items||[];
     for(var i=0;i<items.length;i++){var it=items[i];
@@ -375,7 +368,7 @@ function openModule(type, idx){
   if(type==='h2'||type==='h3'){
     html='<h3>'+(type==='h2'?'H2':'H3')+' Title</h3><div class="field"><label>Text</label><input id="mText" value="'+(data.text||'')+'"></div><div class="form-row"><div class="field"><label>Style</label><select id="mStyle"><option value="red-left"'+(data.style==='red-left'?' selected':'')+'>Red Left Border</option><option value="red-underline"'+(data.style==='red-underline'?' selected':'')+'>Red Underline</option><option value="dark-left"'+(data.style==='dark-left'?' selected':'')+'>Dark Left Border</option><option value="dark-underline"'+(data.style==='dark-underline'?' selected':'')+'>Dark Underline</option><option value="red-bg"'+(data.style==='red-bg'?' selected':'')+'>Red Background</option></select></div><div class="field"><label>Color</label><input type="color" id="mColor" value="'+(data.color||c)+'"></div></div>';
   }
-  else if(type==='text'){vizData.push({type:'text',data:{text:''}});renderAll();scrollToViz(vizData.length-1);closeModal();return;}
+  else if(type==='text'){vizData.push({type:'text',data:{text:''}});renderAll();scrollToViz(vizData.length-1);return;}
   else if(type==='image'){
     html='<h3>Image</h3>'
       +'<div class="field"><label>Image URL</label><input id="mImgUrl" value="'+(data.url||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div>'
@@ -388,25 +381,7 @@ function openModule(type, idx){
       +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
       +'<div class="field"><label>描述</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
   }
-  else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
-    var n=parseInt(type), imgs=data.imgs||[];
-    html='<h3>'+n+' Images in 1 Row</h3>';
-    for(var i=0;i<n;i++){ var item=imgs[i]||{};
-      html+='<div style="border:1px solid #eee;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa">'
-        +'<div style="font-weight:bold;font-size:13px;color:var(--r);margin-bottom:8px">📷 Image '+(i+1)+'</div>'
-        +'<div class="upload-widget" id="mImgWidget'+i+'">'
-        +(item.url?'<div class="uw-preview"><img src="'+item.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((item.fileName)||'')+'</b> <span style="color:var(--g);font-size:11px">'+(item.fileSize||'')+' '+(item.dims||'')+'</span></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile'+i+'\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
-        +'</div>'
-        +'<input type="file" id="mImgFile'+i+'" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile'+i+'\',\'mImgWidget'+i+'\',\'mImgName'+i+'\')">'
-        +'<div style="display:flex;gap:8px;margin-top:8px">'
-        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">File Name</label><input id="mImgName'+i+'" value="'+(item.fileName||'')+'" placeholder="image-'+ (i+1) +'.jpg" style="padding:6px 8px;font-size:12px" onchange="this.dataset.changed=\'1\'"></div>'
-        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">ALT</label><input id="mAlt'+i+'" value="'+(item.alt||'')+'" placeholder="ALT 文本" style="padding:6px 8px;font-size:12px"></div>'
-        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">Label</label><input id="mLabel'+i+'" value="'+(item.label||'')+'" placeholder="Caption" style="padding:6px 8px;font-size:12px"></div>'
-        +'</div>'
-        +'<input type="hidden" id="mImgUrl'+i+'" value="'+(item.url||'')+'"><input type="hidden" id="mImgSize'+i+'" value="'+(item.fileSize||'')+'"><input type="hidden" id="mImgDims'+i+'" value="'+(item.dims||'')+'">'
-        +'</div>';
-    }
-  }
+  else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){var n=parseInt(type),imgs2=[];for(var j=0;j<n;j++)imgs2.push({url:'',alt:'',label:''});vizData.push({type:type,data:{imgs:imgs2}});renderAll();scrollToViz(vizData.length-1);return;}
   else if(type==='features'){
     var items=data.items||[{name:'',desc:''}];
     html='<h3>Feature List</h3><div id="featureItems">';
@@ -466,13 +441,7 @@ function saveModule(type){
     data.sub=document.getElementById('mSub').value;
     data.text=document.getElementById('mText').value;
   }
-  else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
-    var n=parseInt(type);data.imgs=[];
-    for(var i=0;i<n;i++){
-      var url=document.getElementById('mImgUrl'+i), name=document.getElementById('mImgName'+i), alt=document.getElementById('mAlt'+i), label=document.getElementById('mLabel'+i), size=document.getElementById('mImgSize'+i), dims=document.getElementById('mImgDims'+i);
-      data.imgs.push({url:url?url.value:'', fileName:name?name.value:'', fileSize:size?size.value:'', dims:dims?dims.value:'', alt:alt?alt.value:'', label:label?label.value:''});
-    }
-  }
+  
   else if(type==='features'){
     data.items=[];var names=document.querySelectorAll('#modal [data-field=fname]'), descs=document.querySelectorAll('#modal [data-field=fdesc]');
     for(var i=0;i<names.length;i++){if(names[i].value||descs[i].value) data.items.push({name:names[i].value,desc:descs[i].value});}
