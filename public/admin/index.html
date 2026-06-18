@@ -142,7 +142,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
         <!-- Basic -->
         <div id="panel-basic" class="tab-content active">
-          <div class="field"><label>Product Name (H1) <span class="req">*</span></label><input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug()"><div class="helper">Page H1 heading. Must be unique per product.</div></div>
+          <div class="field"><label>Product Name (H1) <span class="req">*</span></label><input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug();autoAlt()"><div class="helper">Page H1 heading. Must be unique per product.</div></div>
           <div class="form-row">
             <div class="field"><label>URL Slug <span class="req">*</span></label><input id="pSlug" placeholder="nmrv050-worm-gearbox"><div class="helper" id="slugHint">Short, clean path. Ex: nmrv050-worm-gearbox</div></div>
             <div class="field"><label>Image ALT Text</label><input id="pImgAlt" placeholder="NMRV050 worm gearbox front view"><div class="helper">For Google image search</div></div>
@@ -561,7 +561,7 @@ function login(){
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
 
 /* Nav */
-document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');}});
+document.querySelectorAll('.sidebar nav a').forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelectorAll('.sidebar nav a').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('page-'+this.dataset.page).classList.add('active');if(this.dataset.page==='products')resetForm();}});
 document.querySelectorAll('.tab-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});this.classList.add('active');document.querySelectorAll('#page-products .tab-content').forEach(function(x){x.classList.remove('active')});document.getElementById('panel-'+this.dataset.panel).classList.add('active');}});
 
 /* ====== GALLERY IMAGE UPLOAD ====== */
