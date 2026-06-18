@@ -103,16 +103,37 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 </style>
 </head>
 <body>
-<div id="fallback" style="text-align:center;padding:40px;font-family:Inter,system-ui,sans-serif">
-<div style="font-size:48px;margin-bottom:16px">⚙️</div>
-<h1>Ceten Admin</h1>
-<p id="fbMsg" style="color:#6b7280;font-size:14px">Loading admin panel...</p>
-<div id="fbError" style="display:none;margin-top:16px;padding:16px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;max-width:500px;margin-left:auto;margin-right:auto">
-<p id="fbErrorText" style="color:#ce1132;font-size:13px;margin-bottom:12px"></p>
-<button onclick="location.reload()" style="padding:8px 20px;background:#ce1132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">刷新重试</button>
-<button onclick="localStorage.clear();location.href='./'" style="padding:8px 20px;background:#6b7280;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;margin-left:8px">重新登录</button>
+<!-- Anti-Blank-Screen: always visible until JS takes over -->
+<div id="absLoading" style="text-align:center;padding:60px 20px;font-family:Inter,system-ui,sans-serif;background:#f0f2f5;min-height:100vh">
+<div style="max-width:480px;margin:0 auto">
+<div style="font-size:56px;margin-bottom:12px">⚙️</div>
+<h1 style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 4px 0">Ceten Admin</h1>
+<p id="absStatus" style="color:#6b7280;font-size:13px;margin:0 0 24px 0">Loading admin panel...</p>
+<div id="absSpinner" style="width:40px;height:40px;border:3px solid #e5e7eb;border-top:3px solid #ce1132;border-radius:50%;margin:0 auto 20px;animation:absSpin 0.8s linear infinite"></div>
+<div id="absError" style="display:none;text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+<span style="font-size:24px">⚠️</span>
+<span style="font-weight:700;color:#ce1132;font-size:15px">Initialization Failed</span>
+</div>
+<div style="font-size:12px;line-height:1.8;color:#374151">
+<div style="margin-bottom:8px"><strong>Error:</strong> <span id="absErrMsg" style="color:#ce1132">—</span></div>
+<div><strong>Possible causes:</strong></div>
+<ul style="margin:4px 0 12px 16px;padding:0;color:#6b7280">
+<li>GitHub token expired or invalid</li>
+<li>Network connection issue</li>
+<li>JavaScript blocked by browser extension</li>
+<li>CDN cache serving old version — try Ctrl+Shift+R</li>
+</ul>
+</div>
+<div style="display:flex;gap:8px">
+<button onclick="location.reload()" style="flex:1;padding:10px;background:#ce1132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">🔄 Refresh</button>
+<button onclick="localStorage.clear();location.href='./'" style="flex:1;padding:10px;background:#6b7280;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">↩ Back to Login</button>
 </div>
 </div>
+</div>
+</div>
+<style>@keyframes absSpin{to{transform:rotate(360deg)}}#absLoading.resolved{display:none}</style>
+
 <div id="dash" class="dashboard">
   <aside class="sidebar">
     <div class="brand">⚙️ Ceten</div>
@@ -275,31 +296,47 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
 
 <script>
-console.log("=== Dashboard JS v5 Loaded ===");
+console.log("=== Dashboard JS v6 ===");
 var K=localStorage.getItem('ggn_token')||'';
 var R='shijiediyihaokan/woshidahuaidan';
 var A='https://api.github.com';
-var GLOBAL_ERRORS=[];
+var ABS_INITIALIZED=false;
+var ABS_TIMER=setTimeout(function(){if(!ABS_INITIALIZED)showABSError('Initialization timed out after 5 seconds. The dashboard may have a JavaScript syntax error or a blocked resource.','Timeout — 5s');},5000);
 
-/* Global error capture */
-window.onerror=function(m,s,l,c,e){GLOBAL_ERRORS.push(m);var fb=document.getElementById('fbError'),ft=document.getElementById('fbErrorText');if(fb&&ft){ft.textContent='JS Error: '+m+' (line '+l+')';fb.style.display='block';document.getElementById('fbMsg').textContent='Script error occurred.';}return false;};
-window.addEventListener('unhandledrejection',function(e){var fb=document.getElementById('fbError'),ft=document.getElementById('fbErrorText');if(fb&&ft){ft.textContent='Unhandled error: '+(e.reason||'').toString().substring(0,200);fb.style.display='block';document.getElementById('fbMsg').textContent='API request failed.';}});
+/* Show error and hide spinner */
+function showABSError(msg,cause){
+  document.getElementById('absErrMsg').textContent=msg;
+  document.getElementById('absSpinner').style.display='none';
+  document.getElementById('absError').style.display='block';
+  document.getElementById('absStatus').textContent='Initialization failed';
+  clearTimeout(ABS_TIMER);
+}
 
-/* Token check with fallback UI */
+/* Global JS error capture */
+window.onerror=function(m,s,l,c,e){
+  var detail=m+' at '+s+':'+l;
+  showABSError(detail,'JavaScript syntax or runtime error');
+  return true;
+};
+
+window.addEventListener('unhandledrejection',function(e){
+  showABSError((e.reason||'Unknown').toString().substring(0,200),'Unhandled Promise rejection or API failure');
+});
+
+/* Token check */
 if(!K||K.length<10){
-  document.getElementById('fbMsg').textContent='Login status expired. Please log in again.';
-  document.getElementById('fbError').style.display='block';
-  document.getElementById('fbErrorText').textContent='No valid GitHub token found.';
+  showABSError('No valid GitHub token found in localStorage.','Missing or expired login token');
   throw new Error('No token');
 }
 
-/* Show dashboard and hide fallback */
+/* Try to initialize dashboard */
 try{
   document.getElementById('dash').classList.add('on');
-  document.getElementById('fallback').classList.add('hidden');
-  console.log("Dashboard shown");
+  document.getElementById('absLoading').classList.add('resolved');
+  ABS_INITIALIZED=true;clearTimeout(ABS_TIMER);
+  console.log("✅ Dashboard initialized successfully");
 }catch(e){
-  document.getElementById('fbMsg').textContent='Failed to initialize dashboard: '+e.message;
+  showABSError(e.message,'Dashboard DOM initialization failed');
 }
 if(!K){window.location.href='./';}
 
