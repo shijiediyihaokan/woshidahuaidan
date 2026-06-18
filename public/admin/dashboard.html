@@ -159,9 +159,9 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
               <input type="color" id="titleColor" value="#ce1132">
             </span>
             <div class="mod-sep"></div>
+            <button class="mod-btn" onclick="openModule('text')" style="background:#ce1132;color:#fff;font-weight:bold">✏️ 添加正文文字</button>
             <button class="mod-btn" onclick="openModule('h2')">📌 二级标题</button>
             <button class="mod-btn" onclick="openModule('h3')">📌 三级标题</button>
-            <button class="mod-btn" onclick="openModule('text')">📝 文本</button>
             <button class="mod-btn" onclick="openModule('image')">🖼️ 图片</button>
             <button class="mod-btn" onclick="openModule('leftimg')">🖼️ 左图</button>
             <button class="mod-btn" onclick="openModule('rightimg')">🖼️ 右图</button>
@@ -177,7 +177,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
             <button class="mod-btn" onclick="openModule('table')">📋 表格</button>
             <button class="mod-btn" onclick="openModule('cta')">📧 联系</button>
           </div>
-          <div class="viz-preview" id="vizPreview"></div>
+          <div class="viz-preview" id="vizPreview" style="min-height:600px;max-height:70vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:16px;background:#fafafa"></div>
           <div style="margin-top:8px"><button class="btn btn-xs" onclick="exportViz()" style="font-size:11px">📋 Export HTML</button> <span class="helper">点击模块编辑，悬停删除。</span></div>
         </div>
 
@@ -298,7 +298,7 @@ function renderVizModule(m, idx) {
   var h='';
   if(m.type==='h2') h=titleHTML(m.text,'h2',m.style,m.color);
   else if(m.type==='h3') h=titleHTML(m.text,'h3',m.style,m.color);
-  else if(m.type==='text') h='<div style="font-size:14px;line-height:1.8;color:#444;margin:10px 0;">'+m.text+'</div>';
+  else if(m.type==='text') h='<div style="font-size:14px;line-height:1.8;color:#444;margin:10px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #eee">'+m.text+'</div><div class="quick-add" style="display:flex;gap:4px;margin:4px 0 12px 0;opacity:0;transition:opacity .2s" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0\'"><button class="btn btn-xs" onclick="event.stopPropagation();quickAddModule(\'text\','+idx+')" style="font-size:10px">+文字</button><button class="btn btn-xs" onclick="event.stopPropagation();quickAddModule(\'image\','+idx+')" style="font-size:10px">+图片</button></div>';
   else if(m.type==='leftimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:45%;vertical-align:top;padding-right:15px;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td></tr></table>';
   else if(m.type==='rightimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td><td style="width:45%;vertical-align:top;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td></tr></table>';
 
@@ -511,6 +511,11 @@ function addSpecRow(){var n=document.querySelectorAll('#specRows .item-row').len
 function addFaqRow(){var n=document.querySelectorAll('#faqItems > div').length;document.getElementById('faqItems').innerHTML+='<div style="margin-bottom:12px;padding:10px;background:#fafafa;border-radius:6px"><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">Q'+(n+1)+'</span><input placeholder="Question" data-field="fq" data-idx="'+n+'"></div><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">A</span><input placeholder="Answer" data-field="fa" data-idx="'+n+'"></div></div>';}
 
 /* ====== EXPORT ====== */
+function quickAddModule(type,afterIdx){
+  vizData.splice(afterIdx+1,0,{type:type,data:type==='text'?{text:''}:type==='image'?{url:'',alt:''}:type==='related'?{products:[]}:{}});
+  renderAll();
+  editingIdx=afterIdx+1;openModule(type);
+}
 function exportViz(){
   var html='';
   for(var i=0;i<vizData.length;i++){
