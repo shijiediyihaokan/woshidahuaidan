@@ -18,7 +18,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 .login-card button{width:100%;padding:14px;background:var(--r);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
 .login-card button:hover{background:#a80d28}
 
-.dashboard{display:none}.dashboard.on{display:flex;min-height:100vh}
+.dashboard{display:none}.dashboard.on{display:flex;min-height:100vh}#fallback.hidden{display:none}
 .sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10}
 .sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px;font-size:20px;font-weight:800;color:#fff}
 .sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
@@ -103,6 +103,16 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 </style>
 </head>
 <body>
+<div id="fallback" style="text-align:center;padding:40px;font-family:Inter,system-ui,sans-serif">
+<div style="font-size:48px;margin-bottom:16px">⚙️</div>
+<h1>Ceten Admin</h1>
+<p id="fbMsg" style="color:#6b7280;font-size:14px">Loading admin panel...</p>
+<div id="fbError" style="display:none;margin-top:16px;padding:16px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;max-width:500px;margin-left:auto;margin-right:auto">
+<p id="fbErrorText" style="color:#ce1132;font-size:13px;margin-bottom:12px"></p>
+<button onclick="location.reload()" style="padding:8px 20px;background:#ce1132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">刷新重试</button>
+<button onclick="localStorage.clear();location.href='./'" style="padding:8px 20px;background:#6b7280;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;margin-left:8px">重新登录</button>
+</div>
+</div>
 <div id="dash" class="dashboard">
   <aside class="sidebar">
     <div class="brand">⚙️ Ceten</div>
@@ -265,14 +275,32 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
 
 <script>
-console.log("=== Dashboard JS Loaded ===");
+console.log("=== Dashboard JS v5 Loaded ===");
 var K=localStorage.getItem('ggn_token')||'';
 var R='shijiediyihaokan/woshidahuaidan';
 var A='https://api.github.com';
-if(!K){document.body.innerHTML='<div style="text-align:center;padding:60px;font-family:sans-serif"><h2>Login status expired</h2><p>Please <a href="./">log in again</a>.</p></div>';throw new Error('No token');}
-/* Show dashboard immediately */
-document.getElementById('dash').classList.add('on');
-console.log("Dashboard shown");
+var GLOBAL_ERRORS=[];
+
+/* Global error capture */
+window.onerror=function(m,s,l,c,e){GLOBAL_ERRORS.push(m);var fb=document.getElementById('fbError'),ft=document.getElementById('fbErrorText');if(fb&&ft){ft.textContent='JS Error: '+m+' (line '+l+')';fb.style.display='block';document.getElementById('fbMsg').textContent='Script error occurred.';}return false;};
+window.addEventListener('unhandledrejection',function(e){var fb=document.getElementById('fbError'),ft=document.getElementById('fbErrorText');if(fb&&ft){ft.textContent='Unhandled error: '+(e.reason||'').toString().substring(0,200);fb.style.display='block';document.getElementById('fbMsg').textContent='API request failed.';}});
+
+/* Token check with fallback UI */
+if(!K||K.length<10){
+  document.getElementById('fbMsg').textContent='Login status expired. Please log in again.';
+  document.getElementById('fbError').style.display='block';
+  document.getElementById('fbErrorText').textContent='No valid GitHub token found.';
+  throw new Error('No token');
+}
+
+/* Show dashboard and hide fallback */
+try{
+  document.getElementById('dash').classList.add('on');
+  document.getElementById('fallback').classList.add('hidden');
+  console.log("Dashboard shown");
+}catch(e){
+  document.getElementById('fbMsg').textContent='Failed to initialize dashboard: '+e.message;
+}
 if(!K){window.location.href='./';}
 
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';

@@ -104,6 +104,12 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 </head>
 <body>
 
+<div id="loginFallback" style="text-align:center;padding:40px;font-family:Inter,system-ui,sans-serif;display:none">
+<div style="font-size:48px">⚠️</div>
+<h2 style="color:#ce1132">Page Load Error</h2>
+<p style="color:#6b7280;font-size:13px" id="loginErrMsg">JavaScript failed to load.</p>
+<button onclick="location.reload()" style="padding:10px 24px;background:#ce1132;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;margin-top:12px">刷新重试</button>
+</div>
 <div id="loginPage" class="login-page">
   <div class="login-card">
     <div style="font-size:48px;margin-bottom:16px">⚙️</div>
@@ -275,7 +281,12 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div id="toast" style="display:none"></div>
 
 <script>
-console.log("=== Ceten Admin JS Loaded ===");
+console.log("=== Ceten Admin JS v5 Loaded ===");
+/* Show login fallback if JS completely fails */
+window.onerror=function(){document.getElementById('loginFallback').style.display='block';document.getElementById('loginPage').style.display='none';};
+/* Show login page */
+try{document.getElementById('loginPage').style.display='flex';}catch(e){document.getElementById('loginFallback').style.display='block';}
+
 console.log("Page URL:", window.location.href);
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 var vizData = []; /* [{type, data}] */
