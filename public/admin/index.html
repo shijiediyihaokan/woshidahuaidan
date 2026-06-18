@@ -170,9 +170,9 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
               <input type="color" id="titleColor" value="#ce1132">
             </span>
             <div class="mod-sep"></div>
-            <button class="mod-btn" onclick="openModule('text')" style="background:#ce1132;color:#fff;font-weight:bold">✏️ 添加正文文字</button>
             <button class="mod-btn" onclick="openModule('h2')">📌 二级标题</button>
             <button class="mod-btn" onclick="openModule('h3')">📌 三级标题</button>
+            <button class="mod-btn" onclick="openModule('text')">📝 文本</button>
             <button class="mod-btn" onclick="openModule('image')">🖼️ 图片</button>
             <button class="mod-btn" onclick="openModule('leftimg')">🖼️ 左图</button>
             <button class="mod-btn" onclick="openModule('rightimg')">🖼️ 右图</button>
@@ -188,7 +188,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
             <button class="mod-btn" onclick="openModule('table')">📋 表格</button>
             <button class="mod-btn" onclick="openModule('cta')">📧 联系</button>
           </div>
-          <div class="viz-preview" id="vizPreview" style="min-height:600px;max-height:70vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:16px;background:#fafafa"></div>
+          <div class="viz-preview" id="vizPreview"></div>
           <div style="margin-top:8px"><button class="btn btn-xs" onclick="exportViz()" style="font-size:11px">📋 Export HTML</button> <span class="helper">点击模块编辑，悬停删除。</span></div>
         </div>
 
@@ -300,7 +300,7 @@ function renderVizModule(m, idx) {
   var h='';
   if(m.type==='h2') h=titleHTML(m.text,'h2',m.style,m.color);
   else if(m.type==='h3') h=titleHTML(m.text,'h3',m.style,m.color);
-  else if(m.type==='text') h='<div class="viz-module" id="viz-'+idx+'" style="position:relative;margin:8px 0"><div class="viz-actions" style="position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px"><button class="btn btn-xs" onclick="event.stopPropagation();editModule('+idx+')" style="font-size:10px">✏️</button><button class="btn btn-xs" onclick="event.stopPropagation();delModule('+idx+')" style="font-size:10px">✕</button><button class="btn btn-xs" onclick="event.stopPropagation();moveUp('+idx+')" style="font-size:10px">↑</button><button class="btn btn-xs" onclick="event.stopPropagation();moveDown('+idx+')" style="font-size:10px">↓</button></div><textarea oninput="vizData['+idx+'].data.text=this.value;" style="width:100%;min-height:80px;padding:12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;line-height:1.8;resize:vertical;font-family:inherit;color:#444" placeholder="输入正文内容...">'+m.text+'</textarea></div>';
+  else if(m.type==='text') h='<div style="font-size:14px;line-height:1.8;color:#444;margin:10px 0;">'+m.text+'</div>';
   else if(m.type==='leftimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:45%;vertical-align:top;padding-right:15px;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td></tr></table>';
   else if(m.type==='rightimg') h='<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:15px 0;"><tr><td style="width:55%;vertical-align:top;font-size:14px;line-height:1.8;color:#444;padding-right:15px;"><strong style="font-size:16px;color:#ce1132;">'+m.sub+'</strong><br>'+m.text+'</td><td style="width:45%;vertical-align:top;"><img src="'+m.img+'" alt="'+m.alt+'" style="width:100%;border-radius:6px;"></td></tr></table>';
 
@@ -381,16 +381,193 @@ function openModule(type, idx){
     html='<h3>Text Block</h3><div class="field"><label>Content</label><textarea id="mText" rows="4">'+(data.text||'')+'</textarea></div>';
   }
   else if(type==='image'){
-    var exUrl=editingIdx>=0&&vizData[editingIdx].data.url?vizData[editingIdx].data.url:'';
-    var exAlt=editingIdx>=0&&vizData[editingIdx].data.alt?vizData[editingIdx].data.alt:'';
-    m.innerHTML='<h3>添加图片</h3>'
-    +'<div class="upload-zone" id="modImgZone" style="margin-bottom:12px;padding:20px;text-align:center;cursor:pointer" onclick="document.getElementById(\'modImgFile\').click()">'
-    +'<div class="icon">📁</div><p>点击或拖拽图片到此处<br><small>JPG, PNG, WebP ≤600KB</small></p>'
-    +'<div id="modImgPreview" style="margin-top:8px">'+(exUrl?'<img src="'+exUrl+'" style="max-width:200px;max-height:150px;border-radius:4px">':'')+'</div></div>'
-    +'<input type="file" id="modImgFile" accept="image/*" style="display:none" onchange="uploadModImg()">'
-    +'<div class="field"><label>图片 URL</label><input id="mImgUrl" value="'+exUrl+'" placeholder="或手动输入图片URL"></div>'
-    +'<div class="field"><label>ALT 文本</label><input id="mImgAlt" value="'+exAlt+'" placeholder="描述图片内容，用于SEO和无障碍访问"></div>'
-    +'<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveModule(\'image\')">保存</button></div>';return;}
+    html='<h3>Image</h3>'
+      +'<div class="field"><label>Image URL</label><input id="mImgUrl" value="'+(data.url||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Worm gearbox front view"></div>';
+  }
+  else if(type==='leftimg'||type==='rightimg'){
+    html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3>'
+      +'<div class="field"><label>Image URL</label><input id="mImgUrl" value="'+(data.img||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Worm gearbox front view"></div>'
+      +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
+      +'<div class="field"><label>描述</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
+  }
+  else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
+    var n=parseInt(type), imgs=data.imgs||[];
+    html='<h3>'+n+' Images in 1 Row</h3>';
+    for(var i=0;i<n;i++){ var item=imgs[i]||{};
+      html+='<div style="border:1px solid #eee;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa">'
+        +'<div style="font-weight:bold;font-size:13px;color:var(--r);margin-bottom:8px">📷 Image '+(i+1)+'</div>'
+        +'<div class="upload-widget" id="mImgWidget'+i+'">'
+        +(item.url?'<div class="uw-preview"><img src="'+item.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((item.fileName)||'')+'</b> <span style="color:var(--g);font-size:11px">'+(item.fileSize||'')+' '+(item.dims||'')+'</span></div>':'<div class="uw-empty" onclick="document.getElementById(\'mImgFile'+i+'\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+        +'</div>'
+        +'<input type="file" id="mImgFile'+i+'" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile'+i+'\',\'mImgWidget'+i+'\',\'mImgName'+i+'\')">'
+        +'<div style="display:flex;gap:8px;margin-top:8px">'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">File Name</label><input id="mImgName'+i+'" value="'+(item.fileName||'')+'" placeholder="image-'+ (i+1) +'.jpg" style="padding:6px 8px;font-size:12px" onchange="this.dataset.changed=\'1\'"></div>'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">ALT</label><input id="mAlt'+i+'" value="'+(item.alt||'')+'" placeholder="ALT 文本" style="padding:6px 8px;font-size:12px"></div>'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">Label</label><input id="mLabel'+i+'" value="'+(item.label||'')+'" placeholder="Caption" style="padding:6px 8px;font-size:12px"></div>'
+        +'</div>'
+        +'<input type="hidden" id="mImgUrl'+i+'" value="'+(item.url||'')+'"><input type="hidden" id="mImgSize'+i+'" value="'+(item.fileSize||'')+'"><input type="hidden" id="mImgDims'+i+'" value="'+(item.dims||'')+'">'
+        +'</div>';
+    }
+  }
+  else if(type==='features'){
+    var items=data.items||[{name:'',desc:''}];
+    html='<h3>Feature List</h3><div id="featureItems">';
+    for(var i=0;i<items.length;i++){html+='<div class="item-row"><span style="min-width:20px;font-weight:bold;font-size:12px;color:var(--r)">'+(i+1)+'</span><input placeholder="Feature name" value="'+(items[i].name||'')+'" data-field="fname" data-idx="'+i+'" style="max-width:200px"><input placeholder="Description" value="'+(items[i].desc||'')+'" data-field="fdesc" data-idx="'+i+'"></div>';}
+    html+='</div><button class="btn btn-sm btn-secondary" onclick="addFeatureRow()" style="margin-top:8px">+ Add Feature</button>';
+  }
+  else if(type==='specs'){
+    var rows=data.rows||[{name:'',val:''}];
+    html='<h3>Spec Table</h3><div id="specRows">';
+    for(var i=0;i<rows.length;i++){html+='<div class="item-row"><span style="min-width:16px;font-weight:bold;font-size:12px;color:var(--r)">'+(i+1)+'</span><input placeholder="Param" value="'+(rows[i].name||'')+'" data-field="sname" data-idx="'+i+'" style="max-width:200px"><input placeholder="Value" value="'+(rows[i].val||'')+'" data-field="sval" data-idx="'+i+'"></div>';}
+    html+='</div><button class="btn btn-sm btn-secondary" onclick="addSpecRow()" style="margin-top:8px">+ Add Row</button>';
+  }
+  else if(type==='faq'||type==='faqSchema'){
+    var items=data.items||[{q:'',a:''}];
+    html='<h3>'+(type==='faqSchema'?'FAQ Schema (structured data)':'FAQ')+'</h3><div id="faqItems">';
+    for(var i=0;i<items.length;i++){html+='<div style="margin-bottom:12px;padding:10px;background:#fafafa;border-radius:6px"><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">Q'+(i+1)+'</span><input placeholder="Question" value="'+(items[i].q||'')+'" data-field="fq" data-idx="'+i+'"></div><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">A</span><input placeholder="Answer" value="'+(items[i].a||'')+'" data-field="fa" data-idx="'+i+'"></div></div>';}
+    html+='</div><button class="btn btn-sm btn-secondary" onclick="addFaqRow()" style="margin-top:8px">+ Add Q&A</button>';
+  }
+  else if(type==='table'){
+    var rows=data.rows||[['Header 1','Header 2'],['Row 1','Data'],['Row 2','Data']], cols=data.cols||2, style=data.style||'striped', color=data.color||'#ce1132';
+    html='<h3>Table</h3><div class="form-row"><div class="field"><label>Style</label><select id="mTableStyle"><option value="striped"'+(style==='striped'?' selected':'')+'>Striped</option><option value="plain"'+(style==='plain'?' selected':'')+'>Plain</option><option value="dark"'+(style==='dark'?' selected':'')+'>Dark Header</option></select></div><div class="field"><label>Header Color</label><input type="color" id="mTableColor" value="'+color+'" onchange="addRecentColor(this.value)"><div id="recentColorsTable" style="display:flex;gap:4px;margin-top:4px"></div></div></div><div class="form-row"><div class="field"><label>Columns (2-6)</label><input type="number" id="mTableCols" value="'+cols+'" min="2" max="6" onchange="rebuildTable()" style="width:80px"></div><div class="field"><label>Rows (2-20)</label><input type="number" id="mTableRows" value="'+rows.length+'" min="2" max="20" onchange="rebuildTable()" style="width:80px"></div></div><div id="tableGrid" style="overflow-x:auto;margin-top:8px">';
+    html+=buildTableGrid(rows,cols);
+    html+='</div>';setTimeout(function(){renderRecentColors('recentColorsTable');},100);
+  }
+  else if(type==='cta'){
+    html='<h3>Call to Action</h3><div class="field"><label>Title</label><input id="mCtaTitle" value="'+(data.title||'Need a Custom Solution?')+'"></div><div class="field"><label>Text</label><textarea id="mCtaText" rows="2">'+(data.text||'Send us your drawings — quote within 12 hours.')+'</textarea></div><div class="form-row"><div class="field"><label>Email</label><input id="mCtaEmail" value="'+(data.email||'info@ggn-gear.com')+'"></div><div class="field"><label>Phone</label><input id="mCtaPhone" value="'+(data.phone||'+86-18057543143')+'"></div></div>';
+  }
+
+  html+='<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveModule(\''+type+'\')">✅ Insert Module</button></div>';
+  document.getElementById('modal').innerHTML=html;
+  document.getElementById('modal').dataset.type=type;
+  document.getElementById('modalOverlay').style.display='flex';
+}
+
+function closeModal(){ document.getElementById('modalOverlay').style.display='none'; editingIdx=-1; }
+
+function saveModule(type){
+  var data={type:type};
+  if(type==='h2'||type==='h3'){data.text=document.getElementById('mText').value;data.style=document.getElementById('mStyle').value;data.color=document.getElementById('mColor').value;}
+  else if(type==='text'){data.text=document.getElementById('mText').value;}
+  else if(type==='image'){
+    html='<h3>Image</h3><div class="field"><label>Image</label><div class="upload-widget" id="mImgWidget">'
+      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>'
+        :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
+      +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
+      +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
+      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"></div>'
+      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
+  }
+  else if(type==='image'){
+    data.url=document.getElementById('mImgUrl').value;
+    data.alt=document.getElementById('mAlt').value;
+  }
+  else if(type==='leftimg'||type==='rightimg'){
+    data.img=document.getElementById('mImgUrl').value;
+    data.alt=document.getElementById('mAlt').value;
+    data.sub=document.getElementById('mSub').value;
+    data.text=document.getElementById('mText').value;
+  }
+  else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
+    var n=parseInt(type);data.imgs=[];
+    for(var i=0;i<n;i++){
+      var url=document.getElementById('mImgUrl'+i), name=document.getElementById('mImgName'+i), alt=document.getElementById('mAlt'+i), label=document.getElementById('mLabel'+i), size=document.getElementById('mImgSize'+i), dims=document.getElementById('mImgDims'+i);
+      data.imgs.push({url:url?url.value:'', fileName:name?name.value:'', fileSize:size?size.value:'', dims:dims?dims.value:'', alt:alt?alt.value:'', label:label?label.value:''});
+    }
+  }
+  else if(type==='features'){
+    data.items=[];var names=document.querySelectorAll('#modal [data-field=fname]'), descs=document.querySelectorAll('#modal [data-field=fdesc]');
+    for(var i=0;i<names.length;i++){if(names[i].value||descs[i].value) data.items.push({name:names[i].value,desc:descs[i].value});}
+  }
+  else if(type==='specs'){
+    data.rows=[];var names=document.querySelectorAll('#modal [data-field=sname]'), vals=document.querySelectorAll('#modal [data-field=sval]');
+    for(var i=0;i<names.length;i++){if(names[i].value||vals[i].value) data.rows.push({name:names[i].value,val:vals[i].value});}
+  }
+  else if(type==='faq'||type==='faqSchema'){
+    data.items=[];var qs=document.querySelectorAll('#modal [data-field=fq]'), as=document.querySelectorAll('#modal [data-field=fa]');
+    for(var i=0;i<qs.length;i++){if(qs[i].value||as[i].value) data.items.push({q:qs[i].value,a:as[i].value});}
+  }
+  else if(type==='table'){
+    data.style=document.getElementById('mTableStyle').value;
+    data.color=document.getElementById('mTableColor').value;
+    data.cols=parseInt(document.getElementById('mTableCols').value)||2;
+    var nRows=parseInt(document.getElementById('mTableRows').value)||2, nCols=data.cols;
+    data.rows=[];
+    for(var r=0;r<nRows;r++){var row=[];for(var c=0;c<nCols;c++){var cell=document.getElementById('mTCell'+r+'_'+c);row.push(cell?cell.value:'');}data.rows.push(row);}
+  }
+  else if(type==='cta'){data.title=document.getElementById('mCtaTitle').value;data.text=document.getElementById('mCtaText').value;data.email=document.getElementById('mCtaEmail').value;data.phone=document.getElementById('mCtaPhone').value;}
+
+  if(editingIdx>=0){vizData[editingIdx]=data;}else{vizData.push(data);}
+  closeModal(); renderAll(); toast('✅ 模块已'+(editingIdx>=0?'更新':'添加'),'success');
+}
+
+function editModule(idx){ openModule(vizData[idx].type, idx); }
+function delModule(idx){ vizData.splice(idx,1); renderAll(); toast('模块已删除','success'); }
+function moveUp(idx){ if(idx>0){var t=vizData[idx];vizData[idx]=vizData[idx-1];vizData[idx-1]=t;renderAll();} }
+function moveDown(idx){ if(idx<vizData.length-1){var t=vizData[idx];vizData[idx]=vizData[idx+1];vizData[idx+1]=t;renderAll();} }
+
+function addFeatureRow(){var n=document.querySelectorAll('#featureItems .item-row').length;document.getElementById('featureItems').innerHTML+='<div class="item-row"><span style="min-width:20px;font-weight:bold;font-size:12px;color:var(--r)">'+(n+1)+'</span><input placeholder="Feature name" data-field="fname" data-idx="'+n+'" style="max-width:200px"><input placeholder="Description" data-field="fdesc" data-idx="'+n+'"></div>';}
+function addSpecRow(){var n=document.querySelectorAll('#specRows .item-row').length;document.getElementById('specRows').innerHTML+='<div class="item-row"><span style="min-width:16px;font-weight:bold;font-size:12px;color:var(--r)">'+(n+1)+'</span><input placeholder="Param" data-field="sname" data-idx="'+n+'" style="max-width:200px"><input placeholder="Value" data-field="sval" data-idx="'+n+'"></div>';}
+function addFaqRow(){var n=document.querySelectorAll('#faqItems > div').length;document.getElementById('faqItems').innerHTML+='<div style="margin-bottom:12px;padding:10px;background:#fafafa;border-radius:6px"><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">Q'+(n+1)+'</span><input placeholder="Question" data-field="fq" data-idx="'+n+'"></div><div class="item-row"><span style="font-weight:bold;font-size:12px;color:var(--r)">A</span><input placeholder="Answer" data-field="fa" data-idx="'+n+'"></div></div>';}
+
+/* ====== EXPORT ====== */
+function exportViz(){
+  var html='';
+  for(var i=0;i<vizData.length;i++){
+    var d=vizData[i], h='';
+    if(d.type==='h2') h=titleHTML(d.text,'h2',d.style,d.color);
+    else if(d.type==='h3') h=titleHTML(d.text,'h3',d.style,d.color);
+    else {
+      var tmp=document.createElement('div');tmp.innerHTML=renderVizModule(d,i);
+      var inner=tmp.querySelector('.viz-module');h=inner?inner.innerHTML.replace(/<div class="viz-actions">[^<]*<\/div>/,''):'';
+    }
+    html+=h+'\n';
+  }
+  if(!html.trim()) return toast('没有可导出的模块','error');
+  document.getElementById('pBody').value='';
+  navigator.clipboard.writeText(html).then(function(){toast('📋 HTML 已复制！已粘贴到详情内容框。','success');});
+  document.getElementById('pBody').value=html;
+}
+
+/* ====== AUTO SLUG ====== */
+function autoSlug(){
+  var t=document.getElementById('pTitle').value;
+  if(!document.getElementById('pSlug').value||document.getElementById('pSlug').dataset.auto==='1'){
+    document.getElementById('pSlug').value=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    document.getElementById('pSlug').dataset.auto='1';
+  }
+}
+document.getElementById('pSlug').addEventListener('input',function(){this.dataset.auto='0';});
+
+function checkSeoTitle(){var el=document.getElementById('pMetaTitle'),c=document.getElementById('seoTitleCount'),l=el.value.length;c.textContent=l+' / 50-60';c.className='char-count '+(l>=50&&l<=60?'ok':(l>0?'warn':''));el.className=(l>0&&(l<50||l>60))?'error':'';}
+function checkMetaDesc(){var el=document.getElementById('pMetaDesc'),c=document.getElementById('metaDescCount'),l=el.value.length;c.textContent=l+' / 120-155';c.className='char-count '+(l>=120&&l<=155?'ok':(l>0?'warn':''));el.className=(l>0&&(l<120||l>155))?'error':'';}
+
+
+/* ====== H1 DUPLICATE DETECTION ====== */
+var h1CheckTimer=null,allProducts=null,editingExistingSlug=null;
+function normH1(t){return (t||'').trim().toLowerCase().replace(/\s+/g,' ');}
+function checkH1(){
+  clearTimeout(h1CheckTimer);
+  var t=document.getElementById('pTitle').value;
+  document.getElementById('h1Status').innerHTML='';
+  if(!t||!K)return;
+  h1CheckTimer=setTimeout(function(){
+    var nh=normH1(t);
+    /* Check localStorage drafts first */
+    var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');
+    for(var slug in drafts){
+      if(normH1(drafts[slug].title)===nh&&slug!==editingExistingSlug){
+        document.getElementById('h1Status').innerHTML='<span style="color:#e67e22">📝 草稿箱中已存在相同的 H1 标题。</span> <button class="btn btn-xs" style="background:#e67e22;color:#fff;margin-left:8px" onclick="loadDraft(\''+slug+'\')">继续编辑草稿</button>';
+        return;
+      }
+    }
+    /* Check published products from GitHub */
+    if(!allProducts){
+      fetch(A+'/repos/'+R+'/contents/src/content/products',{headers:{'Authorization':'token '+K}})
+      .then(function(r){return r.json()}).then(function(files){
+        if(!Array.isArray(files)){allProducts=[];return;}
         var count=0,products={};
         files.forEach(function(f){
           if(!f.name.endsWith('.md'))return;count++;
@@ -618,27 +795,6 @@ function handleModalUpload(fileInputId, widgetId, nameInputId){
 }
 function updateModalImgName(nameInputId){}
 
-function uploadModImg(){
-  var f=document.getElementById('modImgFile').files[0];if(!f)return;
-  if(f.size>600*1024){toast('图片过大！上限600KB','error');return;}
-  var reader=new FileReader();reader.onload=function(e){
-    document.getElementById('modImgPreview').innerHTML='<img src="'+e.target.result+'" style="max-width:200px;max-height:150px;border-radius:4px">';
-    if(K){
-      var ext=f.name.lastIndexOf('.')>0?f.name.substring(f.name.lastIndexOf('.')):'';
-      var base=f.name.substring(0,f.name.lastIndexOf('.')>0?f.name.lastIndexOf('.'):f.name.length);
-      base=base.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9_-]/g,'').substring(0,60);
-      var safeName=base+ext;
-      var b64=e.target.result.split(',')[1];
-      fetch(A+'/repos/'+R+'/contents/public/images/products/'+safeName,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:'Upload '+safeName,content:b64,branch:'main'})})
-      .then(function(r){return r.json()}).then(function(d){
-        if(d.content||(d.message&&d.message.indexOf('already exists')>=0)||(d.message&&d.message.indexOf('sha')>=0)){
-          document.getElementById('mImgUrl').value='/woshidahuaidan/images/products/'+safeName;
-          toast('上传成功','success');
-        }
-      });
-    }
-  };reader.readAsDataURL(f);
-}
 function uploadMedia(){
   var f=document.getElementById('mediaFile').files[0];if(!f)return;
   var r=new FileReader();r.onload=function(ev){
