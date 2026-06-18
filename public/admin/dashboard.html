@@ -317,6 +317,7 @@ function showABSError(msg,cause){
 
 /* Global JS error capture */
 window.onerror=function(m,s,l,c,e){
+  console.error('GLOBAL ERROR:',m,'at',s+':'+l);
   var detail=m+' at '+s+':'+l;
   showABSError(detail,'JavaScript syntax or runtime error');
   return true;
@@ -334,11 +335,18 @@ if(!K||K.length<10){
 
 /* Try to initialize dashboard */
 try{
-  document.getElementById('dash').classList.add('on');
+  console.log('STEP1: checking dash element');
+  var dashEl=document.getElementById('dash');
+  if(!dashEl){showABSError('#dash element not found in DOM','HTML structure issue');throw new Error('no dash');}
+  console.log('STEP2: adding on class');
+  dashEl.classList.add('on');
+  console.log('STEP3: hiding loading');
   document.getElementById('absLoading').classList.add('resolved');
   ABS_INITIALIZED=true;clearTimeout(ABS_TIMER);
-  console.log("✅ Dashboard initialized successfully");
+  console.log('STEP4: dashboard visible');
+  console.log('✅ Dashboard initialized successfully');
 }catch(e){
+  console.error('INIT FAILED:',e.message,e.stack);
   showABSError(e.message,'Dashboard DOM initialization failed');
 }
 if(!K){window.location.href='./';}
