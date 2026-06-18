@@ -142,10 +142,10 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
         <!-- Basic -->
         <div id="panel-basic" class="tab-content active">
-          <div class="field"><label>Product Name (H1) <span class="req">*</span></label><input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug();autoAlt()"><div class="helper">Page H1 heading. Must be unique per product.</div></div>
+          <div class="field"><label>Product Name (H1) <span class="req">*</span></label><input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug();if(document.getElementById('pImgAlt').dataset.autoAlt!=='0'){document.getElementById('pImgAlt').dataset.autoAlt='1';autoAlt();}"><div class="helper">Page H1 heading. Must be unique per product.</div></div>
           <div class="form-row">
             <div class="field"><label>URL Slug <span class="req">*</span></label><input id="pSlug" placeholder="nmrv050-worm-gearbox"><div class="helper" id="slugHint">Short, clean path. Ex: nmrv050-worm-gearbox</div></div>
-            <div class="field"><label>Image ALT Text</label><input id="pImgAlt" placeholder="NMRV050 worm gearbox front view"><div class="helper">For Google image search</div></div>
+            <div class="field"><label>Image ALT Text</label><input id="pImgAlt" placeholder="e.g. Industrial worm screw jack front view" onfocus="if(this.dataset.autoAlt!=='0')this.dataset.autoAlt='1'" oninput="this.dataset.autoAlt='0'" data-autoalt="1"><div class="helper">For Google image search</div></div>
           </div>
           <div class="form-row">
             <div class="field"><label>Category <span class="req">*</span></label><select id="pCat"><option value="">Select...</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select></div>
@@ -591,12 +591,13 @@ function uploadGalleryImage(f){
     }).catch(function(){ addToGallery(f, e.target.result, null, safeName); });
   }; reader.readAsDataURL(f);
 }
+function buildGalleryAlt(productName, fileName, cat){var angleHints={front:'front view',side:'side view',back:'back view',top:'top view',bottom:'bottom view',iso:'isometric view',assembly:'assembly view',detail:'detail view',main:'product image',multi:'multi-angle view'};var hint='product image';var fnLower=fileName.toLowerCase();for(var k in angleHints){if(fnLower.indexOf(k)>=0){hint=angleHints[k];break;}}var alt='';if(productName){alt=productName.toLowerCase().replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();}else if(cat){alt=cat.toLowerCase().replace(/s$/,'');}else{alt=fnLower.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();}alt=alt+' '+hint;alt=alt.charAt(0).toUpperCase()+alt.slice(1);return alt;}
 function addToGallery(f, dataUrl, url, safeName){
   var img = new Image();
   img.onload = function(){
     var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB', displayName = safeName||f.name;
     var productName = document.getElementById('pTitle').value || '';
-    var defaultAlt = productName || f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
+    var defaultAlt = buildGalleryAlt(productName, f.name, document.getElementById('pCat').value);
     galleryImages.push({name: displayName, url: url||'', size: sizeKB, dims: dims, alt: defaultAlt, dataUrl: dataUrl});
     renderGallery();
   }; img.src = dataUrl;
@@ -780,7 +781,7 @@ function send(path,content,message){
   .then(function(r){return r.json()}).then(function(d){if(d.content)toast('Saved! Deploying...','success');else toast(d.message,'error');});
 }
 function resetForm(){
-  ['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var fields=['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'];fields.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';if(id==='pImgAlt'){el.dataset.autoAlt='1';}if(id==='pSlug'){el.dataset.auto='1';}}});
   document.getElementById('pOrder').value='0';
   document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
   vizData=[];renderAll();checkSeoTitle();checkMetaDesc();toast('Reset','success');
