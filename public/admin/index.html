@@ -586,8 +586,8 @@ function uploadGalleryImage(f){
     .then(function(r){return r.json()}).then(function(d){
       var url = '/woshidahuaidan/images/products/'+safeName;
       if(d.content) addToGallery(f, e.target.result, url, safeName);
-      else if(d.message && d.message.includes('already exists')) addToGallery(f, e.target.result, url, safeName);
-      else { addToGallery(f, e.target.result, null, safeName); toast('Upload issue: '+d.message,'error'); }
+      else if(d.message && (d.message.indexOf('already exists')>=0||d.message.indexOf('sha')>=0)) addToGallery(f, e.target.result, url, safeName);
+      else { addToGallery(f, e.target.result, url, safeName); toast('Upload issue: '+d.message,'error'); }
     }).catch(function(){ addToGallery(f, e.target.result, null, safeName); });
   }; reader.readAsDataURL(f);
 }
@@ -810,7 +810,16 @@ function saveNews(){
 function send(path,content,message){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
-  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('Saved! Deploying...','success');else toast(d.message,'error');});
+  .then(function(r){return r.json()}).then(function(d){
+    if(d.content){toast('Saved! Deploying...','success');return;}
+    if(d.message&&d.message.indexOf('sha')>=0){
+      /* File exists without sha — fetch sha and retry */
+      fetch(A+'/repos/'+R+'/contents/'+path,{headers:{'Authorization':'token '+K}}).then(function(r2){return r2.json()}).then(function(ex){
+        if(ex.sha){sendUpdate(path,content,message,ex.sha);}
+        else{toast(d.message,'error');}
+      });
+    }else{toast(d.message,'error');}
+  });
 }
 function resetForm(){
   var fields=['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'];fields.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';if(id==='pImgAlt'){el.dataset.autoAlt='1';}if(id==='pSlug'){el.dataset.auto='1';}}});
