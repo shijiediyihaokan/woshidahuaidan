@@ -389,7 +389,7 @@ function openModule(type, idx){
     html='<h3>'+(type==='leftimg'?'Image Left + Text Right':'Text Left + Image Right')+'</h3>'
       +'<div class="field"><label>Image URL</label><input id="mImgUrl" value="'+(data.img||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div>'
       +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Worm gearbox front view"></div>'
-      +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
+      +'<div class="field"><label>图片标题</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
       +'<div class="field"><label>描述</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
   }
   else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
