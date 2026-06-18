@@ -275,6 +275,8 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div id="toast" style="display:none"></div>
 
 <script>
+console.log("=== Ceten Admin JS Loaded ===");
+console.log("Page URL:", window.location.href);
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 var vizData = []; /* [{type, data}] */
 
@@ -646,26 +648,33 @@ function deleteDraft(){
 
 /* ====== LOGIN ====== */
 function login(){
+  console.log("LOGIN_CLICKED");
   var tokenEl=document.getElementById('t');
   var btnEl=document.querySelector('#loginPage button');
   if(!tokenEl||!btnEl){alert('页面加载异常，请刷新重试');return;}
   K=tokenEl.value.trim();
+  console.log("TOKEN_LENGTH:", K.length);
   if(!K){btnEl.textContent='请输入 Token';setTimeout(function(){btnEl.textContent='登录';},2000);return;}
   btnEl.textContent='验证中...';btnEl.disabled=true;
   btnEl.style.opacity='0.7';
+  console.log("VERIFY_GITHUB_TOKEN_START");
   fetch(A+'/user',{headers:{'Authorization':'token '+K}})
   .then(function(r){
+    console.log("GITHUB_STATUS:", r.status);
     if(r.status===401){btnEl.textContent='Token 无效';btnEl.style.background='#e67e22';throw new Error('TOKEN_INVALID');}
+    if(r.status===403){btnEl.textContent='403 权限不足';btnEl.style.background='#e67e22';throw new Error('FORBIDDEN');}
     if(!r.ok){btnEl.textContent='网络错误';btnEl.style.background='#e67e22';throw new Error('NETWORK_ERROR');}
     return r.json();
   })
   .then(function(d){
     if(!d.login){btnEl.textContent='Token 无效';btnEl.style.background='#e67e22';throw new Error('TOKEN_INVALID');}
     btnEl.textContent='登录成功！';btnEl.style.background='#059669';
+    console.log("LOGIN_SUCCESS_REDIRECT");
     localStorage.setItem('ggn_token', K);
     setTimeout(function(){window.location.href='./dashboard.html';},500);
   })
   .catch(function(e){
+    console.log("LOGIN_ERROR:", e.message);
     setTimeout(function(){btnEl.textContent='登录';btnEl.disabled=false;btnEl.style.opacity='1';btnEl.style.background='';},2000);
   });
 }
