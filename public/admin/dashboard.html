@@ -265,9 +265,14 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
 
 <script>
+console.log("=== Dashboard JS Loaded ===");
 var K=localStorage.getItem('ggn_token')||'';
 var R='shijiediyihaokan/woshidahuaidan';
 var A='https://api.github.com';
+if(!K){document.body.innerHTML='<div style="text-align:center;padding:60px;font-family:sans-serif"><h2>Login status expired</h2><p>Please <a href="./">log in again</a>.</p></div>';throw new Error('No token');}
+/* Show dashboard immediately */
+document.getElementById('dash').classList.add('on');
+console.log("Dashboard shown");
 if(!K){window.location.href='./';}
 
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
