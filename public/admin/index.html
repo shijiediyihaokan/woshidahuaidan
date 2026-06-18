@@ -922,7 +922,12 @@ function deleteDraftSilent(slug){var drafts=JSON.parse(localStorage.getItem('ggn
 function sendUpdate(path,content,message,sha){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main',sha:sha})})
-  .then(function(r){return r.json()}).then(function(d){if(d.content){toast('✅ 更新成功！已复用已有图片。','success');var sl=path.split('/').pop().replace('.md','');deleteDraftSilent(sl);}else{toast(d.message,'error');}});
+  .then(function(r){return r.json()}).then(function(d){
+    if(!d.content){toast(d.message,'error');return;}
+    toast('✅ 更新成功！已复用已有图片。','success');
+    var sl=path.split('/').pop().replace('.md','');
+    deleteDraftSilent(sl);
+  });
 }
 
 function saveNews(){
