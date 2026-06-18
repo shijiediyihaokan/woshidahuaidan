@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>Ceten Dashboard</title>
+<title>Ceten 管理后台</title>
 <style>
 :root{--r:#ce1132;--d:#1a1a1a;--g:#6b7280;--l:#f3f4f6;--b:#2563eb;--w:#fff}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -103,17 +103,6 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 </style>
 </head>
 <body>
-
-<div id="loginPage" class="login-page">
-  <div class="login-card">
-    <div style="font-size:48px;margin-bottom:16px">⚙️</div>
-    <h1>Ceten 管理后台</h1><p>GRANGIN | CETEN</p>
-    <input id="t" type="password" placeholder="GitHub 个人访问令牌">
-    <button onclick="login()">登录</button>
-    <div class="hint">Get token at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>权限范围：<b>repo</b></div>
-  </div>
-</div>
-
 <div id="dash" class="dashboard">
   <aside class="sidebar">
     <div class="brand">⚙️ Ceten</div>
@@ -260,7 +249,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <button class="btn btn-sm" onclick="loadFromGithub()" style="margin:4px">🔄 加载已有数据</button>
           <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click();resetForm()" style="margin:4px">➕ 新建产品</button>
           <button class="btn btn-sm" onclick="document.querySelector('[data-page=news]').click()" style="margin:4px">📝 新建文章</button>
-          <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">未设置 — 请先登录</span></div>
+          <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">✅ 已登录</span></div>
         </div>
       </div>
     </div>
@@ -274,7 +263,13 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
 <div id="toast" style="display:none"></div>
 
+
 <script>
+var K=localStorage.getItem('ggn_token')||'';
+var R='shijiediyihaokan/woshidahuaidan';
+var A='https://api.github.com';
+if(!K){window.location.href='./';}
+
 var K='';var R='shijiediyihaokan/woshidahuaidan';var A='https://api.github.com';
 var vizData = []; /* [{type, data}] */
 
@@ -673,10 +668,7 @@ function login(){
   .finally(function(){btn.textContent='登录';btn.disabled=false;});
 }
 /* Auto-login from localStorage */
-(function(){
-  var saved=localStorage.getItem('ggn_token');
-  if(saved){ window.location.href = './dashboard.html'; }
-})();
+/* auto-login handled by index.html */;
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
 
 /* Nav */
@@ -990,6 +982,9 @@ function renderRecentColors(containerId){
   el.innerHTML=html;
 }
 // Auto-render when modal opens
+
+/* Load overview on dashboard load */
+setTimeout(function(){if(K)loadOverview();},300);
 </script>
 </body>
 </html>
