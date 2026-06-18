@@ -256,7 +256,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         <div class="card"><h3>📰 News Articles</h3><div id="overviewNews" style="font-size:13px;line-height:2">Loading...</div></div>
         <div class="card"><h3>⚡ Quick Actions</h3>
           <button class="btn btn-sm" onclick="loadFromGithub()" style="margin:4px">🔄 Load Existing Data</button>
-          <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click()" style="margin:4px">➕ New Product</button>
+          <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click();resetForm()" style="margin:4px">➕ New Product</button>
           <button class="btn btn-sm" onclick="document.querySelector('[data-page=news]').click()" style="margin:4px">📝 New Article</button>
           <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">Not set — login first</span></div>
         </div>
