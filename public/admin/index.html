@@ -106,10 +106,10 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div id="loginPage" class="login-page">
   <div class="login-card">
     <div style="font-size:48px;margin-bottom:16px">⚙️</div>
-    <h1>Ceten Dashboard</h1><p>GRANGIN | CETEN</p>
-    <input id="t" type="password" placeholder="GitHub Personal Access Token">
-    <button onclick="login()">Sign In</button>
-    <div class="hint">Get token at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>Scope: <b>repo</b></div>
+    <h1>Ceten 管理后台</h1><p>GRANGIN | CETEN</p>
+    <input id="t" type="password" placeholder="GitHub 个人访问令牌">
+    <button onclick="login()">登录</button>
+    <div class="hint">Get token at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>权限范围：<b>repo</b></div>
   </div>
 </div>
 
@@ -117,10 +117,10 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
   <aside class="sidebar">
     <div class="brand">⚙️ Ceten</div>
     <nav>
-      <a href="#" class="active" data-page="products">📦 Products</a>
-      <a href="#" data-page="news">📰 News</a>
-      <a href="#" data-page="media">🖼️ Media</a>
-      <a href="#" data-page="overview">📊 Overview</a>
+      <a href="#" class="active" data-page="products">📦 产品管理</a>
+      <a href="#" data-page="news">📰 文章管理</a>
+      <a href="#" data-page="media">🖼️ 媒体库</a>
+      <a href="#" data-page="overview">📊 总览</a>
     </nav>
     <div class="user"><div class="avatar">A</div><span id="userName">Admin</span></div>
   </aside>
@@ -135,77 +135,77 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
       <div class="card">
         <div class="tabs">
-          <button class="tab-btn active" data-panel="basic">Basic Info</button>
+          <button class="tab-btn active" data-panel="basic">基本信息</button>
           <button class="tab-btn" data-panel="detail">🎨 Detail Page</button>
           <button class="tab-btn" data-panel="seo">SEO</button>
         </div>
 
         <!-- Basic -->
         <div id="panel-basic" class="tab-content active">
-          <div class="field"><label>Product Name (H1) <span class="req">*</span></label><input id="pTitle" placeholder="NMRV050 Worm Gearbox" oninput="autoSlug();if(document.getElementById('pImgAlt').dataset.autoAlt!=='0'){document.getElementById('pImgAlt').dataset.autoAlt='1';autoAlt();}"><div class="helper">Page H1 heading. Must be unique per product.</div></div>
+          <div class="field"><label>产品名称 (H1) <span class="req">*</span></label><input id="pTitle" placeholder="例如：NMRV050 Worm Gearbox" oninput="autoSlug();if(document.getElementById('pImgAlt').dataset.autoAlt!=='0'){document.getElementById('pImgAlt').dataset.autoAlt='1';autoAlt();}"><div class="helper">页面 H1 标题。每个产品必须唯一。</div></div>
           <div class="form-row">
-            <div class="field"><label>URL Slug <span class="req">*</span></label><input id="pSlug" placeholder="nmrv050-worm-gearbox"><div class="helper" id="slugHint">Short, clean path. Ex: nmrv050-worm-gearbox</div></div>
-            <div class="field"><label>Image ALT Text</label><input id="pImgAlt" placeholder="e.g. Industrial worm screw jack front view" onfocus="if(this.dataset.autoAlt!=='0')this.dataset.autoAlt='1'" oninput="this.dataset.autoAlt='0'" data-autoalt="1"><div class="helper">For Google image search</div></div>
+            <div class="field"><label>URL Slug <span class="req">*</span></label><input id="pSlug" placeholder="例如：nmrv050-worm-gearbox"><div class="helper" id="slugHint">简短干净的路径。例如：nmrv050-worm-gearbox</div></div>
+            <div class="field"><label>图片 ALT 文本</label><input id="pImgAlt" placeholder="例如：工业蜗轮丝杆升降机前视图" onfocus="if(this.dataset.autoAlt!=='0')this.dataset.autoAlt='1'" oninput="this.dataset.autoAlt='0'" data-autoalt="1"><div class="helper">用于 Google 图片搜索</div></div>
           </div>
           <div class="form-row">
-            <div class="field"><label>Category <span class="req">*</span></label><select id="pCat"><option value="">Select...</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select></div>
-            <div class="field"><label>Subcategory</label><select id="pSub"><option value="">None</option><optgroup label="Gearboxes"><option>worm-gearboxes</option><option>helical-gearboxes</option><option>bevel-gearboxes</option><option>right-angle-gearboxes</option><option>screw-jacks</option><option>speed-variators</option><option>industrial-gearboxes</option></optgroup></select></div>
+            <div class="field"><label>产品分类 <span class="req">*</span></label><select id="pCat"><option value="">请选择...</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select></div>
+            <div class="field"><label>子分类</label><select id="pSub"><option value="">无</option><optgroup label="Gearboxes"><option>worm-gearboxes</option><option>helical-gearboxes</option><option>bevel-gearboxes</option><option>right-angle-gearboxes</option><option>screw-jacks</option><option>speed-variators</option><option>industrial-gearboxes</option></optgroup></select></div>
           </div>
         </div>
 
         <!-- Content fields moved to Detail Page -->
         <div id="panel-detail" class="tab-content">
           <div class="form-row">
-            <div class="field"><label>Short Description <span class="req">*</span></label><textarea id="pExcerpt" rows="2" placeholder="Concise product description for listings and search results (120-160 chars recommended)"></textarea></div>
-            <div class="field"><label>Key Features</label><textarea id="pFeat" rows="3" placeholder="One feature per line"></textarea><div class="helper">Each line = one bullet point on product page</div></div>
+            <div class="field"><label>简短描述 <span class="req">*</span></label><textarea id="pExcerpt" rows="2" placeholder="用于列表页和搜索结果的简洁产品描述（建议 120-160 字符）"></textarea></div>
+            <div class="field"><label>核心特点</label><textarea id="pFeat" rows="3" placeholder="每行一个特点"></textarea><div class="helper">Each line = one bullet point on product page</div></div>
           </div>
-          <div class="field"><label>Technical Specs</label><textarea id="pSpec" rows="3" placeholder="Name: Value&#10;Size: 025-150&#10;Ratio: 5:1 to 100:1"></textarea><div class="helper">Name: Value format, one per line</div></div>
+          <div class="field"><label>技术参数</label><textarea id="pSpec" rows="3" placeholder="Name: Value&#10;Size: 025-150&#10;Ratio: 5:1 to 100:1"></textarea><div class="helper">名称: 数值 格式，每行一个</div></div>
           <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
           <div class="field">
-            <label>Detail Page Body</label>
+            <label>详情页正文</label>
             <div class="modules-bar">
             <span class="mod-label">H2:</span>
               <select id="titleStyle"><option value="red-left">Red Left Border</option><option value="red-underline">Red Underline</option><option value="dark-left">Dark Left Border</option><option value="dark-underline">Dark Underline</option><option value="red-bg">Red Background</option></select>
               <input type="color" id="titleColor" value="#ce1132">
             </span>
             <div class="mod-sep"></div>
-            <button class="mod-btn" onclick="openModule('h2')">📌 H2</button>
-            <button class="mod-btn" onclick="openModule('h3')">📌 H3</button>
-            <button class="mod-btn" onclick="openModule('text')">📝 Text</button>
-            <button class="mod-btn" onclick="openModule('image')">🖼️ Image</button>
-            <button class="mod-btn" onclick="openModule('leftimg')">🖼️ L-Img</button>
-            <button class="mod-btn" onclick="openModule('rightimg')">🖼️ R-Img</button>
+            <button class="mod-btn" onclick="openModule('h2')">📌 二级标题</button>
+            <button class="mod-btn" onclick="openModule('h3')">📌 三级标题</button>
+            <button class="mod-btn" onclick="openModule('text')">📝 文本</button>
+            <button class="mod-btn" onclick="openModule('image')">🖼️ 图片</button>
+            <button class="mod-btn" onclick="openModule('leftimg')">🖼️ 左图</button>
+            <button class="mod-btn" onclick="openModule('rightimg')">🖼️ 右图</button>
             <div class="mod-sep"></div>
             <button class="mod-btn" onclick="openModule('2imgs')">1×2</button>
             <button class="mod-btn" onclick="openModule('3imgs')">1×3</button>
             <button class="mod-btn" onclick="openModule('4imgs')">1×4</button>
             <button class="mod-btn" onclick="openModule('6imgs')">1×6</button>
             <div class="mod-sep"></div>
-            <button class="mod-btn" onclick="openModule('features')">✅ Features</button>
-            <button class="mod-btn" onclick="openModule('specs')">📊 Specs</button>
-            <button class="mod-btn" onclick="openModule('faq')">❓ FAQ</button>
-            <button class="mod-btn" onclick="openModule('table')">📋 Table</button>
-            <button class="mod-btn" onclick="openModule('cta')">📧 CTA</button>
+            <button class="mod-btn" onclick="openModule('features')">✅ 特点</button>
+            <button class="mod-btn" onclick="openModule('specs')">📊 参数</button>
+            <button class="mod-btn" onclick="openModule('faq')">❓ 常见问题</button>
+            <button class="mod-btn" onclick="openModule('table')">📋 表格</button>
+            <button class="mod-btn" onclick="openModule('cta')">📧 联系</button>
           </div>
           <div class="viz-preview" id="vizPreview"></div>
-          <div style="margin-top:8px"><button class="btn btn-xs" onclick="exportViz()" style="font-size:11px">📋 Export HTML</button> <span class="helper">Click any module to edit. Hover for delete.</span></div>
+          <div style="margin-top:8px"><button class="btn btn-xs" onclick="exportViz()" style="font-size:11px">📋 Export HTML</button> <span class="helper">点击模块编辑，悬停删除。</span></div>
         </div>
 
         <!-- SEO -->
         <div id="panel-seo" class="tab-content">
-          <div class="field"><label>SEO Title <span class="req">*</span></label><input id="pMetaTitle" placeholder="NMRV050 Worm Gearbox Manufacturer | GRANGIN" oninput="checkSeoTitle()"><div class="char-count" id="seoTitleCount">0 / 50-60</div><div class="helper">50-60 chars. Each product UNIQUE.</div></div>
-          <div class="field"><label>Meta Description <span class="req">*</span></label><textarea id="pMetaDesc" rows="3" placeholder="NMRV050 worm gearbox 0.18-7.5kW, aluminum, ratios 5:1-100:1. For conveyors & packaging. ISO 9001." oninput="checkMetaDesc()"></textarea><div class="char-count" id="metaDescCount">0 / 120-155</div><div class="helper">120-155 chars. Include keywords + params + application. Each product DIFFERENT.</div></div>
-          <div class="field"><label>Keywords</label><input id="pKeywords" placeholder="worm gearbox, NMRV050, speed reducer"></div>
-          <div class="field"><label>Order</label><input id="pOrder" type="number" value="0" style="width:120px"><div class="helper">Higher=first. 900000+=featured</div></div>
+          <div class="field"><label>SEO 标题 <span class="req">*</span></label><input id="pMetaTitle" placeholder="例如：NMRV050 蜗轮减速机制造商 | GRANGIN" oninput="checkSeoTitle()"><div class="char-count" id="seoTitleCount">0 / 50-60</div><div class="helper">50-60 字符。每个产品必须不同。</div></div>
+          <div class="field"><label>Meta 描述 <span class="req">*</span></label><textarea id="pMetaDesc" rows="3" placeholder="例如：NMRV050 蜗轮减速机 0.18-7.5kW, 铝合金, 速比 5:1-100:1。用于输送机和包装设备。ISO 9001。" oninput="checkMetaDesc()"></textarea><div class="char-count" id="metaDescCount">0 / 120-155</div><div class="helper">120-155 字符。包含关键词 + 参数 + 应用。每个产品必须不同。</div></div>
+          <div class="field"><label>关键词</label><input id="pKeywords" placeholder="worm gearbox, NMRV050, speed reducer"></div>
+          <div class="field"><label>排序</label><input id="pOrder" type="number" value="0" style="width:120px"><div class="helper">数值越大越靠前。900000+ = 置顶推荐</div></div>
         </div>
       </div>
 
       <!-- Image Gallery Upload -->
       <div class="card">
-        <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(≤600KB each, drag to reorder)</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
+        <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(每张 ≤600KB，可拖拽排序)</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
         <div class="upload-zone" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
           <div class="icon">📁</div>
-          <p>Click or drag images here<br><small>JPG, PNG, WebP — Max 600KB each. First image = main.</small></p>
+          <p>点击或拖拽图片到此处<br><small>JPG, PNG, WebP — 每张上限 600KB。第一张为主图。</small></p>
         </div>
         <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="addGalleryImages()">
         <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px"></div>
@@ -214,16 +214,16 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
       <!-- Actions -->
       <div style="display:flex;gap:12px">
-        <button class="btn btn-primary" onclick="saveProd()">💾 Save & Publish</button>
-        <button class="btn btn-secondary" onclick="addSimilar()">📋 Add Similar</button>
-        <button class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
+        <button class="btn btn-primary" onclick="saveProd()">💾 保存并发布</button>
+        <button class="btn btn-secondary" onclick="addSimilar()">📋 添加相似产品</button>
+        <button class="btn btn-secondary" onclick="resetForm()">↺ 重置</button>
       </div>
-      <div class="helper" style="margin-top:8px">Deploys in ~2 min via GitHub Actions</div>
+      <div class="helper" style="margin-top:8px">通过 GitHub Actions 约 2 分钟部署</div>
     </div>
 
     <!-- ====== NEWS ====== -->
     <div id="page-news" class="tab-content">
-      <div class="main-header"><h1>News & Articles</h1><p>Publish blog posts</p></div>
+      <div class="main-header"><h1>文章管理</h1><p>发布博客文章</p></div>
       <div class="card">
         <div class="form-row">
           <div class="field"><label>Title <span class="req">*</span></label><input id="nTitle"></div>
@@ -231,34 +231,34 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         </div>
         <div class="form-row">
           <div class="field"><label>Date</label><input id="nDate" type="date"></div>
-          <div class="field"><label>Featured Image</label><input id="nImg" placeholder="/woshidahuaidan/images/news/file.jpg"></div>
+          <div class="field"><label>特色图片</label><input id="nImg" placeholder="/woshidahuaidan/images/news/file.jpg"></div>
         </div>
-        <div class="field"><label>Excerpt</label><textarea id="nExcerpt" rows="2"></textarea></div>
-        <div class="field"><label>Content (Markdown) <span class="req">*</span></label><textarea id="nBody" rows="14" placeholder="## Heading&#10;&#10;Content here..."></textarea></div>
-        <button class="btn btn-primary" onclick="saveNews()">💾 Publish</button>
+        <div class="field"><label>摘要</label><textarea id="nExcerpt" rows="2"></textarea></div>
+        <div class="field"><label>正文 (Markdown) <span class="req">*</span></label><textarea id="nBody" rows="14" placeholder="## Heading&#10;&#10;Content here..."></textarea></div>
+        <button class="btn btn-primary" onclick="saveNews()">💾 发布</button>
       </div>
     </div>
 
     <!-- ====== MEDIA ====== -->
     <div id="page-media" class="tab-content">
-      <div class="main-header"><h1>Media Library</h1><p>Upload images — click URL to copy</p></div>
+      <div class="main-header"><h1>媒体库</h1><p>上传图片 — 点击 URL 复制</p></div>
       <div class="card"><div class="card-grid">
-        <div><div class="upload-zone" id="mediaUploadZone" onclick="document.getElementById('mediaFile').click()"><div class="icon">📁</div><p>Click to browse<br><small>JPG, PNG, WebP ≤5MB</small></p></div><input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()"></div>
-        <div><h3 style="font-size:14px;margin-bottom:8px">📋 Click URL to copy</h3><div id="mediaList" style="font-size:12px"></div></div>
+        <div><div class="upload-zone" id="mediaUploadZone" onclick="document.getElementById('mediaFile').click()"><div class="icon">📁</div><p>点击浏览<br><small>JPG, PNG, WebP ≤5MB</small></p></div><input type="file" id="mediaFile" accept="image/*" style="display:none" onchange="uploadMedia()"></div>
+        <div><h3 style="font-size:14px;margin-bottom:8px">📋 点击 URL 复制</h3><div id="mediaList" style="font-size:12px"></div></div>
       </div></div>
     </div>
 
     <!-- Overview Page -->
     <div id="page-overview" class="tab-content">
-      <div class="main-header"><h1>Site Overview</h1><p>Products, news, and category coverage</p></div>
+      <div class="main-header"><h1>网站总览</h1><p>产品、文章和分类覆盖情况</p></div>
       <div class="card-grid">
-        <div class="card"><h3>📦 Products by Category</h3><div id="overviewCats" style="font-size:13px;line-height:2">Loading...</div></div>
-        <div class="card"><h3>📰 News Articles</h3><div id="overviewNews" style="font-size:13px;line-height:2">Loading...</div></div>
-        <div class="card"><h3>⚡ Quick Actions</h3>
-          <button class="btn btn-sm" onclick="loadFromGithub()" style="margin:4px">🔄 Load Existing Data</button>
-          <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click();resetForm()" style="margin:4px">➕ New Product</button>
-          <button class="btn btn-sm" onclick="document.querySelector('[data-page=news]').click()" style="margin:4px">📝 New Article</button>
-          <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">Not set — login first</span></div>
+        <div class="card"><h3>📦 按分类查看产品</h3><div id="overviewCats" style="font-size:13px;line-height:2">加载中...</div></div>
+        <div class="card"><h3>📰 文章</h3><div id="overviewNews" style="font-size:13px;line-height:2">加载中...</div></div>
+        <div class="card"><h3>⚡ 快捷操作</h3>
+          <button class="btn btn-sm" onclick="loadFromGithub()" style="margin:4px">🔄 加载已有数据</button>
+          <button class="btn btn-sm" onclick="document.querySelector('[data-page=products]').click();resetForm()" style="margin:4px">➕ 新建产品</button>
+          <button class="btn btn-sm" onclick="document.querySelector('[data-page=news]').click()" style="margin:4px">📝 新建文章</button>
+          <div style="margin-top:12px;font-size:11px;color:var(--g)">Token: <span id="ovToken">未设置 — 请先登录</span></div>
         </div>
       </div>
     </div>
@@ -386,7 +386,7 @@ function openModule(type, idx){
       +'<div class="field"><label>Image URL</label><input id="mImgUrl" value="'+(data.img||'')+'" placeholder="/woshidahuaidan/images/products/file.jpg"></div>'
       +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'" placeholder="Worm gearbox front view"></div>'
       +'<div class="field"><label>Sub-title</label><input id="mSub" value="'+(data.sub||'')+'" placeholder="Compact Structure"></div>'
-      +'<div class="field"><label>Description</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
+      +'<div class="field"><label>描述</label><textarea id="mText" rows="3">'+(data.text||'')+'</textarea></div>';
   }
   else if(type==='2imgs'||type==='3imgs'||type==='4imgs'||type==='6imgs'){
     var n=parseInt(type), imgs=data.imgs||[];
@@ -400,7 +400,7 @@ function openModule(type, idx){
         +'<input type="file" id="mImgFile'+i+'" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile'+i+'\',\'mImgWidget'+i+'\',\'mImgName'+i+'\')">'
         +'<div style="display:flex;gap:8px;margin-top:8px">'
         +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">File Name</label><input id="mImgName'+i+'" value="'+(item.fileName||'')+'" placeholder="image-'+ (i+1) +'.jpg" style="padding:6px 8px;font-size:12px" onchange="this.dataset.changed=\'1\'"></div>'
-        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">ALT</label><input id="mAlt'+i+'" value="'+(item.alt||'')+'" placeholder="ALT text" style="padding:6px 8px;font-size:12px"></div>'
+        +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">ALT</label><input id="mAlt'+i+'" value="'+(item.alt||'')+'" placeholder="ALT 文本" style="padding:6px 8px;font-size:12px"></div>'
         +'<div style="flex:1"><label style="font-size:11px;color:var(--g)">Label</label><input id="mLabel'+i+'" value="'+(item.label||'')+'" placeholder="Caption" style="padding:6px 8px;font-size:12px"></div>'
         +'</div>'
         +'<input type="hidden" id="mImgUrl'+i+'" value="'+(item.url||'')+'"><input type="hidden" id="mImgSize'+i+'" value="'+(item.fileSize||'')+'"><input type="hidden" id="mImgDims'+i+'" value="'+(item.dims||'')+'">'
@@ -435,7 +435,7 @@ function openModule(type, idx){
     html='<h3>Call to Action</h3><div class="field"><label>Title</label><input id="mCtaTitle" value="'+(data.title||'Need a Custom Solution?')+'"></div><div class="field"><label>Text</label><textarea id="mCtaText" rows="2">'+(data.text||'Send us your drawings — quote within 12 hours.')+'</textarea></div><div class="form-row"><div class="field"><label>Email</label><input id="mCtaEmail" value="'+(data.email||'info@ggn-gear.com')+'"></div><div class="field"><label>Phone</label><input id="mCtaPhone" value="'+(data.phone||'+86-18057543143')+'"></div></div>';
   }
 
-  html+='<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveModule(\''+type+'\')">✅ Insert Module</button></div>';
+  html+='<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveModule(\''+type+'\')">✅ Insert Module</button></div>';
   document.getElementById('modal').innerHTML=html;
   document.getElementById('modal').dataset.type=type;
   document.getElementById('modalOverlay').style.display='flex';
@@ -496,11 +496,11 @@ function saveModule(type){
   else if(type==='cta'){data.title=document.getElementById('mCtaTitle').value;data.text=document.getElementById('mCtaText').value;data.email=document.getElementById('mCtaEmail').value;data.phone=document.getElementById('mCtaPhone').value;}
 
   if(editingIdx>=0){vizData[editingIdx]=data;}else{vizData.push(data);}
-  closeModal(); renderAll(); toast('✅ Module '+(editingIdx>=0?'updated':'added'),'success');
+  closeModal(); renderAll(); toast('✅ 模块已'+(editingIdx>=0?'更新':'添加'),'success');
 }
 
 function editModule(idx){ openModule(vizData[idx].type, idx); }
-function delModule(idx){ vizData.splice(idx,1); renderAll(); toast('Module removed','success'); }
+function delModule(idx){ vizData.splice(idx,1); renderAll(); toast('模块已删除','success'); }
 function moveUp(idx){ if(idx>0){var t=vizData[idx];vizData[idx]=vizData[idx-1];vizData[idx-1]=t;renderAll();} }
 function moveDown(idx){ if(idx<vizData.length-1){var t=vizData[idx];vizData[idx]=vizData[idx+1];vizData[idx+1]=t;renderAll();} }
 
@@ -521,9 +521,9 @@ function exportViz(){
     }
     html+=h+'\n';
   }
-  if(!html.trim()) return toast('No modules to export','error');
+  if(!html.trim()) return toast('没有可导出的模块','error');
   document.getElementById('pBody').value='';
-  navigator.clipboard.writeText(html).then(function(){toast('📋 HTML copied! Pasted to Detail Content field.','success');});
+  navigator.clipboard.writeText(html).then(function(){toast('📋 HTML 已复制！已粘贴到详情内容框。','success');});
   document.getElementById('pBody').value=html;
 }
 
@@ -542,15 +542,15 @@ function checkMetaDesc(){var el=document.getElementById('pMetaDesc'),c=document.
 
 /* ====== LOGIN ====== */
 function login(){
-  K=document.getElementById('t').value.trim();if(!K) return toast('Enter token','error');
+  K=document.getElementById('t').value.trim();if(!K) return toast('请输入 Token','error');
   fetch(A+'/user',{headers:{'Authorization':'token '+K}}).then(function(r){return r.json()}).then(function(d){
     if(d.login){
       document.getElementById('loginPage').style.display='none'; document.getElementById('dash').classList.add('on');
       document.getElementById('userName').textContent=d.login;
-      document.getElementById('ovToken').textContent='✅ Logged in as '+d.login;
+      document.getElementById('ovToken').textContent='✅ 已登录： '+d.login;
       localStorage.setItem('ggn_token', K);
-      toast('Welcome, '+d.login+'! Token saved.','success');
-    } else toast('Invalid token','error');
+      toast('欢迎，'+d.login+'！Token 已保存。','success');
+    } else toast('Token 无效','error');
   });
 }
 /* Auto-login from localStorage */
@@ -577,7 +577,7 @@ function uploadGalleryImage(f){
   var base=f.name.substring(0,f.name.lastIndexOf('.')>0?f.name.lastIndexOf('.'):f.name.length);
   base=base.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9_-]/g,'').substring(0,60);
   var safeName=base+ext;
-  if(f.size > 600*1024){ toast('❌ '+f.name+' too large! '+(f.size/1024).toFixed(0)+'KB > 600KB','error'); return; }
+  if(f.size > 600*1024){ toast('❌ '+f.name+' 文件过大！'+(f.size/1024).toFixed(0)+'KB > 600KB','error'); return; }
   var reader = new FileReader();
   reader.onload = function(e){
     var b64=e.target.result.split(',')[1], path='public/images/products/'+safeName;
@@ -587,7 +587,7 @@ function uploadGalleryImage(f){
       var url = '/woshidahuaidan/images/products/'+safeName;
       if(d.content) addToGallery(f, e.target.result, url, safeName);
       else if(d.message && (d.message.indexOf('already exists')>=0||d.message.indexOf('sha')>=0)) addToGallery(f, e.target.result, url, safeName);
-      else { addToGallery(f, e.target.result, url, safeName); toast('Upload issue: '+d.message,'error'); }
+      else { addToGallery(f, e.target.result, url, safeName); toast('上传失败：'+d.message,'error'); }
     }).catch(function(){ addToGallery(f, e.target.result, null, safeName); });
   }; reader.readAsDataURL(f);
 }
@@ -609,22 +609,22 @@ function renderGallery(){
       +'<img src="'+img.dataUrl+'" style="width:100%;height:120px;object-fit:cover">'
       +'<button onclick="removeGalleryImage('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:22px;text-align:center">✕</button>'
       +(i===0?'<span style="position:absolute;top:4px;left:4px;background:var(--r);color:#fff;border-radius:3px;font-size:10px;padding:1px 5px;font-weight:bold">★ MAIN</span>'
-        :'<button onclick="setMainImage('+i+')" title="Set as main image" style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:3px;font-size:10px;padding:1px 5px;cursor:pointer">Set Main</button>')
+        :'<button onclick="setMainImage('+i+')" title="设为主图" style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:3px;font-size:10px;padding:1px 5px;cursor:pointer">Set Main</button>')
       +'<div style="padding:6px 8px">'
-      +'<input value="'+img.name+'" onchange="galleryImages['+i+'].name=this.value;updateGallery()" style="width:100%;border:none;font-size:11px;padding:2px;background:transparent" title="File name (editable)">'
+      +'<input value="'+img.name+'" onchange="galleryImages['+i+'].name=this.value;updateGallery()" style="width:100%;border:none;font-size:11px;padding:2px;background:transparent" title="文件名（可编辑）">'
       +'<div style="font-size:10px;color:var(--g);margin:2px 0">'+img.size+' | '+img.dims+'</div>'
-      +'<input value="'+img.alt+'" placeholder="ALT text" onchange="galleryImages['+i+'].alt=this.value;updateGallery()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">'
+      +'<input value="'+img.alt+'" placeholder="ALT 文本" onchange="galleryImages['+i+'].alt=this.value;updateGallery()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">'
       +'</div></div>';
   });
   strip.innerHTML = html;
   updateGallery();
 }
-function removeGalleryImage(i){ galleryImages.splice(i,1); renderGallery(); toast('Image removed','success'); }
+function removeGalleryImage(i){ galleryImages.splice(i,1); renderGallery(); toast('图片已移除','success'); }
 function setMainImage(i){
   var img = galleryImages.splice(i,1)[0];
   galleryImages.unshift(img);
   renderGallery();
-  toast('⭐ New main image set','success');
+  toast('⭐ 已设置新主图','success');
 }
 function updateGallery(){
   document.getElementById('pGallery').value = JSON.stringify(galleryImages.map(function(img){return {name:img.name,url:img.url,size:img.size,dims:img.dims,alt:img.alt};}));
@@ -643,7 +643,7 @@ function previewImage(){}
 var modalUploadCache={};
 function handleModalUpload(fileInputId, widgetId, nameInputId){
   var fileInput=document.getElementById(fileInputId), f=fileInput.files[0]; if(!f) return;
-  if(f.size > 600*1024){ toast('❌ Image too large! Max 600KB. This file: '+(f.size/1024).toFixed(0)+'KB','error'); fileInput.value=''; return; }
+  if(f.size > 600*1024){ toast('❌ 图片过大！上限 600KB。当前文件：'+(f.size/1024).toFixed(0)+'KB','error'); fileInput.value=''; return; }
   var widget=document.getElementById(widgetId), nameInput=document.getElementById(nameInputId);
   var reader=new FileReader(); reader.onload=function(e){
     var b64=e.target.result.split(',')[1], path='public/images/products/'+f.name;
@@ -678,14 +678,14 @@ function uploadMedia(){
     .then(function(r){return r.json()}).then(function(d){
       if(d.content){var url='/woshidahuaidan/images/products/'+f.name;
       document.getElementById('mediaList').innerHTML+='<div style="margin:4px 0;cursor:pointer;padding:4px;border-radius:4px" onclick="copyURL(\''+url+'\',this)" title="Click to copy"><code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-size:11px">'+url+'</code> <span style="font-size:10px;color:var(--g)">('+f.name+')</span></div>';
-      toast('Uploaded! Click URL to copy.','success');} else toast(d.message,'error');
+      toast('上传成功！点击 URL 复制。','success');} else toast(d.message,'error');
     });
   };r.readAsDataURL(f);
 }
 function copyURL(url, el){
   navigator.clipboard.writeText(url).then(function(){
     el.style.background='#d4edda'; setTimeout(function(){el.style.background=''},1000);
-    toast('📋 Copied: '+url,'success');
+    toast('📋 已复制：'+url,'success');
   });
 }
 
@@ -711,7 +711,7 @@ function loadOverview(){
     }
   }).catch(function(){ document.getElementById('overviewCats').innerHTML='Login first, then click 🔄 Load'; });
 }
-function loadFromGithub(){ loadOverview(); toast('🔄 Loading site data...','success'); }
+function loadFromGithub(){ loadOverview(); toast('🔄 正在加载网站数据...','success'); }
 /* Auto-load overview when tab clicked */
 document.querySelector('[data-page=overview]').addEventListener('click', function(){ setTimeout(loadOverview,100); });
 
@@ -723,7 +723,7 @@ function addSimilar(){
   document.getElementById('pMetaTitle').value='';document.getElementById('pMetaDesc').value='';
   vizData=[];renderAll();
   checkSeoTitle();checkMetaDesc();
-  toast('📋 Copied! Fill in: name, slug, images, SEO title, meta description.','success');document.getElementById('pTitle').focus();
+  toast('📋 已复制！请填写：名称、Slug、图片、SEO 标题、Meta 描述。','success');document.getElementById('pTitle').focus();
 }
 
 /* ====== SAVE ====== */
@@ -757,13 +757,13 @@ function buildFM(){
 
 var imgReused=false,existingSha=null;
 function saveProd(){
-  if(!K)return toast('Login first','error');
+  if(!K)return toast('请先登录','error');
   var t=document.getElementById('pTitle').value,s=document.getElementById('pSlug').value,c=document.getElementById('pCat').value,ex=document.getElementById('pExcerpt').value;
   var mt=document.getElementById('pMetaTitle').value,md=document.getElementById('pMetaDesc').value;
-  if(!t)return toast('❌ Product Name required','error');if(!s){s=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');document.getElementById('pSlug').value=s;}
-  if(s.length<2)return toast('❌ Slug too short','error');if(!c)return toast('❌ Category required','error');if(!ex)return toast('❌ Short Description required','error');
-  if(mt&&(mt.length<50||mt.length>60))return toast('❌ SEO Title must be 50-60 chars (now '+mt.length+')','error');
-  if(md&&(md.length<120||md.length>155))return toast('❌ Meta Description must be 120-155 chars (now '+md.length+')','error');
+  if(!t)return toast('❌ 产品名称为必填项','error');if(!s){s=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');document.getElementById('pSlug').value=s;}
+  if(s.length<2)return toast('❌ Slug 过短','error');if(!c)return toast('❌ 分类为必填项','error');if(!ex)return toast('❌ 简短描述为必填项','error');
+  if(mt&&(mt.length<50||mt.length>60))return toast('❌ SEO 标题需 50-60 字符（当前 '+mt.length+'）','error');
+  if(md&&(md.length<120||md.length>155))return toast('❌ Meta 描述需 120-155 字符（当前 '+md.length+'）','error');
   var path='src/content/products/'+s+'.md';
   /* Check if product already exists for duplicate handling */
   fetch(A+'/repos/'+R+'/contents/'+path,{headers:{'Authorization':'token '+K}}).then(function(r){return r.json()}).then(function(existing){
@@ -796,11 +796,11 @@ function saveProd(){
 function sendUpdate(path,content,message,sha){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main',sha:sha})})
-  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('✅ Updated! Image reused.','success');else toast(d.message,'error');});
+  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('✅ 更新成功！已复用已有图片。','success');else toast(d.message,'error');});
 }
 
 function saveNews(){
-  if(!K)return toast('Login first','error');var t=document.getElementById('nTitle').value;if(!t)return toast('Title required','error');
+  if(!K)return toast('请先登录','error');var t=document.getElementById('nTitle').value;if(!t)return toast('标题为必填项','error');
   var d=document.getElementById('nDate').value||new Date().toISOString().split('T')[0],ex=document.getElementById('nExcerpt').value.replace(/"/g,'\\"'),bd=document.getElementById('nBody').value,im=document.getElementById('nImg').value;
   var sl=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),dt=new Date(d),fs=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+'-'+sl;
   var fm='---\ntitle: "'+t+'"\ndate: "'+d+'"\ncategory: "'+document.getElementById('nCat').value+'"\nexcerpt: "'+ex+'"\n';if(im)fm+='image: "'+im+'"\n';fm+='published: true\n---\n'+bd;
@@ -811,7 +811,7 @@ function send(path,content,message){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
   .then(function(r){return r.json()}).then(function(d){
-    if(d.content){toast('Saved! Deploying...','success');return;}
+    if(d.content){toast('已保存！正在部署...','success');return;}
     if(d.message&&d.message.indexOf('sha')>=0){
       /* File exists without sha — fetch sha and retry */
       fetch(A+'/repos/'+R+'/contents/'+path,{headers:{'Authorization':'token '+K}}).then(function(r2){return r2.json()}).then(function(ex){
@@ -825,7 +825,7 @@ function resetForm(){
   var fields=['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'];fields.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';if(id==='pImgAlt'){el.dataset.autoAlt='1';}if(id==='pSlug'){el.dataset.auto='1';}}});
   document.getElementById('pOrder').value='0';
   document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
-  vizData=[];renderAll();checkSeoTitle();checkMetaDesc();document.getElementById('imgStatus').innerHTML='';imgReused=false;existingSha=null;toast('Reset','success');
+  vizData=[];renderAll();checkSeoTitle();checkMetaDesc();document.getElementById('imgStatus').innerHTML='';imgReused=false;existingSha=null;toast('已重置','success');
 }
 
 /* ====== TABLE BUILDER HELPER ====== */
