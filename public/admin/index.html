@@ -142,7 +142,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
         <!-- Basic -->
         <div id="panel-basic" class="tab-content active">
-          <div class="field"><label>产品名称 (H1) <span class="req">*</span></label><input id="pTitle" placeholder="例如：NMRV050 Worm Gearbox" oninput="autoSlug();if(document.getElementById('pImgAlt').dataset.autoAlt!=='0'){document.getElementById('pImgAlt').dataset.autoAlt='1';autoAlt();}"><div class="helper">页面 H1 标题。每个产品必须唯一。</div></div>
+          <div class="field"><label>产品名称 (H1) <span class="req">*</span></label><input id="pTitle" placeholder="例如：NMRV050 Worm Gearbox" oninput="autoSlug();if(document.getElementById('pImgAlt').dataset.autoAlt!=='0'){document.getElementById('pImgAlt').dataset.autoAlt='1';autoAlt();}checkH1()"><div class="helper">页面 H1 标题。每个产品必须唯一。</div><div id="h1Status" style="font-size:12px;margin-top:4px;min-height:18px"></div></div>
           <div class="form-row">
             <div class="field"><label>URL Slug <span class="req">*</span></label><input id="pSlug" placeholder="例如：nmrv050-worm-gearbox"><div class="helper" id="slugHint">简短干净的路径。例如：nmrv050-worm-gearbox</div></div>
             <div class="field"><label>图片 ALT 文本</label><input id="pImgAlt" placeholder="例如：工业蜗轮丝杆升降机前视图" onfocus="if(this.dataset.autoAlt!=='0')this.dataset.autoAlt='1'" oninput="this.dataset.autoAlt='0'" data-autoalt="1"><div class="helper">用于 Google 图片搜索</div></div>
@@ -215,6 +215,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
       <!-- Actions -->
       <div style="display:flex;gap:12px">
         <button class="btn btn-primary" onclick="saveProd()">💾 保存并发布</button>
+        <button class="btn btn-secondary" onclick="saveDraft()">💾 保存草稿</button>
         <button class="btn btn-secondary" onclick="addSimilar()">📋 添加相似产品</button>
         <button class="btn btn-secondary" onclick="resetForm()">↺ 重置</button>
       </div>
@@ -540,6 +541,108 @@ document.getElementById('pSlug').addEventListener('input',function(){this.datase
 function checkSeoTitle(){var el=document.getElementById('pMetaTitle'),c=document.getElementById('seoTitleCount'),l=el.value.length;c.textContent=l+' / 50-60';c.className='char-count '+(l>=50&&l<=60?'ok':(l>0?'warn':''));el.className=(l>0&&(l<50||l>60))?'error':'';}
 function checkMetaDesc(){var el=document.getElementById('pMetaDesc'),c=document.getElementById('metaDescCount'),l=el.value.length;c.textContent=l+' / 120-155';c.className='char-count '+(l>=120&&l<=155?'ok':(l>0?'warn':''));el.className=(l>0&&(l<120||l>155))?'error':'';}
 
+
+/* ====== H1 DUPLICATE DETECTION ====== */
+var h1CheckTimer=null,allProducts=null,editingExistingSlug=null;
+function normH1(t){return (t||'').trim().toLowerCase().replace(/\s+/g,' ');}
+function checkH1(){
+  clearTimeout(h1CheckTimer);
+  var t=document.getElementById('pTitle').value;
+  document.getElementById('h1Status').innerHTML='';
+  if(!t||!K)return;
+  h1CheckTimer=setTimeout(function(){
+    var nh=normH1(t);
+    /* Check localStorage drafts first */
+    var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');
+    for(var slug in drafts){
+      if(normH1(drafts[slug].title)===nh&&slug!==editingExistingSlug){
+        document.getElementById('h1Status').innerHTML='<span style="color:#e67e22">📝 草稿箱中已存在相同的 H1 标题。</span> <button class="btn btn-xs" style="background:#e67e22;color:#fff;margin-left:8px" onclick="loadDraft(\''+slug+'\')">继续编辑草稿</button>';
+        return;
+      }
+    }
+    /* Check published products from GitHub */
+    if(!allProducts){
+      fetch(A+'/repos/'+R+'/contents/src/content/products',{headers:{'Authorization':'token '+K}})
+      .then(function(r){return r.json()}).then(function(files){
+        if(!Array.isArray(files)){allProducts=[];return;}
+        var count=0,products={};
+        files.forEach(function(f){
+          if(!f.name.endsWith('.md'))return;count++;
+          fetch(f.download_url).then(function(r2){return r2.text()}).then(function(md){
+            var m=md.match(/title:\s*"([^"]+)"/);
+            if(m){var slug=f.name.replace('.md','');products[slug]=m[1];}
+            count--;if(count<=0){allProducts=products;matchH1(nh,products);}
+          });
+        });
+        if(count===0)allProducts={};
+      });
+    }else{
+      matchH1(nh,allProducts);
+    }
+  },500);
+}
+function matchH1(nh,products){
+  for(var slug in products){
+    if(normH1(products[slug])===nh&&slug!==editingExistingSlug){
+      document.getElementById('h1Status').innerHTML='<span style="color:#ce1132">⚠ 已发布产品中已存在相同的 H1 标题。</span> <button class="btn btn-xs" style="background:#ce1132;color:#fff;margin-left:8px" onclick="loadExisting(\''+slug+'\')">打开已有产品</button>';
+      return;
+    }
+  }
+  document.getElementById('h1Status').innerHTML='<span style="color:#059669">✅ 该 H1 标题可用，可以继续创建新产品。</span>';
+}
+function loadExisting(slug){
+  fetch(A+'/repos/'+R+'/contents/src/content/products/'+slug+'.md',{headers:{'Authorization':'token '+K}})
+  .then(function(r){return r.json()}).then(function(d){
+    var md=atob(d.content.replace(/\n/g,''));
+    parseMarkdownToForm(md,slug);
+    editingExistingSlug=slug;
+    document.getElementById('h1Status').innerHTML='<span style="color:#2563eb">📎 正在编辑已有产品</span>';
+    toast('已加载已有产品：'+slug,'success');
+  });
+}
+function loadDraft(slug){
+  var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');
+  var d=drafts[slug];if(!d)return;
+  document.getElementById('pTitle').value=d.title||'';
+  document.getElementById('pSlug').value=slug;document.getElementById('pSlug').dataset.auto='0';
+  document.getElementById('pCat').value=d.cat||'';
+  document.getElementById('pSub').value=d.sub||'';
+  document.getElementById('pExcerpt').value=d.excerpt||'';
+  document.getElementById('pImgAlt').value=d.alt||'';
+  editingExistingSlug=slug;
+  document.getElementById('h1Status').innerHTML='<span style="color:#e67e22">📝 正在编辑草稿</span>';
+  toast('已加载草稿：'+slug,'success');
+}
+function saveDraft(){
+  var t=document.getElementById('pTitle').value,s=document.getElementById('pSlug').value;
+  if(!t||!s)return;
+  var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');
+  drafts[s]={title:t,cat:document.getElementById('pCat').value,sub:document.getElementById('pSub').value,excerpt:document.getElementById('pExcerpt').value,alt:document.getElementById('pImgAlt').value,time:new Date().toISOString()};
+  localStorage.setItem('ggn_drafts',JSON.stringify(drafts));
+  toast('草稿已保存','success');
+}
+function parseMarkdownToForm(md,slug){
+  var t=md.match(/title:\s*"([^"]+)"/);if(t)document.getElementById('pTitle').value=t[1];
+  var c=md.match(/category:\s*"([^"]+)"/);if(c)document.getElementById('pCat').value=c[1];
+  var sc=md.match(/subcategory:\s*"([^"]+)"/);if(sc)document.getElementById('pSub').value=sc[1];
+  var ex=md.match(/excerpt:\s*"([^"]+)"/);if(ex)document.getElementById('pExcerpt').value=ex[1];
+  var im=md.match(/image:\s*"([^"]+)"/);if(im)document.getElementById('pImg').value=im[1];
+  var alt=md.match(/imageAlt:\s*"([^"]+)"/);if(alt){document.getElementById('pImgAlt').value=alt[1];document.getElementById('pImgAlt').dataset.autoAlt='0';}
+  var mt=md.match(/metaTitle:\s*"([^"]+)"/);if(mt)document.getElementById('pMetaTitle').value=mt[1];
+  var md2=md.match(/metaDescription:\s*"([^"]+)"/);if(md2)document.getElementById('pMetaDesc').value=md2[1];
+  var kw=md.match(/keywords:\s*"([^"]+)"/);if(kw)document.getElementById('pKeywords').value=kw[1];
+  var ord=md.match(/order:\s*(\d+)/);if(ord)document.getElementById('pOrder').value=ord[1];
+  document.getElementById('pSlug').value=slug;document.getElementById('pSlug').dataset.auto='0';
+  checkSeoTitle();checkMetaDesc();
+}
+function deleteDraft(){
+  var s=document.getElementById('pSlug').value;if(!s)return;
+  var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');
+  delete drafts[s];localStorage.setItem('ggn_drafts',JSON.stringify(drafts));
+  editingExistingSlug=null;checkH1();
+  toast('草稿已删除','success');
+}
+
 /* ====== LOGIN ====== */
 function login(){
   K=document.getElementById('t').value.trim();if(!K) return toast('请输入 Token','error');
@@ -793,10 +896,11 @@ function saveProd(){
     var d=buildFM();send('src/content/products/'+d.slug+'.md',d.content,'Add/Update product: '+t);
   });
 }
+function deleteDraftSilent(slug){var drafts=JSON.parse(localStorage.getItem('ggn_drafts')||'{}');delete drafts[slug];localStorage.setItem('ggn_drafts',JSON.stringify(drafts));editingExistingSlug=null;}
 function sendUpdate(path,content,message,sha){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main',sha:sha})})
-  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('✅ 更新成功！已复用已有图片。','success');else toast(d.message,'error');});
+  .then(function(r){return r.json()}).then(function(d){if(d.content)toast('✅ 更新成功！已复用已有图片。','success');var sl=path.split('/').pop().replace('.md','');deleteDraftSilent(sl);else toast(d.message,'error');});
 }
 
 function saveNews(){
@@ -811,7 +915,7 @@ function send(path,content,message){
   var b64=btoa(unescape(encodeURIComponent(content)));
   fetch(A+'/repos/'+R+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+K,'Content-Type':'application/json'},body:JSON.stringify({message:message,content:b64,branch:'main'})})
   .then(function(r){return r.json()}).then(function(d){
-    if(d.content){toast('已保存！正在部署...','success');return;}
+    if(d.content){toast('已保存！正在部署...','success');var sl=path.split('/').pop().replace('.md','');deleteDraftSilent(sl);return;}
     if(d.message&&d.message.indexOf('sha')>=0){
       /* File exists without sha — fetch sha and retry */
       fetch(A+'/repos/'+R+'/contents/'+path,{headers:{'Authorization':'token '+K}}).then(function(r2){return r2.json()}).then(function(ex){
@@ -823,7 +927,7 @@ function send(path,content,message){
 }
 function resetForm(){
   var fields=['pTitle','pSlug','pCat','pSub','pExcerpt','pFeat','pSpec','pImg','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'];fields.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';if(id==='pImgAlt'){el.dataset.autoAlt='1';}if(id==='pSlug'){el.dataset.auto='1';}}});
-  document.getElementById('pOrder').value='0';
+  editingExistingSlug=null;allProducts=null;document.getElementById('h1Status').innerHTML='';document.getElementById('pOrder').value='0';
   document.getElementById('pGallery').value=''; galleryImages=[]; renderGallery();
   vizData=[];renderAll();checkSeoTitle();checkMetaDesc();document.getElementById('imgStatus').innerHTML='';imgReused=false;existingSha=null;toast('已重置','success');
 }
