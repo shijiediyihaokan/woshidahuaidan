@@ -92,7 +92,8 @@
       });
 
       initDone = true;
-      console.log('✅ Dashboard fully initialized');
+      console.log('Admin dashboard loaded: image-block-v1');
+  console.log('✅ Dashboard fully initialized');
     } catch (e) {
       console.error('Dashboard init failed:', e);
       U.hideLoading();
