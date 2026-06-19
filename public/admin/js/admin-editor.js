@@ -284,7 +284,10 @@ window.AdminEditor = (function() {
 
           gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=cur.alt||AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
 
-          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
+          var gm=d.alignment||'center';
+          var gfit=d.fitMode||'contain';
+          var gar=d.aspectRatio||'auto';
+          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px;object-fit:'+gfit+';'+(gar!=='auto'?'aspect-ratio:'+gar:'')+'">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
 
           gh+='</div>';
 
