@@ -16,7 +16,14 @@ window.AdminEditor = (function() {
 
   var V = __vizData;
 
+  function ensureIds() {
+    for(var i=0;i<V.length;i++){
+      if(!V[i].id) V[i].id = 'm_' + Date.now() + '_' + i;
+    }
+  }
+
   function init() {
+    ensureIds();
 
     console.log('Editor: init');
 
@@ -29,6 +36,16 @@ window.AdminEditor = (function() {
   }
 
   /* Bind module add buttons via data-action */
+
+  /* Insert module click handler */
+  document.addEventListener('click', function(event) {
+    var btn = event.target.closest('[data-action="insert-module"]');
+    if (!btn) return;
+    event.preventDefault();
+    event.stopPropagation();
+    var afterIdx = parseInt(btn.dataset.after);
+    showInsertMenu(afterIdx, btn);
+  });
 
   function bindModuleButtons() {
 
@@ -306,6 +323,51 @@ window.AdminEditor = (function() {
     }
 
   });
+
+  function renderInsertPoint(afterIdx) {
+    return '<div class="insert-point" data-after="'+afterIdx+'" style="text-align:center;padding:4px 0;opacity:0.3;transition:opacity .2s" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.3\'">'+
+      '<button class="btn btn-xs" data-action="insert-module" data-after="'+afterIdx+'" style="background:#f0f2f5;border:1px dashed #d1d5db;color:var(--g);font-size:11px;padding:4px 16px;border-radius:20px">+ \u5728\u6b64\u5904\u6dfb\u52a0\u5185\u5bb9</button>'+
+      '</div>';
+  }
+
+  function insertModule(afterIdx, type) {
+    var m = createDefaultModule(type);
+    V.splice(afterIdx+1, 0, m);
+    renderAll();
+    scrollToViz(afterIdx+1);
+  }
+
+  function showInsertMenu(afterIdx, btn) {
+    var existing = document.querySelector('.insert-menu');
+    if(existing) existing.remove();
+    var menu = document.createElement('div');
+    menu.className = 'insert-menu';
+    menu.style.cssText = 'position:absolute;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;padding:6px 0;min-width:140px';
+    var items = [
+      {t:'text',l:'正文文字'},{t:'h2',l:'H2 标题'},{t:'h3',l:'H3 标题'},
+      {t:'image',l:'图片'},{t:'table',l:'表格'},{t:'features',l:'Features'},
+      {t:'specs',l:'Specs'},{t:'faq',l:'FAQ'},{t:'cta',l:'CTA'}
+    ];
+    items.forEach(function(item){
+      var el = document.createElement('div');
+      el.textContent = item.l;
+      el.style.cssText = 'padding:6px 16px;cursor:pointer;font-size:13px;color:#374151;white-space:nowrap';
+      el.onmouseenter = function(){ this.style.background='#f3f4f6'; };
+      el.onmouseleave = function(){ this.style.background=''; };
+      el.onclick = function(){ insertModule(afterIdx, item.t); menu.remove(); };
+      menu.appendChild(el);
+    });
+    var rect = btn.getBoundingClientRect();
+    menu.style.left = rect.left + 'px';
+    menu.style.top = (rect.bottom + 4) + 'px';
+    document.body.appendChild(menu);
+    /* Close on outside click */
+    setTimeout(function(){
+      document.addEventListener('click', function closeMenu(e){
+        if(!menu.contains(e.target)){ menu.remove(); document.removeEventListener('click', closeMenu); }
+      });
+    }, 0);
+  }
 
   function exportViz() {
 
