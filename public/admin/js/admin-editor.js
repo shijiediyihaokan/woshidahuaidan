@@ -9,20 +9,30 @@ window.AdminEditor = (function() {
   window.__vizData = [];
 
   function init() {
-    console.log('AdminEditor.init');
-    bindModuleButtons();
-    bindGlobalActions();
+    console.log('AdminEditor.init START');
+    try {
+      bindModuleButtons();
+      bindGlobalActions();
+      console.log('AdminEditor.init DONE, __vizData=', window.__vizData);
+    } catch(e) {
+      console.error('AdminEditor.init FAILED:', e);
+    }
     return Promise.resolve();
   }
 
   /* === Bind module add buttons via data-action === */
   function bindModuleButtons() {
+    console.log('Editor: binding module buttons');
     document.addEventListener('click', function(event) {
       var btn = event.target.closest('[data-action="add-module"]');
       if (!btn) return;
+      console.log('Editor: add-module clicked, type=' + btn.dataset.type);
       event.preventDefault();
+      event.stopPropagation();
       var type = btn.dataset.type;
-      if (type) addModule(type);
+      if (type) {
+        try { addModule(type); } catch(e) { console.error('addModule failed:', e); }
+      }
     });
   }
 
