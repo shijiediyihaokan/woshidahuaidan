@@ -407,53 +407,16 @@ function openModule(type, idx){
 function closeModal(){ document.getElementById('modalOverlay').style.display='none'; editingIdx=-1; }
 
 function saveModule(type){
+  /* All modules are now inline — saveModule only handles legacy modal cases */
   var data={type:type};
-  if(type==='h2'||type==='h3'){/* inline */
-  else if(type==='text'){data.text=document.getElementById('mText').value;}
-  else if(type==='image'){
-    html='<h3>Image</h3><div class="field"><label>Image</label><div class="upload-widget" id="mImgWidget">'
-      +(data.url?'<div class="uw-preview"><img src="'+data.url+'" style="max-width:200px;max-height:150px;border-radius:4px"></div><div class="uw-info"><b>'+((data.fileName)||'')+'</b></div>'
-        :'<div class="uw-empty" onclick="document.getElementById(\'mImgFile\').click()">📁 Click to upload <small>(≤600KB)</small></div>')
-      +'</div><input type="file" id="mImgFile" accept="image/*" style="display:none" onchange="handleModalUpload(\'mImgFile\',\'mImgWidget\',\'mImgName\')">'
-      +'<input id="mImgName" value="'+(data.fileName||'')+'" placeholder="image-name.jpg" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;margin-top:6px;font-size:12px">'
-      +'<input type="hidden" id="mImgUrl" value="'+(data.img||'')+'"></div>'
-      +'<div class="field"><label>ALT Text</label><input id="mAlt" value="'+(data.alt||'')+'"></div>';
-  }
-  else if(type==='image'){
-    data.url=document.getElementById('mImgUrl').value;
-    data.alt=document.getElementById('mAlt').value;
-  }
-  else if(type==='leftimg'||type==='rightimg'){
+  if(type==='leftimg'||type==='rightimg'){
     data.img=document.getElementById('mImgUrl').value;
     data.alt=document.getElementById('mAlt').value;
     data.sub=document.getElementById('mSub').value;
     data.text=document.getElementById('mText').value;
+    if(editingIdx>=0){vizData[editingIdx]=data;}else{vizData.push(data);}
+    closeModal();renderAll();toast('✅ 模块已'+(editingIdx>=0?'更新':'添加'),'success');
   }
-  
-  else if(type==='features'){
-    data.items=[];var names=document.querySelectorAll('#modal [data-field=fname]'), descs=document.querySelectorAll('#modal [data-field=fdesc]');
-    for(var i=0;i<names.length;i++){if(names[i].value||descs[i].value) data.items.push({name:names[i].value,desc:descs[i].value});}
-  }
-  else if(type==='specs'){
-    data.rows=[];var names=document.querySelectorAll('#modal [data-field=sname]'), vals=document.querySelectorAll('#modal [data-field=sval]');
-    for(var i=0;i<names.length;i++){if(names[i].value||vals[i].value) data.rows.push({name:names[i].value,val:vals[i].value});}
-  }
-  else if(type==='faq'||type==='faqSchema'){
-    data.items=[];var qs=document.querySelectorAll('#modal [data-field=fq]'), as=document.querySelectorAll('#modal [data-field=fa]');
-    for(var i=0;i<qs.length;i++){if(qs[i].value||as[i].value) data.items.push({q:qs[i].value,a:as[i].value});}
-  }
-  else if(type==='table'){
-    data.style=document.getElementById('mTableStyle').value;
-    data.color=document.getElementById('mTableColor').value;
-    data.cols=parseInt(document.getElementById('mTableCols').value)||2;
-    var nRows=parseInt(document.getElementById('mTableRows').value)||2, nCols=data.cols;
-    data.rows=[];
-    for(var r=0;r<nRows;r++){var row=[];for(var c=0;c<nCols;c++){var cell=document.getElementById('mTCell'+r+'_'+c);row.push(cell?cell.value:'');}data.rows.push(row);}
-  }
-  else if(type==='cta'){data.title=document.getElementById('mCtaTitle').value;data.text=document.getElementById('mCtaText').value;data.email=document.getElementById('mCtaEmail').value;data.phone=document.getElementById('mCtaPhone').value;}
-
-  if(editingIdx>=0){vizData[editingIdx]=data;}else{vizData.push(data);}
-  closeModal(); renderAll(); toast('✅ 模块已'+(editingIdx>=0?'更新':'添加'),'success');
 }
 
 function editModule(idx){ openModule(vizData[idx].type, idx); }
