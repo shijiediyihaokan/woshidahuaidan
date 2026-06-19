@@ -94,7 +94,7 @@ window.AdminEditor = (function() {
 
       case 'h3': return { type:'h3', data:{text:'',style:'red-left',color:'#ce1132'} };
 
-      case 'image': return { type:'image', data:{url:'',alt:'',widthPercent:60,aspectRatio:'auto',fitMode:'contain',alignment:'center'} };
+      case 'image': return { type:'image', data:{url:'',alt:''} };
 
       case 'features': return { type:'features', data:{items:[{name:'',desc:''}]} };
 
