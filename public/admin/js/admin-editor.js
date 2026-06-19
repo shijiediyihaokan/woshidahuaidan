@@ -212,7 +212,7 @@ window.AdminEditor = (function() {
 
           '</div>'+
 
-          '<div style="margin-top:8px;font-size:11px;color:var(--g);margin-bottom:2px">ALT: <span style="color:#374151;font-weight:600">'+(d.alt||'(auto-generated on upload)')+'</span></div>'+
+          '<div style="margin-top:8px;font-size:11px;color:var(--g);margin-bottom:2px">ALT 文本: <span style="color:#374151;font-weight:600">'+(d.alt||'(auto-generated on upload)')+'</span></div>'+
           '<input value="'+(d.alt||'')+'" placeholder="Edit ALT text..." onchange="__vizData['+idx+'].data.alt=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px"></div>';
 
         break;
@@ -233,8 +233,8 @@ window.AdminEditor = (function() {
 
           gh+='</div>';
 
-          gh+='<div style="font-size:10px;color:var(--g);text-align:left;margin-top:2px">ALT: <span style="color:#374151">'+(item.alt||'(auto)')+'</span></div>';
-          gh+='<input value="'+(item.alt||'')+'" placeholder="Edit ALT" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
+          gh+='<div style="font-size:10px;color:var(--g);text-align:left;margin-top:2px">ALT 文本: <span style="color:#374151">'+(item.alt||'(auto)')+'</span></div>';
+          gh+='<input value="'+(item.alt||'')+'" placeholder="编辑 ALT 文本" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
 
           gh+='<input value="'+(item.text||'')+'" placeholder="Caption" onchange="__vizData['+idx+'].data.imgs['+gi+'].text=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
 
