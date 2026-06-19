@@ -201,20 +201,45 @@ window.AdminEditor = (function() {
         break;
 
       case'image':
-
         var iu=d.url||'';
-
-        h='<div class="viz-module" id="viz-'+idx+'" style="padding:12px;border:1px dashed #e5e7eb;border-radius:8px;background:#fafafa">'+act+
-
-          '<div class="upload-zone" style="min-height:100px;cursor:pointer" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.url=ev.target.result;var alt=AdminEditor.autoAlt(fn);if(!__vizData['+idx+'].data.alt)__vizData['+idx+'].data.alt=alt;AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">'+
-
-          (iu?'<img src="'+iu+'" style="max-width:100%;max-height:200px;border-radius:4px">':'<div class="icon">📁</div><p>Click to upload</p>')+
-
-          '</div>'+
-
-          '<div style="margin-top:8px;font-size:11px;color:var(--g);margin-bottom:2px">ALT 文本: <span style="color:#374151;font-weight:600">'+(d.alt||'(auto-generated on upload)')+'</span></div>'+
-          '<input value="'+(d.alt||'')+'" placeholder="Edit ALT text..." onchange="__vizData['+idx+'].data.alt=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px"></div>';
-
+        var wp=d.widthPercent||60;
+        var ar=d.aspectRatio||'auto';
+        var fm=d.fitMode||'contain';
+        var al=d.alignment||'center';
+        var am=(al==='left'?'0 auto 0 0':al==='right'?'0 0 0 auto':'auto');
+        h='<div class="viz-module image-block" id="viz-'+idx+'">'+act;
+        if(iu){
+          h+='<img src="'+iu+'" alt="'+(d.alt||'')+'" style="width:'+wp+'%;height:auto;object-fit:'+fm+';display:block;margin:'+am+';border-radius:4px;'+(ar!=='auto'?'aspect-ratio:'+ar:'')+'">';
+        }else{
+          h+='<div class="img-placeholder" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.url=ev.target.result;if(!__vizData['+idx+'].data.alt)__vizData['+idx+'].data.alt=AdminEditor.autoAlt(fn);AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()" style="cursor:pointer;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:2px dashed #d1d5db;border-radius:6px;color:var(--g);font-size:13px">📁 点击上传图片</div>';
+        }
+        h+='<div style="margin-top:6px;font-size:10px;color:var(--g)">ALT 文本: <span style="color:#374151;font-weight:600">'+(d.alt||'(自动生成)')+'</span></div>';
+        h+='<input value="'+(d.alt||'')+'" placeholder="编辑 ALT 文本" onchange="__vizData['+idx+'].data.alt=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">';
+        /* 宽度 */
+        h+='<div style="display:flex;gap:4px;margin-top:4px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">宽度:</span>';
+        [{v:40,l:'小 (40%)'},{v:60,l:'中 (60%)'},{v:80,l:'大 (80%)'},{v:100,l:'全宽'}].forEach(function(s){
+          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(wp===s.v?'background:var(--r);color:#fff':'')+'">'+s.l+'</button>';
+        });
+        h+='</div>';
+        /* 图片比例 */
+        h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">图片比例:</span>';
+        [{v:'auto',l:'自动'},{v:'1:1',l:'正方形 1:1'},{v:'4:3',l:'横图 4:3'},{v:'16:9',l:'宽屏 16:9'}].forEach(function(r){
+          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(ar===r.v?'background:var(--r);color:#fff':'')+'">'+r.l+'</button>';
+        });
+        h+='</div>';
+        /* 显示方式 */
+        h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">显示方式:</span>';
+        [{v:'contain',l:'完整显示'},{v:'cover',l:'填充裁切'}].forEach(function(f){
+          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(fm===f.v?'background:var(--r);color:#fff':'')+'">'+f.l+'</button>';
+        });
+        h+='</div>';
+        /* 对齐方式 */
+        h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">对齐方式:</span>';
+        [{v:'left',l:'左对齐'},{v:'center',l:'居中'},{v:'right',l:'右对齐'}].forEach(function(a){
+          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(al===a.v?'background:var(--r);color:#fff':'')+'">'+a.l+'</button>';
+        });
+        h+='</div>';
+        h+='</div>';
         break;
 
       case'2imgs':case'3imgs':case'4imgs':case'6imgs':
