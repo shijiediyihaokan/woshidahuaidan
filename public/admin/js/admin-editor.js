@@ -58,6 +58,10 @@ window.AdminEditor = (function() {
       case 'faq': return { type:'faq', data:{items:[{q:'',a:''}]} };
       case 'table': return { type:'table', data:{rows:[['',''],['','']],cols:2,style:'striped',color:'#ce1132'} };
       case 'cta': return { type:'cta', data:{title:'',text:'',email:'',phone:''} };
+      case '2imgs': case '3imgs': case '4imgs': case '6imgs':
+        var n=parseInt(type);var imgs=[];
+        for(var j=0;j<n;j++)imgs.push({url:'',alt:'',label:''});
+        return {type:type,data:{imgs:imgs}};
       default: return { type:type, data:{} };
     }
   }
@@ -112,6 +116,22 @@ window.AdminEditor = (function() {
           '</div>'+
           '<input value="'+iu+'" placeholder="Image URL" onchange="__vizData['+idx+'].data.url=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px;margin-top:4px">'+
           '<input value="'+(d.alt||'')+'" placeholder="ALT text" onchange="__vizData['+idx+'].data.alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px;margin-top:2px"></div>';
+        break;
+      case'2imgs':case'3imgs':case'4imgs':case'6imgs':
+        var gn=parseInt(m.type),gimgs=d.imgs||[],gh='<div class="viz-module" id="viz-'+idx+'" style="padding:8px;border:1px dashed #e5e7eb;border-radius:8px;background:#fafafa">'+act;
+        gh+='<table style="width:100%;margin-top:20px"><tr>';
+        for(var gi=0;gi<gn;gi++){var item=gimgs[gi]||{url:'',alt:'',label:''};
+          gh+='<td style="width:'+(100/gn).toFixed(0)+'%;padding:4px;vertical-align:top;text-align:center">';
+          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].alt:\'\',label:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].label:\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
+          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
+          gh+='</div>';
+          gh+='<input value="'+(item.url||'')+'" placeholder="URL" onchange="__vizData['+idx+'].data.imgs['+gi+'].url=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">';
+          gh+='<input value="'+(item.alt||'')+'" placeholder="ALT" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
+          gh+='<input value="'+(item.label||'')+'" placeholder="Label" onchange="__vizData['+idx+'].data.imgs['+gi+'].label=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
+          gh+='</td>';
+        }
+        gh+='</tr></table></div>';h=gh;
+        break;
         break;
       default:
         h='<div class="viz-module" id="viz-'+idx+'" style="padding:8px;border:1px dashed #e5e7eb;border-radius:6px">'+act+
