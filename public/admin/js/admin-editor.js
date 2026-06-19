@@ -326,7 +326,7 @@ window.AdminEditor = (function() {
 
   function renderInsertPoint(afterIdx) {
     return '<div class="insert-point" data-after="'+afterIdx+'" style="text-align:center;padding:4px 0;opacity:0.3;transition:opacity .2s" onmouseenter="this.style.opacity=\'1\'" onmouseleave="this.style.opacity=\'0.3\'">'+
-      '<button class="btn btn-xs" data-action="insert-module" data-after="'+afterIdx+'" style="background:#f0f2f5;border:1px dashed #d1d5db;color:var(--g);font-size:11px;padding:4px 16px;border-radius:20px">+ \u5728\u6b64\u5904\u6dfb\u52a0\u5185\u5bb9</button>'+
+      '<button class="btn btn-xs" data-action="insert-module" data-after="'+afterIdx+'" style="background:#f0f2f5;border:1px dashed #d1d5db;color:var(--g);font-size:11px;padding:4px 16px;border-radius:20px">+ 在此处添加内容</button>'+
       '</div>';
   }
 
