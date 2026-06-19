@@ -114,7 +114,6 @@ window.AdminEditor = (function() {
           '<div class="upload-zone" style="min-height:100px;cursor:pointer" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.url=ev.target.result;AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">'+
           (iu?'<img src="'+iu+'" style="max-width:100%;max-height:200px;border-radius:4px">':'<div class="icon">📁</div><p>Click to upload</p>')+
           '</div>'+
-          '<input value="'+iu+'" placeholder="Image URL" onchange="__vizData['+idx+'].data.url=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px;margin-top:4px">'+
           '<input value="'+(d.alt||'')+'" placeholder="ALT text" onchange="__vizData['+idx+'].data.alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:11px;padding:4px 8px;margin-top:2px"></div>';
         break;
       case'2imgs':case'3imgs':case'4imgs':case'6imgs':
@@ -125,7 +124,7 @@ window.AdminEditor = (function() {
           gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].alt:\'\',label:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].label:\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
           gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
           gh+='</div>';
-          gh+='<input value="'+(item.url||'')+'" placeholder="URL" onchange="__vizData['+idx+'].data.imgs['+gi+'].url=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">';
+          
           gh+='<input value="'+(item.alt||'')+'" placeholder="ALT" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
           gh+='<input value="'+(item.label||'')+'" placeholder="Label" onchange="__vizData['+idx+'].data.imgs['+gi+'].label=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
           gh+='</td>';
