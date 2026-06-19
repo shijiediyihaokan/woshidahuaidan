@@ -8,8 +8,6 @@
 
 var __vizData = [];
 
-
-
 window.AdminEditor = (function() {
 
   'use strict';
@@ -17,8 +15,6 @@ window.AdminEditor = (function() {
   var U = window.AdminUtils;
 
   var V = __vizData;
-
-
 
   function init() {
 
@@ -31,8 +27,6 @@ window.AdminEditor = (function() {
     return Promise.resolve();
 
   }
-
-
 
   /* Bind module add buttons via data-action */
 
@@ -58,8 +52,6 @@ window.AdminEditor = (function() {
 
   }
 
-
-
   function bindGlobalActions() {
 
     document.addEventListener('click', function(event) {
@@ -76,8 +68,6 @@ window.AdminEditor = (function() {
 
   }
 
-
-
   /* Module CRUD */
 
   function addModule(type) {
@@ -93,8 +83,6 @@ window.AdminEditor = (function() {
     console.log('Editor: added module ' + type + ', count=' + V.length);
 
   }
-
-
 
   function createDefaultModule(type) {
 
@@ -132,8 +120,6 @@ window.AdminEditor = (function() {
 
   }
 
-
-
   function deleteModule(idx) { V.splice(idx, 1); renderAll(); }
 
   function moveUp(idx) { if(idx>0){var t=V[idx];V[idx]=V[idx-1];V[idx-1]=t;renderAll();} }
@@ -152,8 +138,6 @@ window.AdminEditor = (function() {
 
   }
 
-
-
   /* Render */
 
   function renderAll() {
@@ -165,8 +149,6 @@ window.AdminEditor = (function() {
     p.innerHTML=h;
 
   }
-
-
 
   function renderModule(m, idx) {
 
@@ -245,13 +227,11 @@ window.AdminEditor = (function() {
 
           gh+='<td style="width:'+(100/gn).toFixed(0)+'%;padding:4px;vertical-align:top;text-align:center">';
 
-          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].alt||AdminEditor.autoAlt(fn):AdminEditor.autoAlt('image'),text:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].text||\'\',label:__vizData['+idx+'].data.imgs['+gi+']?__vizData['+idx+'].data.imgs['+gi+'].label:\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
+          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=cur.alt||AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
 
           gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
 
           gh+='</div>';
-
-          
 
           gh+='<div style="font-size:10px;color:var(--g);text-align:left;margin-top:2px">ALT: <span style="color:#374151">'+(item.alt||'(auto)')+'</span></div>';
           gh+='<input value="'+(item.alt||'')+'" placeholder="Edit ALT" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
@@ -266,8 +246,6 @@ window.AdminEditor = (function() {
 
         break;
 
-        break;
-
       default:
 
         h='<div class="viz-module" id="viz-'+idx+'" style="padding:8px;border:1px dashed #e5e7eb;border-radius:6px">'+act+
@@ -279,8 +257,6 @@ window.AdminEditor = (function() {
     return h;
 
   }
-
-
 
   /* Delegate viz actions */
 
@@ -306,8 +282,6 @@ window.AdminEditor = (function() {
 
   });
 
-
-
   function exportViz() {
 
     var html='';for(var i=0;i<V.length;i++)html+=renderModule(V[i],i)+'\n';
@@ -315,10 +289,6 @@ window.AdminEditor = (function() {
     navigator.clipboard.writeText(html).then(function(){U.toast('HTML copied!','success');});
 
   }
-
-
-
-
 
   /* Auto-generate ALT text from product name + filename hints */
 
@@ -329,8 +299,6 @@ window.AdminEditor = (function() {
     var pn = productName ? productName.value.trim() : '';
 
     var fn = fileName || '';
-
-    
 
     /* Detect angle/view from filename */
 
@@ -350,8 +318,6 @@ window.AdminEditor = (function() {
 
     }
 
-    
-
     var alt = '';
 
     if(pn) {
@@ -368,8 +334,6 @@ window.AdminEditor = (function() {
 
     }
 
-    
-
     /* Remove stop words and clean up */
 
     var stopWords = ['the','a','an','of','in','on','at','to','for','with','and','or'];
@@ -380,8 +344,6 @@ window.AdminEditor = (function() {
 
     if(!alt || alt.length < 3) alt = 'product';
 
-    
-
     alt = alt + ' ' + angle;
 
     alt = alt.charAt(0).toUpperCase() + alt.slice(1);
@@ -390,9 +352,6 @@ window.AdminEditor = (function() {
 
   }
 
-
-
   return { init:init, renderAll:renderAll, autoAlt:autoAlt };
 
 })();
-
