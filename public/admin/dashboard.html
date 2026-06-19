@@ -113,8 +113,8 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 #absLoading.resolved{display:none}
 #absSpinner{width:40px;height:40px;border:3px solid #e5e7eb;border-top:3px solid #ce1132;border-radius:50%;margin:0 auto 20px;animation:absSpin .8s linear infinite}
 /* CSS-only 5-second timeout: show error if JS hasn't hidden the spinner */
-#absTimeout{display:none;text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:500px;margin:0 auto;animation:absShow .5s 5s forwards}
-@keyframes absShow{0%,99%{display:none;opacity:0}100%{display:block;opacity:1}}
+#absTimeout{display:none;text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:500px;margin:0 auto;animation:absShow .5s 8s forwards}
+@keyframes absShow{0%,98%{display:none;opacity:0}100%{display:block;opacity:1}}
 </style>
 <div id="absLoading">
 <div style="max-width:480px;margin:0 auto">
@@ -307,22 +307,37 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
 
 <script>
-console.log("=== Dashboard JS v9 ===");
+console.log("=== Dashboard JS v10 ===");
 var K=localStorage.getItem('ggn_token')||'';
 var R='shijiediyihaokan/woshidahuaidan';
 var A='https://api.github.com';
 
-/* Global error capture */
-window.onerror=function(m,s,l,c,e){console.error('GLOBAL ERROR:',m,'at',s+':'+l);return true;};
-window.addEventListener('unhandledrejection',function(e){console.error('PROMISE ERROR:',e.reason);});
+/* === Global error capture: never blank, never infinite spinner === */
+window.onerror=function(m,s,l,c,e){
+  var fb=document.getElementById('absLoading');
+  if(fb){fb.classList.remove('resolved');document.getElementById('absErrMsg').textContent=m+' (line '+l+')';}
+  console.error('ERROR:',m,s,l);
+  return true;
+};
+window.addEventListener('unhandledrejection',function(e){
+  var fb=document.getElementById('absLoading');
+  if(fb){fb.classList.remove('resolved');document.getElementById('absErrMsg').textContent='Promise error: '+(e.reason||'').toString().substring(0,200);}
+  console.error('UNHANDLED:',e.reason);
+});
 
-/* Token check */
-if(!K||K.length<10){throw new Error('No token');}
-
-/* Show dashboard — CSS-only timeout handles the fallback if we crash */
-document.getElementById('dash').classList.add('on');
-document.getElementById('absLoading').classList.add('resolved');
-console.log('✅ Dashboard initialized');
+/* === Safe init with try/catch === */
+try{
+  if(!K||K.length<10){throw new Error('No GitHub token — please log in');}
+  var dash=document.getElementById('dash');
+  if(!dash){throw new Error('Dashboard DOM not found');}
+  dash.classList.add('on');
+  document.getElementById('absLoading').classList.add('resolved');
+  console.log('✅ Dashboard ready');
+}catch(e){
+  document.getElementById('absLoading').classList.remove('resolved');
+  document.getElementById('absErrMsg').textContent=e.message;
+  console.error('INIT FAILED:',e.message);
+}
 
 if(!K){window.location.href='./';}
 
