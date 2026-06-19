@@ -64,7 +64,8 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 /* Editor preview */
 .viz-preview{min-height:600px;max-height:70vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:16px;background:#fafafa}
 /* Sticky toolbar in Detail Page editor */
-#panel-detail .modules-bar{position:sticky;top:0;z-index:50;background:#fff;padding:8px 0;border-bottom:1px solid #e5e7eb;margin-bottom:8px}
+#panel-detail{overflow:visible!important}
+#panel-detail .modules-bar{position:-webkit-sticky;position:sticky;top:0;z-index:50;background:#f0f2f5;padding:8px 0;margin-bottom:8px;border-bottom:1px solid #e5e7eb}
 .viz-module{position:relative}.viz-actions{position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px}
 
 /* Modules bar */
@@ -291,12 +292,12 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div class="toast" id="toast"></div>
 
 <!-- External JS files — loaded in order -->
-<script src="./js/admin-utils.js?v=26"></script>
-<script src="./js/admin-auth.js?v=26"></script>
-<script src="./js/admin-dashboard.js?v=26"></script>
-<script src="./js/admin-products.js?v=26"></script>
-<script src="./js/admin-editor.js?v=26"></script>
-<script src="./js/admin-media.js?v=26"></script>
+<script src="./js/admin-utils.js?v=27"></script>
+<script src="./js/admin-auth.js?v=27"></script>
+<script src="./js/admin-dashboard.js?v=27"></script>
+<script src="./js/admin-products.js?v=27"></script>
+<script src="./js/admin-editor.js?v=27"></script>
+<script src="./js/admin-media.js?v=27"></script>
 
 <div style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#9ca3af;z-index:9999;opacity:0.5">后台版本: image-block-v1</div>
 </body>
