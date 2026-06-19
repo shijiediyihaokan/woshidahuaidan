@@ -60,7 +60,7 @@ window.AdminEditor = (function() {
       case 'cta': return { type:'cta', data:{title:'',text:'',email:'',phone:''} };
       case '2imgs': case '3imgs': case '4imgs': case '6imgs':
         var n=parseInt(type);var imgs=[];
-        for(var j=0;j<n;j++)imgs.push({url:'',alt:'',label:''});
+        for(var j=0;j<n;j++)imgs.push({url:'',alt:'',text:''});
         return {type:type,data:{imgs:imgs}};
       default: return { type:type, data:{} };
     }
