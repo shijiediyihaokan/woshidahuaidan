@@ -7,6 +7,8 @@ window.AdminProducts = (function() {
   var U = window.AdminUtils;
   var Auth = window.AdminAuth;
   var products = [];
+  var editingSlug = null;
+  var editingSha = null;
 
   function init() {
     console.log('AdminProducts.init');
@@ -80,37 +82,142 @@ window.AdminProducts = (function() {
           document.getElementById('overviewCats').innerHTML = '<p style="color:var(--g)">No products found or login required.</p>';
           return;
         }
-        var cats = {}, total = 0, processed = 0;
+        products = [];
+        var processed = 0;
         data.forEach(function(f) {
           if (!f.name.endsWith('.md')) return;
           processed++;
           U.fetchWithTimeout(f.download_url || f.url)
             .then(function(r) { return r.text(); })
             .then(function(md) {
-              var m = md.match(/category:\s*"([^"]+)"/);
-              if (m) { cats[m[1]] = (cats[m[1]] || 0) + 1; total++; }
+              var prod = parseFrontmatter(md);
+              prod.sha = f.sha;
+              prod.path = f.path;
+              prod.filename = f.name;
+              prod.download_url = f.download_url;
+              products.push(prod);
             })
             .catch(function() {})
             .finally(function() {
               processed--;
-              if (processed <= 0) renderOverview(cats, total);
+              if (processed <= 0) renderOverview();
             });
         });
-        if (processed === 0) renderOverview({}, 0);
+        if (processed === 0) renderOverview();
       })
       .catch(function() {
         document.getElementById('overviewCats').innerHTML = '<p style="color:#ce1132">⚠ Failed to load products. Please check GitHub token.</p>';
       });
   }
 
-  function renderOverview(cats, total) {
+  function parseFrontmatter(md) {
+    var prod = { title:'', category:'', subcategory:'', excerpt:'', slug:'',
+                 imageAlt:'', metaTitle:'', metaDescription:'', keywords:'', order:0 };
+    var m = md.match(/^---\n([\s\S]*?)\n---/);
+    if (!m) return prod;
+    var fm = m[1];
+    var fields = {
+      'title': 'title', 'category': 'category', 'subcategory': 'subcategory',
+      'excerpt': 'excerpt', 'slug': 'slug', 'imageAlt': 'imageAlt',
+      'metaTitle': 'metaTitle', 'metaDescription': 'metaDescription',
+      'keywords': 'keywords', 'order': 'order'
+    };
+    for (var key in fields) {
+      var re = new RegExp(key + ':\\s*"([^"]*)"');
+      var match = fm.match(re);
+      if (match) prod[fields[key]] = match[1];
+    }
+    var orderMatch = fm.match(/order:\s*(\d+)/);
+    if (orderMatch) prod.order = parseInt(orderMatch[1]);
+    return prod;
+  }
+
+  function renderOverview() {
+    var cats = {};
+    products.forEach(function(p) {
+      if (p.category) cats[p.category] = (cats[p.category] || 0) + 1;
+    });
+
     var all = ['Gearboxes', 'Gear Motors', 'AC Motors', 'Gears', 'Sprockets', 'Pulleys', 'Transmission Shafts', 'Sheet Metal Fabrication'];
-    var html = '<span>Total: <b>' + total + '</b> products</span><br><br>';
+    var html = '<span>Total: <b>' + products.length + '</b> products</span><br><br>';
+
+    /* Category summary */
     all.forEach(function(c) {
       var n = cats[c] || 0;
       html += '<div style="margin:4px 0"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:' + (n ? '#27ae60' : '#e0e0e0') + ';margin-right:6px"></span><b>' + c + '</b>: ' + (n || '❌ None') + '</div>';
     });
+
+    /* Clickable product list */
+    if (products.length > 0) {
+      html += '<br><h4 style="margin-bottom:8px">📋 Product List (click to edit)</h4>';
+      html += '<table style="width:100%;border-collapse:collapse;font-size:12px">';
+      html += '<thead><tr style="background:#f9fafb;text-align:left">';
+      html += '<th style="padding:6px 8px;border-bottom:2px solid #e5e7eb">Product</th>';
+      html += '<th style="padding:6px 8px;border-bottom:2px solid #e5e7eb">Category</th>';
+      html += '<th style="padding:6px 8px;border-bottom:2px solid #e5e7eb">Subcategory</th>';
+      html += '</tr></thead><tbody>';
+
+      products.sort(function(a, b) { return (a.category || '').localeCompare(b.category || '') || (a.title || '').localeCompare(b.title || ''); });
+
+      products.forEach(function(p, i) {
+        html += '<tr data-prod-idx="' + i + '" style="cursor:pointer;border-bottom:1px solid #f0f0f0" onclick="window.AdminProducts.editProduct(' + i + ')" onmouseenter="this.style.background=\'#fef2f2\'" onmouseleave="this.style.background=\'\'">';
+        html += '<td style="padding:6px 8px;color:#ce1132;font-weight:500">' + (p.title || p.slug || p.filename) + '</td>';
+        html += '<td style="padding:6px 8px;color:#374151">' + (p.category || '—') + '</td>';
+        html += '<td style="padding:6px 8px;color:#6b7280">' + (p.subcategory || '—') + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+    }
+
     document.getElementById('overviewCats').innerHTML = html;
+  }
+
+  /* === Edit Product === */
+  function editProduct(idx) {
+    var p = products[idx];
+    if (!p) return;
+    console.log('Editing product:', p.title || p.slug);
+
+    /* Populate Basic Info */
+    document.getElementById('pTitle').value = p.title || '';
+    document.getElementById('pSlug').value = p.slug || '';
+    document.getElementById('pSlug').dataset.manual = '1';
+    document.getElementById('pCat').value = p.category || '';
+    document.getElementById('pExcerpt').value = p.excerpt || '';
+    document.getElementById('pImgAlt').value = p.imageAlt || '';
+
+    /* Trigger subcategory cascade */
+    var catEl = document.getElementById('pCat');
+    if (catEl) catEl.dispatchEvent(new Event('change'));
+    /* Set subcategory after population (slight delay for DOM update) */
+    setTimeout(function() {
+      var subEl = document.getElementById('pSub');
+      if (subEl && p.subcategory) subEl.value = p.subcategory;
+    }, 50);
+
+    /* Populate SEO */
+    document.getElementById('pMetaTitle').value = p.metaTitle || '';
+    document.getElementById('pMetaDesc').value = p.metaDescription || '';
+    document.getElementById('pKeywords').value = p.keywords || '';
+    document.getElementById('pOrder').value = p.order || 0;
+
+    /* Set edit state */
+    editingSlug = p.slug || p.filename.replace('.md', '');
+    editingSha = p.sha;
+
+    /* Update save button */
+    var saveBtn = document.querySelector('[data-action="save-product"]');
+    if (saveBtn) saveBtn.textContent = '💾 Update & Publish';
+
+    /* Switch to Products tab */
+    var productsLink = document.querySelector('.sidebar nav a[data-page="products"]');
+    if (productsLink) productsLink.click();
+
+    /* Switch to Basic Info tab */
+    var basicTab = document.querySelector('#page-products .tab-btn[data-panel="basic"]');
+    if (basicTab) basicTab.click();
+
+    U.toast('Loaded: ' + (p.title || p.slug), 'success');
   }
 
   /* === Save Product === */
@@ -156,13 +263,31 @@ window.AdminProducts = (function() {
     var path = 'src/content/products/' + slug + '.md';
     var b64 = btoa(unescape(encodeURIComponent(content)));
 
+    var body = { message: (editingSha ? 'Update: ' : 'Add: ') + title, content: b64, branch: 'main' };
+    if (editingSha) body.sha = editingSha;
+
     U.fetchWithTimeout(A + '/repos/' + repo + '/contents/' + path, {
       method: 'PUT',
       headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Add/Update: ' + title, content: b64, branch: 'main' })
+      body: JSON.stringify(body)
     }).then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d.content) { U.toast('Saved! Deploying...', 'success'); }
+        if (d.content) {
+          /* Update local SHA for subsequent saves */
+          if (d.content.sha) {
+            editingSha = d.content.sha;
+            /* Also update in products array */
+            for (var i = 0; i < products.length; i++) {
+              if (products[i].slug === slug || products[i].filename === slug + '.md') {
+                products[i].sha = d.content.sha;
+                products[i].slug = slug;
+                break;
+              }
+            }
+          }
+          editingSlug = slug;
+          U.toast('Saved! Deploying...', 'success');
+        }
         else { U.toast(d.message || 'Save failed', 'error'); }
       })
       .catch(function() { U.toast('Save failed — network error', 'error'); });
@@ -173,6 +298,12 @@ window.AdminProducts = (function() {
       var el = document.getElementById(id); if (el) el.value = '';
     });
     document.getElementById('pOrder').value = '0';
+    editingSlug = null;
+    editingSha = null;
+    var saveBtn = document.querySelector('[data-action="save-product"]');
+    if (saveBtn) saveBtn.textContent = '💾 Save & Publish';
+    var slugEl = document.getElementById('pSlug');
+    if (slugEl) delete slugEl.dataset.manual;
     U.toast('Form reset', 'success');
   }
 
@@ -180,6 +311,7 @@ window.AdminProducts = (function() {
     init: init,
     loadOverview: loadOverview,
     saveProduct: saveProduct,
-    resetForm: resetForm
+    resetForm: resetForm,
+    editProduct: editProduct
   };
 })();
