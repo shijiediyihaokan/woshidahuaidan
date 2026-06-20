@@ -127,7 +127,7 @@ window.AdminEditor = (function() {
 
         var n=parseInt(type);var imgs=[];
 
-        for(var j=0;j<n;j++)imgs.push({url:'',alt:'',text:''});
+        for(var j=0;j<n;j++)imgs.push({url:'',alt:'',text:'',widthPercent:60,aspectRatio:'auto',fitMode:'contain',alignment:'center'});
 
         return {type:type,data:{imgs:imgs}};
 
@@ -282,12 +282,16 @@ window.AdminEditor = (function() {
 
           gh+='<td style="width:'+(100/gn).toFixed(0)+'%;padding:4px;vertical-align:top;text-align:center">';
 
-          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=cur.alt||AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
+          var item=gimgs[gi]||{url:'',alt:'',text:'',widthPercent:60,aspectRatio:'auto',fitMode:'contain',alignment:'center'};
 
-          var gm=d.alignment||'center';
-          var gfit=d.fitMode||'contain';
-          var gar=d.aspectRatio||'auto';
-          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px;object-fit:'+gfit+';'+(gar!=='auto'?'aspect-ratio:'+gar:'')+'">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
+          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=cur.alt||AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\',widthPercent:cur.widthPercent||60,aspectRatio:cur.aspectRatio||\'auto\',fitMode:cur.fitMode||\'contain\',alignment:cur.alignment||\'center\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
+
+          var iw=item.widthPercent||60;
+          var iar=item.aspectRatio||'auto';
+          var ifit=item.fitMode||'contain';
+          var ial=item.alignment||'center';
+          var iam=(ial==='left'?'0 auto 0 0':ial==='right'?'0 0 0 auto':'auto');
+          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px;object-fit:'+ifit+';'+(iar!=='auto'?'aspect-ratio:'+iar:'')+'">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
 
           gh+='</div>';
 
@@ -295,6 +299,32 @@ window.AdminEditor = (function() {
           gh+='<input value="'+(item.alt||'')+'" placeholder="编辑 ALT 文本" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
 
           gh+='<input value="'+(item.text||'')+'" placeholder="Caption" onchange="__vizData['+idx+'].data.imgs['+gi+'].text=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
+
+          /* Per-image config rows — same as single image */
+          /* 宽度 */
+          gh+='<div style="display:flex;gap:3px;margin-top:3px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">宽度:</span>';
+          [{v:40,l:'小'},{v:60,l:'中'},{v:80,l:'大'},{v:100,l:'全'}].forEach(function(s){
+            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(iw===s.v?'background:var(--r);color:#fff':'')+'">'+s.l+'</button>';
+          });
+          gh+='</div>';
+          /* 比例 */
+          gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">比例:</span>';
+          [{v:'auto',l:'自动'},{v:'1:1',l:'1:1'},{v:'4:3',l:'4:3'},{v:'16:9',l:'16:9'}].forEach(function(r){
+            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(iar===r.v?'background:var(--r);color:#fff':'')+'">'+r.l+'</button>';
+          });
+          gh+='</div>';
+          /* 显示 */
+          gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">显示:</span>';
+          [{v:'contain',l:'完整'},{v:'cover',l:'裁切'}].forEach(function(f){
+            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(ifit===f.v?'background:var(--r);color:#fff':'')+'">'+f.l+'</button>';
+          });
+          gh+='</div>';
+          /* 对齐 */
+          gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">对齐:</span>';
+          [{v:'left',l:'左'},{v:'center',l:'中'},{v:'right',l:'右'}].forEach(function(a){
+            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(ial===a.v?'background:var(--r);color:#fff':'')+'">'+a.l+'</button>';
+          });
+          gh+='</div>';
 
           gh+='</td>';
 
