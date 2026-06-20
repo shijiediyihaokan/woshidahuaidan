@@ -248,25 +248,25 @@ window.AdminEditor = (function() {
         /* 宽度 */
         h+='<div style="display:flex;gap:4px;margin-top:4px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">宽度:</span>';
         [{v:40,l:'小 (40%)'},{v:60,l:'中 (60%)'},{v:80,l:'大 (80%)'},{v:100,l:'全宽'}].forEach(function(s){
-          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(wp===s.v?'background:var(--r);color:#fff':'')+'">'+s.l+'</button>';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(wp===s.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+s.l+'</button>';
         });
         h+='</div>';
         /* 图片比例 */
         h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">图片比例:</span>';
         [{v:'auto',l:'自动'},{v:'1:1',l:'正方形 1:1'},{v:'4:3',l:'横图 4:3'},{v:'16:9',l:'宽屏 16:9'}].forEach(function(r){
-          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(ar===r.v?'background:var(--r);color:#fff':'')+'">'+r.l+'</button>';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(ar===r.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+r.l+'</button>';
         });
         h+='</div>';
         /* 显示方式 */
         h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">显示方式:</span>';
         [{v:'contain',l:'完整显示'},{v:'cover',l:'填充裁切'}].forEach(function(f){
-          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(fm===f.v?'background:var(--r);color:#fff':'')+'">'+f.l+'</button>';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(fm===f.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+f.l+'</button>';
         });
         h+='</div>';
         /* 对齐方式 */
         h+='<div style="display:flex;gap:4px;margin-top:2px;align-items:center;font-size:10px"><span style="color:var(--g);min-width:56px">对齐方式:</span>';
         [{v:'left',l:'左对齐'},{v:'center',l:'居中'},{v:'right',l:'右对齐'}].forEach(function(a){
-          h+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(al===a.v?'background:var(--r);color:#fff':'')+'">'+a.l+'</button>';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(al===a.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+a.l+'</button>';
         });
         h+='</div>';
         h+='</div>';
@@ -304,25 +304,25 @@ window.AdminEditor = (function() {
           /* 宽度 */
           gh+='<div style="display:flex;gap:3px;margin-top:3px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">宽度:</span>';
           [{v:40,l:'小'},{v:60,l:'中'},{v:80,l:'大'},{v:100,l:'全'}].forEach(function(s){
-            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(iw===s.v?'background:var(--r);color:#fff':'')+'">'+s.l+'</button>';
+            gh+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].widthPercent='+s.v+';AdminEditor.renderAll()" style="'+(iw===s.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+s.l+'</button>';
           });
           gh+='</div>';
           /* 比例 */
           gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">比例:</span>';
           [{v:'auto',l:'自动'},{v:'1:1',l:'1:1'},{v:'4:3',l:'4:3'},{v:'16:9',l:'16:9'}].forEach(function(r){
-            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(iar===r.v?'background:var(--r);color:#fff':'')+'">'+r.l+'</button>';
+            gh+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].aspectRatio=\''+r.v+'\';AdminEditor.renderAll()" style="'+(iar===r.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+r.l+'</button>';
           });
           gh+='</div>';
           /* 显示 */
           gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">显示:</span>';
           [{v:'contain',l:'完整'},{v:'cover',l:'裁切'}].forEach(function(f){
-            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(ifit===f.v?'background:var(--r);color:#fff':'')+'">'+f.l+'</button>';
+            gh+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].fitMode=\''+f.v+'\';AdminEditor.renderAll()" style="'+(ifit===f.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+f.l+'</button>';
           });
           gh+='</div>';
           /* 对齐 */
           gh+='<div style="display:flex;gap:3px;margin-top:1px;align-items:center;font-size:9px"><span style="color:var(--g);min-width:48px">对齐:</span>';
           [{v:'left',l:'左'},{v:'center',l:'中'},{v:'right',l:'右'}].forEach(function(a){
-            gh+='<button class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(ial===a.v?'background:var(--r);color:#fff':'')+'">'+a.l+'</button>';
+            gh+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.imgs['+gi+'].alignment=\''+a.v+'\';AdminEditor.renderAll()" style="'+(ial===a.v?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+a.l+'</button>';
           });
           gh+='</div>';
 
