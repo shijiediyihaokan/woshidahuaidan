@@ -334,6 +334,23 @@ window.AdminEditor = (function() {
 
         break;
 
+      case'features':
+        var fItems=d.items||[{name:'',desc:''}];
+        h='<div class="viz-module" id="viz-'+idx+'">'+act;
+        h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">🔑 Key Features</div>';
+        for(var fi=0;fi<fItems.length;fi++){
+          var fItem=fItems[fi]||{name:'',desc:''};
+          h+='<div style="display:flex;gap:6px;margin-bottom:4px;align-items:center">';
+          h+='<span style="color:#ce1132;font-weight:bold;font-size:14px;flex-shrink:0">✓</span>';
+          h+='<input type="text" value="'+(fItem.name||'')+'" placeholder="Feature text" onchange="__vizData['+idx+'].data.items['+fi+'].name=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.splice('+fi+',1);AdminEditor.renderAll()" style="flex-shrink:0;background:none;border:none;color:#999;cursor:pointer;font-size:14px" title="Remove">✕</button>';
+          h+='</div>';
+        }
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({name:\'\',desc:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Feature</button>';
+        h+='</div></div>';
+        break;
+
       default:
 
         h='<div class="viz-module" id="viz-'+idx+'" style="padding:8px;border:1px dashed #e5e7eb;border-radius:6px">'+act+
