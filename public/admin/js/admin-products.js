@@ -42,24 +42,27 @@ window.AdminProducts = (function() {
     var subEl = document.getElementById('pSub');
     if (catEl && subEl) {
       var subcats = {
-        'Gearboxes': ['Worm Gearboxes','Helical Gearboxes','Bevel Gearboxes','Planetary Gearboxes'],
-        'Gear Motors': ['Helical Gear Motors','Worm Gear Motors','Bevel Gear Motors','Parallel Shaft Gear Motors'],
-        'AC Motors': ['IEC Motors','Brake Motors','Variable Frequency Motors','Explosion-Proof Motors'],
-        'Gears': ['Spur Gears','Helical Gears','Bevel Gears','Worm Gears','Internal Gears'],
-        'Sprockets': ['Roller Chain Sprockets','Conveyor Sprockets','Engineering Class Sprockets'],
-        'Pulleys': ['V-Belt Pulleys','Timing Belt Pulleys','Taper Lock Pulleys'],
-        'Transmission Shafts': ['Splined Shafts','Keyed Shafts','Hollow Shafts'],
-        'Sheet Metal Fabrication': ['Laser Cutting','CNC Bending','Welding Assembly','Custom Enclosures']
+        'Gearboxes': ['Worm Gearboxes','Helical Gearboxes','Bevel Gearboxes','Right Angle Gearboxes','Industrial Gearboxes','Screw Jacks','Speed Variators'],
+        'Gear Motors': ['AC Gear Motors','Worm Gear Motors','Helical Gear Motors','Bevel Gear Motors'],
+        'AC Motors': ['Single Phase AC Motors','Three Phase AC Motors'],
+        'Gears': ['Spur Gears','Helical Gears','Bevel Gears','Worm Gears','Custom Gears'],
+        'Sprockets': ['Roller Chain Sprockets','Double Pitch Sprockets','Idler Sprockets','Custom Sprockets'],
+        'Pulleys': ['Timing Pulleys','V-Belt Pulleys','Custom Pulleys'],
+        'Transmission Shafts': ['Gear Shafts','Spline Shafts','Linear Shafts','Custom Shafts'],
+        'Sheet Metal Fabrication': ['Welding Parts','Stamping Parts','Enclosures','Laser Cutting Parts']
       };
-      catEl.addEventListener('change', function() {
-        var cat = this.value;
+      function populateSub() {
+        var cat = catEl.value;
         var opts = subcats[cat] || [];
         var prev = subEl.value;
         subEl.innerHTML = '<option value="">None</option>';
         opts.forEach(function(s) {
           subEl.innerHTML += '<option value="'+s+'"'+(s===prev?' selected':'')+'>'+s+'</option>';
         });
-      });
+      }
+      catEl.addEventListener('change', populateSub);
+      /* Fire on page load for pre-selected category (edit mode) */
+      if (catEl.value) populateSub();
     }
   }
 
