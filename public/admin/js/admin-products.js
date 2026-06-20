@@ -36,6 +36,31 @@ window.AdminProducts = (function() {
     /* Slug manual override */
     var slugEl = document.getElementById('pSlug');
     if (slugEl) slugEl.addEventListener('input', function() { this.dataset.manual = '1'; });
+
+    /* Category → Subcategory cascade */
+    var catEl = document.getElementById('pCat');
+    var subEl = document.getElementById('pSub');
+    if (catEl && subEl) {
+      var subcats = {
+        'Gearboxes': ['Worm Gearboxes','Helical Gearboxes','Bevel Gearboxes','Planetary Gearboxes'],
+        'Gear Motors': ['Helical Gear Motors','Worm Gear Motors','Bevel Gear Motors','Parallel Shaft Gear Motors'],
+        'AC Motors': ['IEC Motors','Brake Motors','Variable Frequency Motors','Explosion-Proof Motors'],
+        'Gears': ['Spur Gears','Helical Gears','Bevel Gears','Worm Gears','Internal Gears'],
+        'Sprockets': ['Roller Chain Sprockets','Conveyor Sprockets','Engineering Class Sprockets'],
+        'Pulleys': ['V-Belt Pulleys','Timing Belt Pulleys','Taper Lock Pulleys'],
+        'Transmission Shafts': ['Splined Shafts','Keyed Shafts','Hollow Shafts'],
+        'Sheet Metal Fabrication': ['Laser Cutting','CNC Bending','Welding Assembly','Custom Enclosures']
+      };
+      catEl.addEventListener('change', function() {
+        var cat = this.value;
+        var opts = subcats[cat] || [];
+        var prev = subEl.value;
+        subEl.innerHTML = '<option value="">None</option>';
+        opts.forEach(function(s) {
+          subEl.innerHTML += '<option value="'+s+'"'+(s===prev?' selected':'')+'>'+s+'</option>';
+        });
+      });
+    }
   }
 
   /* === Load Overview === */
