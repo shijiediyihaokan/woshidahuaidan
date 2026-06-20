@@ -351,6 +351,79 @@ window.AdminEditor = (function() {
         h+='</div></div>';
         break;
 
+      case'specs':
+        var sRows=d.rows||[{name:'',value:''}];
+        h='<div class="viz-module" id="viz-'+idx+'">'+act;
+        h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📊 Specifications</div>';
+        for(var si=0;si<sRows.length;si++){
+          var sRow=sRows[si]||{name:'',value:''};
+          h+='<div style="display:flex;gap:6px;margin-bottom:4px;align-items:center">';
+          h+='<input type="text" value="'+(sRow.name||'')+'" placeholder="Parameter" onchange="__vizData['+idx+'].data.rows['+si+'].name=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+          h+='<input type="text" value="'+(sRow.value||'')+'" placeholder="Value" onchange="__vizData['+idx+'].data.rows['+si+'].value=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.splice('+si+',1);AdminEditor.renderAll()" style="flex-shrink:0;background:none;border:none;color:#999;cursor:pointer;font-size:14px" title="Remove">✕</button>';
+          h+='</div>';
+        }
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.push({name:\'\',value:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Row</button>';
+        h+='</div></div>';
+        break;
+
+      case'faq':
+        var qItems=d.items||[{q:'',a:''}];
+        h='<div class="viz-module" id="viz-'+idx+'">'+act;
+        h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">❓ FAQ</div>';
+        for(var qi=0;qi<qItems.length;qi++){
+          var qItem=qItems[qi]||{q:'',a:''};
+          h+='<div style="margin-bottom:8px;padding:8px;background:#fafafa;border-radius:6px;position:relative">';
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.splice('+qi+',1);AdminEditor.renderAll()" style="position:absolute;top:4px;right:4px;background:none;border:none;color:#999;cursor:pointer;font-size:14px" title="Remove">✕</button>';
+          h+='<input type="text" value="'+(qItem.q||'')+'" placeholder="Question" onchange="__vizData['+idx+'].data.items['+qi+'].q=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;font-weight:600;margin-bottom:4px">';
+          h+='<textarea placeholder="Answer" oninput="__vizData['+idx+'].data.items['+qi+'].a=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;min-height:60px;resize:vertical">'+(qItem.a||'')+'</textarea>';
+          h+='</div>';
+        }
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({q:\'\',a:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add FAQ</button>';
+        h+='</div></div>';
+        break;
+
+      case'table':
+        var tCols=d.cols||2;
+        var tRows=d.rows||[['',''],['','']];
+        h='<div class="viz-module" id="viz-'+idx+'">'+act;
+        h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📋 Table</div>';
+        h+='<div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;font-size:11px"><span style="color:var(--g)">Columns:</span>';
+        [2,3,4].forEach(function(c){
+          h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.cols='+c+';__vizData['+idx+'].data.rows=[[\'\',\'\']];AdminEditor.renderAll()" style="'+(tCols===c?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+c+'</button>';
+        });
+        h+='</div>';
+        h+='<table style="width:100%;border-collapse:collapse;font-size:11px">';
+        for(var ti=0;ti<tRows.length;ti++){
+          h+='<tr>';
+          for(var tj=0;tj<tCols;tj++){
+            var cell=(tRows[ti]||[])[tj]||'';
+            h+='<td style="padding:2px;border:1px solid #eee"><input type="text" value="'+cell.replace(/"/g,'&quot;')+'" placeholder="Cell" onchange="if(!__vizData['+idx+'].data.rows['+ti+'])__vizData['+idx+'].data.rows['+ti+']=[];__vizData['+idx+'].data.rows['+ti+']['+tj+']=this.value" style="width:100%;padding:4px 6px;border:1px solid #e5e7eb;border-radius:3px;font-size:11px"></td>';
+          }
+          h+='<td style="padding:2px;border:none"><button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.splice('+ti+',1);AdminEditor.renderAll()" style="background:none;border:none;color:#999;cursor:pointer;font-size:12px" title="Remove row">✕</button></td>';
+          h+='</tr>';
+        }
+        h+='</table>';
+        h+='<button type="button" class="btn btn-xs" onclick="var r=[];for(var j=0;j<__vizData['+idx+'].data.cols;j++)r.push(\'\');__vizData['+idx+'].data.rows.push(r);AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Row</button>';
+        h+='</div></div>';
+        break;
+
+      case'cta':
+        h='<div class="viz-module" id="viz-'+idx+'">'+act;
+        h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📧 Call to Action</div>';
+        h+='<input type="text" value="'+(d.title||'')+'" placeholder="CTA Title" onchange="__vizData['+idx+'].data.title=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;font-weight:600;margin-bottom:4px">';
+        h+='<textarea placeholder="CTA Description" oninput="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;min-height:60px;resize:vertical;margin-bottom:4px">'+(d.text||'')+'</textarea>';
+        h+='<div style="display:flex;gap:6px">';
+        h+='<input type="text" value="'+(d.email||'')+'" placeholder="Email" onchange="__vizData['+idx+'].data.email=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+        h+='<input type="text" value="'+(d.phone||'')+'" placeholder="Phone" onchange="__vizData['+idx+'].data.phone=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+        h+='</div>';
+        h+='</div></div>';
+        break;
+
       default:
 
         h='<div class="viz-module" id="viz-'+idx+'" style="padding:8px;border:1px dashed #e5e7eb;border-radius:6px">'+act+
