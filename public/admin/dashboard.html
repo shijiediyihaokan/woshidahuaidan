@@ -213,6 +213,20 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <textarea id="pExcerpt" rows="2" placeholder="Concise description for listings (120-160 chars)"></textarea>
         </div>
         <div class="field">
+          <label>Product Image</label>
+          <div class="upload-zone" id="basicImgZone" style="padding:16px" onclick="document.getElementById('basicImgInput').click()">
+            <img id="basicImgPreview" src="" style="max-width:100%;max-height:200px;display:none;border-radius:8px;margin:0 auto">
+            <div id="basicImgPlaceholder">
+              <div class="icon" style="font-size:32px;margin-bottom:4px">📁</div>
+              <p style="font-size:12px;color:var(--g);margin:0">Click to upload product image</p>
+              <small style="color:var(--g)">JPG, PNG, WebP ≤5MB</small>
+            </div>
+          </div>
+          <input type="file" id="basicImgInput" accept="image/*" style="display:none" onchange="if(window.AdminProducts)window.AdminProducts.uploadBasicImage()">
+          <input type="hidden" id="pImgUrl">
+          <div class="helper">Product image for listing cards &amp; thumbnails.</div>
+        </div>
+        <div class="field">
           <label>Image ALT Text</label>
           <input id="pImgAlt" placeholder="e.g. Industrial worm screw jack front view">
         </div>
@@ -295,7 +309,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <script src="./js/admin-utils.js?v=32"></script>
 <script src="./js/admin-auth.js?v=32"></script>
 <script src="./js/admin-dashboard.js?v=32"></script>
-<script src="./js/admin-products.js?v=35"></script>
+<script src="./js/admin-products.js?v=38"></script>
 <script src="./js/admin-editor.js?v=37"></script>
 <script src="./js/admin-media.js?v=32"></script>
 

@@ -112,13 +112,13 @@ window.AdminProducts = (function() {
 
   function parseFrontmatter(md) {
     var prod = { title:'', category:'', subcategory:'', excerpt:'', slug:'',
-                 imageAlt:'', metaTitle:'', metaDescription:'', keywords:'', order:0 };
+                 imageUrl:'', imageAlt:'', metaTitle:'', metaDescription:'', keywords:'', order:0 };
     var m = md.match(/^---\n([\s\S]*?)\n---/);
     if (!m) return prod;
     var fm = m[1];
     var fields = {
       'title': 'title', 'category': 'category', 'subcategory': 'subcategory',
-      'excerpt': 'excerpt', 'slug': 'slug', 'imageAlt': 'imageAlt',
+      'excerpt': 'excerpt', 'slug': 'slug', 'imageUrl': 'imageUrl', 'imageAlt': 'imageAlt',
       'metaTitle': 'metaTitle', 'metaDescription': 'metaDescription',
       'keywords': 'keywords', 'order': 'order'
     };
@@ -185,6 +185,21 @@ window.AdminProducts = (function() {
     document.getElementById('pCat').value = p.category || '';
     document.getElementById('pExcerpt').value = p.excerpt || '';
     document.getElementById('pImgAlt').value = p.imageAlt || '';
+    document.getElementById('pImgUrl').value = p.imageUrl || '';
+
+    /* Show image preview if URL exists */
+    var preview = document.getElementById('basicImgPreview');
+    var placeholder = document.getElementById('basicImgPlaceholder');
+    var imgUrl = p.imageUrl || '';
+    if (imgUrl) {
+      preview.src = imgUrl;
+      preview.style.display = 'block';
+      if (placeholder) placeholder.style.display = 'none';
+    } else {
+      preview.src = '';
+      preview.style.display = 'none';
+      if (placeholder) placeholder.style.display = '';
+    }
 
     /* Trigger subcategory cascade */
     var catEl = document.getElementById('pCat');
@@ -238,6 +253,7 @@ window.AdminProducts = (function() {
 
   function buildFrontmatter(t, s, c, ex) {
     var sc = document.getElementById('pSub').value;
+    var imgUrl = document.getElementById('pImgUrl').value.trim();
     var alt = document.getElementById('pImgAlt').value.trim();
     var mt = document.getElementById('pMetaTitle').value.trim();
     var md = document.getElementById('pMetaDesc').value.trim();
@@ -247,6 +263,7 @@ window.AdminProducts = (function() {
     var fm = '---\ntitle: "' + t + '"\ncategory: "' + c + '"\n';
     if (sc) fm += 'subcategory: "' + sc + '"\n';
     fm += 'excerpt: "' + ex + '"\n';
+    if (imgUrl) fm += 'imageUrl: "' + imgUrl + '"\n';
     if (alt) fm += 'imageAlt: "' + alt + '"\n';
     fm += 'slug: "' + s + '"\n';
     if (mt) fm += 'metaTitle: "' + mt + '"\n';
@@ -294,10 +311,15 @@ window.AdminProducts = (function() {
   }
 
   function resetForm() {
-    ['pTitle','pSlug','pCat','pSub','pExcerpt','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id) {
+    ['pTitle','pSlug','pCat','pSub','pExcerpt','pImgUrl','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
     document.getElementById('pOrder').value = '0';
+    /* Reset image preview */
+    var preview = document.getElementById('basicImgPreview');
+    var placeholder = document.getElementById('basicImgPlaceholder');
+    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+    if (placeholder) placeholder.style.display = '';
     editingSlug = null;
     editingSha = null;
     var saveBtn = document.querySelector('[data-action="save-product"]');
@@ -307,11 +329,62 @@ window.AdminProducts = (function() {
     U.toast('Form reset', 'success');
   }
 
+  /* === Basic Info Image Upload === */
+  function uploadBasicImage() {
+    var f = document.getElementById('basicImgInput').files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) { U.toast('File too large (>5MB)', 'error'); return; }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = e.target.result.split(',')[1];
+      var repo = Auth.getRepo();
+      var A = Auth.getApi();
+      var K = Auth.getToken();
+      /* Sanitize filename: keep extension, replace spaces/special chars */
+      var ext = f.name.split('.').pop().toLowerCase();
+      var base = f.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
+      var safeName = base + '.' + ext;
+      var path = 'public/images/products/' + safeName;
+
+      U.fetchWithTimeout(A + '/repos/' + repo + '/contents/' + path, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Upload ' + safeName, content: b64, branch: 'main' })
+      }).then(function(r) { return r.json(); })
+        .then(function(d) {
+          var url = '/woshidahuaidan/images/products/' + safeName;
+          if (d.content || (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))) {
+            /* Update hidden field + preview */
+            document.getElementById('pImgUrl').value = url;
+            var preview = document.getElementById('basicImgPreview');
+            var placeholder = document.getElementById('basicImgPlaceholder');
+            if (preview) {
+              preview.src = e.target.result; /* data URL for instant preview */
+              preview.style.display = 'block';
+            }
+            if (placeholder) placeholder.style.display = 'none';
+            /* Auto-generate ALT if empty */
+            var altEl = document.getElementById('pImgAlt');
+            if (altEl && !altEl.value.trim()) {
+              altEl.value = (document.getElementById('pTitle').value || safeName.replace(/\.[^.]+$/, '').replace(/-/g, ' ')) + ' product image';
+            }
+            U.toast('Image uploaded!', 'success');
+          } else {
+            U.toast(d.message || 'Upload failed', 'error');
+          }
+        })
+        .catch(function() { U.toast('Upload failed — network error', 'error'); });
+    };
+    reader.readAsDataURL(f);
+  }
+
   return {
     init: init,
     loadOverview: loadOverview,
     saveProduct: saveProduct,
     resetForm: resetForm,
-    editProduct: editProduct
+    editProduct: editProduct,
+    uploadBasicImage: uploadBasicImage
   };
 })();
