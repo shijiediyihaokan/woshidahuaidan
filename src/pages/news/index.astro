@@ -1,48 +1,22 @@
 ---
 // ============================================================
-// news/index.astro — Blog/News for content marketing SEO
+// news/index.astro — Knowledge Center: blog/news listing
 // ============================================================
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const articles = [
-  {
-    title: 'Are Worm Gearboxes Self-Locking?',
-    date: '2026-06-05',
-    excerpt: 'Many customers ask whether a worm gearbox can stop reverse rotation by itself. The answer is: sometimes yes, but it depends on several factors including the lead angle, coefficient of friction, and lubrication condition.',
-    slug: 'are-worm-gearboxes-self-locking',
-    category: 'Technical Guide',
-  },
-  {
-    title: 'Top 10 China Worm Gear Motor Manufacturers In 2026',
-    date: '2026-05-19',
-    excerpt: 'The global demand for compact industrial transmission systems continues to grow. We analyze the leading worm gear motor manufacturers in China, evaluating their capabilities, certifications, and market presence.',
-    slug: 'top-10-worm-gear-motor-manufacturers',
-    category: 'Industry Report',
-  },
-  {
-    title: 'Top 10 China AC Gear Motor Manufacturers In 2026',
-    date: '2026-05-19',
-    excerpt: 'The global industrial automation market is expanding rapidly, driving strong demand for reliable AC gear motors. Here is our analysis of the top manufacturers in China.',
-    slug: 'top-10-ac-gear-motor-manufacturers',
-    category: 'Industry Report',
-  },
-  {
-    title: 'How To Select The Right Spur Gear For Your Application',
-    date: '2026-04-28',
-    excerpt: 'Choosing the correct spur gear involves understanding module, pressure angle, face width, and material selection. This guide walks you through the key parameters and selection criteria.',
-    slug: 'select-right-spur-gear',
-    category: 'Technical Guide',
-  },
-  {
-    title: 'Understanding CNC Machining Tolerances for Custom Parts',
-    date: '2026-04-15',
-    excerpt: 'When ordering custom CNC machined parts, specifying the right tolerances is critical for both functionality and cost. Learn about standard tolerance grades and how to specify them correctly.',
-    slug: 'cnc-machining-tolerances',
-    category: 'Technical Guide',
-  },
-];
+const articles = await getCollection('news', ({ data }) => data.published);
+const sortedArticles = articles.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 
-const pageDescription = 'Expert guides and industry insights on gears, sprockets, gearboxes, CNC machining, and power transmission components. Stay informed with GRANGIN technical blog.';
+const categories = ['Product Knowledge', 'Selection Guide', 'Technical Guide', 'Industry News', 'Company News'];
+const catCounts: Record<string, number> = {};
+categories.forEach(c => {
+  catCounts[c] = articles.filter(a => a.data.category === c).length;
+});
+
+const pageDescription = 'Expert guides and industry insights on gears, sprockets, gearboxes, CNC machining, and power transmission components.';
 const pageKeywords = 'gearbox blog, gear manufacturing guides, CNC machining tips, worm gearbox selection, gear motor manufacturers, industrial transmission blog';
 ---
 
@@ -60,29 +34,58 @@ const pageKeywords = 'gearbox blog, gear manufacturing guides, CNC machining tip
 
   <section class="section-py bg-white">
     <div class="container-page">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {articles.map((article) => (
-          <article class="card-base group">
-            <div class="aspect-[16/9] bg-steel-100 flex items-center justify-center">
-              <div class="text-center p-4">
-                <div class="text-4xl mb-2">📰</div>
-                <span class="tag tag-red">{article.category}</span>
-              </div>
-            </div>
-            <div class="p-5">
-              <p class="text-xs text-steel-400 mb-2">
-                {new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-              <h2 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors mb-2 text-lg">
-                <a href={`/news/${article.slug}/`}>{article.title}</a>
-              </h2>
-              <p class="text-sm text-steel-500 leading-relaxed line-clamp-3 mb-3">{article.excerpt}</p>
-              <a href={`/news/${article.slug}/`} class="text-sm font-semibold text-brand-600 group-hover:text-brand-700 transition-colors">
-                Read More →
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Category sidebar -->
+        <aside class="lg:w-52 shrink-0">
+          <h3 class="font-bold text-steel-800 mb-3 text-sm uppercase tracking-wider">Knowledge Center</h3>
+          <ul class="space-y-0.5">
+            <li>
+              <a href="/news/" class="block px-3 py-2 rounded text-sm font-medium bg-brand-600 text-white">
+                All Articles ({articles.length})
               </a>
-            </div>
-          </article>
-        ))}
+            </li>
+            {categories.map((cat) => (
+              <li>
+                <span class="block px-3 py-2 rounded text-sm text-steel-600">
+                  {cat} <span class="text-xs text-steel-400">({catCounts[cat] || 0})</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+
+        <!-- Article grid -->
+        <div class="flex-1 min-w-0">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {sortedArticles.map((article) => (
+              <article class="card-base group">
+                <div class="aspect-[16/9] bg-steel-100 flex items-center justify-center overflow-hidden">
+                  {article.data.image ? (
+                    <img src={article.data.image} alt={article.data.title} class="w-full h-full object-cover" loading="lazy" />
+                  ) : (
+                    <div class="text-center p-4">
+                      <div class="text-4xl mb-2">📰</div>
+                      <span class="tag tag-red">{article.data.category}</span>
+                    </div>
+                  )}
+                </div>
+                <div class="p-5">
+                  <span class="tag tag-red text-xs mb-2">{article.data.category}</span>
+                  <p class="text-xs text-steel-400 mt-2 mb-2">
+                    {new Date(article.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </p>
+                  <h2 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors mb-2 text-lg line-clamp-2">
+                    <a href={`/news/${article.data.slug || article.id}/`}>{article.data.title}</a>
+                  </h2>
+                  <p class="text-sm text-steel-500 leading-relaxed line-clamp-3 mb-3">{article.data.excerpt}</p>
+                  <a href={`/news/${article.data.slug || article.id}/`} class="text-sm font-semibold text-brand-600 group-hover:text-brand-700 transition-colors">
+                    Read More →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>

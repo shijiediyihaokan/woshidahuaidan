@@ -1,0 +1,82 @@
+---
+// ============================================================
+// news/[...slug].astro — News article detail page
+// ============================================================
+import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('news', ({ data }) => data.published);
+  return articles.map((article) => ({
+    params: { slug: article.data.slug || article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props as { article: CollectionEntry<'news'> };
+const { title, date, category, excerpt, image } = article.data;
+const body = article.body || '';
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+const pageDescription = excerpt?.slice(0, 160) || '';
+const pageKeywords = `${title}, ${category}, gear manufacturing, technical guide, GRANGIN`;
+const articleUrl = new URL(`/news/${article.data.slug || article.id}/`, Astro.site).href;
+
+const breadcrumb = {
+  items: [
+    { name: 'Home', url: new URL('/', Astro.site).href },
+    { name: 'Knowledge Center', url: new URL('/news/', Astro.site).href },
+    { name: title, url: articleUrl },
+  ],
+};
+---
+
+<Layout title={title} description={pageDescription} image={image} keywords={pageKeywords} pageType="article">
+  
+  <SEO breadcrumb={breadcrumb} pageType="article" />
+
+  <!-- Breadcrumb -->
+  <div class="bg-steel-50 border-b border-steel-200">
+    <div class="container-page py-3">
+      <nav class="flex items-center gap-2 text-sm text-steel-500">
+        <a href="/" class="hover:text-brand-600 transition-colors">Home</a><span>/</span>
+        <a href="/news/" class="hover:text-brand-600 transition-colors">Knowledge Center</a><span>/</span>
+        <span class="text-steel-800 font-medium truncate">{title}</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Article Header -->
+  <section class="bg-dark-900 text-white py-10 sm:py-14">
+    <div class="container-page max-w-3xl">
+      <span class="tag tag-red mb-3 inline-block">{category}</span>
+      <h1 class="text-2xl sm:text-3xl font-black mb-3">{title}</h1>
+      <p class="text-steel-400 text-sm">{formattedDate}</p>
+      {excerpt && <p class="mt-4 text-steel-300 leading-relaxed">{excerpt}</p>}
+    </div>
+  </section>
+
+  <!-- Article Body -->
+  <section class="section-py bg-white">
+    <div class="container-page max-w-3xl">
+      <article class="prose prose-steel max-w-none prose-headings:text-steel-900 prose-p:text-steel-600 prose-a:text-brand-600 prose-strong:text-steel-800 prose-li:text-steel-600">
+        {body ? (
+          <Fragment set:html={body} />
+        ) : (
+          <p class="text-steel-400 italic">Full article content coming soon.</p>
+        )}
+      </article>
+
+      <!-- Back to Knowledge Center -->
+      <div class="mt-12 pt-8 border-t border-steel-200 text-center">
+        <a href="/news/" class="btn-outline text-sm">
+          ← Back to Knowledge Center
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

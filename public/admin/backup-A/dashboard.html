@@ -98,28 +98,28 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div id="absLoading">
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:56px;margin-bottom:12px">⚙️</div>
-    <h1 style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 4px 0">Ceten Admin</h1>
-    <p id="absStatus" style="color:#6b7280;font-size:13px;margin:0 0 24px 0">Loading admin panel...</p>
+    <h1 style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 4px 0">Ceten 管理后台</h1>
+    <p id="absStatus" style="color:#6b7280;font-size:13px;margin:0 0 24px 0">正在加载管理面板...</p>
     <div id="absSpinner"></div>
     <div id="absErrorBox">
       <div id="absTimeout" style="text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:500px;margin:0 auto">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
           <span style="font-size:24px">⚠️</span>
-          <span style="font-weight:700;color:#ce1132;font-size:15px">Initialization Failed</span>
+          <span style="font-weight:700;color:#ce1132;font-size:15px">初始化失败</span>
         </div>
         <div style="font-size:12px;line-height:1.8;color:#374151">
-          <div style="margin-bottom:8px"><strong>Error:</strong> <span id="absErrMsg" style="color:#ce1132">JavaScript did not load — possible syntax error or blocked resource</span></div>
-          <div><strong>Possible causes:</strong></div>
+          <div style="margin-bottom:8px"><strong>错误：</strong> <span id="absErrMsg" style="color:#ce1132">JavaScript 未能加载 — 可能是语法错误或资源被阻止</span></div>
+          <div><strong>可能原因：</strong></div>
           <ul style="margin:4px 0 12px 16px;padding:0;color:#6b7280">
-            <li>JavaScript syntax error in script files</li>
-            <li>GitHub Pages CDN serving cached old version</li>
-            <li>Browser extension blocking scripts</li>
-            <li>Try Ctrl+Shift+R to force refresh</li>
+            <li>JS 脚本存在语法错误</li>
+            <li>GitHub Pages CDN 提供缓存的旧版本</li>
+            <li>浏览器扩展阻止了脚本加载</li>
+            <li>请尝试 Ctrl+Shift+R 强制刷新</li>
           </ul>
         </div>
         <div style="display:flex;gap:8px">
-          <button onclick="location.reload()" style="flex:1;padding:10px;background:#ce1132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">🔄 Refresh</button>
-          <button onclick="localStorage.clear();location.href='./'" style="flex:1;padding:10px;background:#6b7280;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">↩ Back to Login</button>
+          <button onclick="location.reload()" style="flex:1;padding:10px;background:#ce1132;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">🔄 刷新</button>
+          <button onclick="localStorage.clear();location.href='./'" style="flex:1;padding:10px;background:#6b7280;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">↩ 返回登录</button>
         </div>
       </div>
     </div>
@@ -139,14 +139,14 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
   <div class="sidebar">
     <div class="brand">⚙️ Ceten</div>
     <nav>
-      <a href="#" data-page="overview" class="active">📊 Overview</a>
-      <a href="#" data-page="products">📦 Products</a>
-      <a href="#" data-page="media">🖼️ Media</a>
+      <a href="#" data-page="overview" class="active">📊 概览</a>
+      <a href="#" data-page="products">📦 产品</a>
+      <a href="#" data-page="media">🖼️ 媒体库</a>
     </nav>
     <div class="user">
       <div class="avatar" id="userAvatar">?</div>
       <div>
-        <div style="font-weight:600" id="userName">Admin</div>
+        <div style="font-weight:600" id="userName">管理员</div>
         <div style="font-size:11px;color:var(--g);cursor:pointer" onclick="if(window.AdminAuth)AdminAuth.logout()">🚪 退出</div>
       </div>
     </div>
@@ -157,16 +157,16 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
     <!-- Overview page -->
     <div id="page-overview" class="tab-content active">
       <div class="main-header">
-        <h1>Site Overview</h1>
-        <p>Products, news, and category coverage</p>
+        <h1>网站概览</h1>
+        <p>产品、新闻和分类覆盖情况</p>
       </div>
       <div class="card">
-        <h3>📦 Products by Category</h3>
-        <div id="overviewCats">Loading...</div>
+        <h3>📦 按分类查看产品</h3>
+        <div id="overviewCats">加载中...</div>
       </div>
       <div class="card">
-        <h3>⚡ Quick Actions</h3>
-        <button class="btn btn-sm btn-secondary" data-page="products" style="margin:4px">➕ New Product</button>
+        <h3>⚡ 快捷操作</h3>
+        <button class="btn btn-sm btn-secondary" data-page="products" style="margin:4px">➕ 新建产品</button>
       </div>
     </div>
 
@@ -174,8 +174,8 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
     <div id="page-products" class="tab-content">
       <!-- Tabs -->
       <div class="tab-nav">
-        <button class="tab-btn active" data-panel="basic">Basic Info</button>
-        <button class="tab-btn" data-panel="detail">Detail Page</button>
+        <button class="tab-btn active" data-panel="basic">基本信息</button>
+        <button class="tab-btn" data-panel="detail">详情页</button>
         <button class="tab-btn" data-panel="seo">SEO</button>
       </div>
 
@@ -183,103 +183,121 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
       <div id="panel-basic" class="tab-content active">
         <div class="form-row">
           <div class="field">
-            <label>Product Name (H1) <span class="req">*</span></label>
-            <input id="pTitle" placeholder="e.g. NMRV050 Worm Gearbox">
-            <div class="helper">Page H1. Must be unique.</div>
+            <label>产品名称 (H1) <span class="req">*</span></label>
+            <input id="pTitle" placeholder="例如：NMRV050 蜗轮减速机">
+            <div class="helper">页面 H1 标题，必须唯一</div>
           </div>
           <div class="field">
-            <label>URL Slug <span class="req">*</span></label>
-            <input id="pSlug" placeholder="e.g. nmrv050-worm-gearbox">
-            <div class="helper" id="slugHint">Short, clean path.</div>
+            <label>URL 别名 <span class="req">*</span></label>
+            <input id="pSlug" placeholder="例如：nmrv050-worm-gearbox">
+            <div class="helper" id="slugHint">简短、干净的路径</div>
           </div>
         </div>
         <div class="form-row">
           <div class="field">
-            <label>Category <span class="req">*</span></label>
+            <label>产品分类 <span class="req">*</span></label>
             <select id="pCat">
-              <option value="">Select...</option>
+              <option value="">请选择...</option>
               <option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option>
               <option>Gears</option><option>Sprockets</option><option>Pulleys</option>
               <option>Transmission Shafts</option><option>Sheet Metal Fabrication</option>
             </select>
           </div>
           <div class="field">
-            <label>Subcategory</label>
-            <select id="pSub"><option value="">None</option></select>
+            <label>子分类</label>
+            <select id="pSub"><option value="">无</option></select>
           </div>
         </div>
         <div class="field">
-          <label>Short Description <span class="req">*</span></label>
-          <textarea id="pExcerpt" rows="2" placeholder="Concise description for listings (120-160 chars)"></textarea>
+          <label>简短描述 <span class="req">*</span></label>
+          <textarea id="pExcerpt" rows="2" placeholder="列表页简短描述（120-160字符）"></textarea>
         </div>
+        <!-- Image Gallery Upload -->
+        <div class="card" style="margin-top:16px">
+          <h3>🖼️ 产品图片 <small style="font-weight:normal;color:var(--g)">（每张≤5MB，第一张为主图）</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
+          <div class="upload-zone" style="padding:32px" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
+            <div class="icon">📁</div>
+            <p>点击或拖拽图片到此处<br><small>JPG、PNG、WebP — 第一张是产品主图</small></p>
+          </div>
+          <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="if(window.AdminProducts)window.AdminProducts.addGalleryImages()">
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <span style="font-size:11px;color:var(--g);white-space:nowrap">📎 或贴入URL：</span>
+            <input id="galleryUrlInput" placeholder="从媒体库复制图片URL，粘贴到此处" style="flex:1;padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px" onkeydown="if(event.key==='Enter'){event.preventDefault();if(window.AdminProducts)window.AdminProducts.addGalleryUrl()}">
+            <button type="button" class="btn btn-xs btn-primary" style="padding:6px 16px;white-space:nowrap" onclick="if(window.AdminProducts)window.AdminProducts.addGalleryUrl()">+ 添加</button>
+          </div>
+          <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px"></div>
+          <input type="hidden" id="pGallery" value="">
+          <div class="helper" style="margin-top:8px">第一张图片自动同步到下方的图片URL和ALT字段</div>
+        </div>
+
         <div class="field">
-          <label>Image ALT Text</label>
-          <input id="pImgAlt" placeholder="e.g. Industrial worm screw jack front view">
+          <label>图片 ALT 文本</label>
+          <input id="pImgAlt" placeholder="例如：工业蜗轮丝杆升降机前视图">
         </div>
       </div>
 
       <!-- Detail Page panel -->
       <div id="panel-detail" class="tab-content">
         <div class="modules-bar">
-          <button type="button" class="mod-btn" style="background:#ce1132;color:#fff;font-weight:bold" data-action="add-module" data-type="text">✏️ Add Text</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="h2">📌 H2 Title</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="h3">📌 H3 Title</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="image">🖼️ Image</button>
+          <button type="button" class="mod-btn" style="background:#ce1132;color:#fff;font-weight:bold" data-action="add-module" data-type="text">✏️ 添加文字</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="h2">📌 H2 标题</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="h3">📌 H3 标题</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="image">🖼️ 图片</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="2imgs">1×2</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="3imgs">1×3</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="4imgs">1×4</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="6imgs">1×6</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="features">✅ Features</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="specs">📊 Specs</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="faq">❓ FAQ</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="table">📋 Table</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="cta">📧 CTA</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="features">✅ 特性</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="specs">📊 规格</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="faq">❓ 常见问题</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="table">📋 表格</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="cta">📧 行动号召</button>
         </div>
         <div class="viz-preview" id="vizPreview"></div>
-        <button class="btn btn-xs" data-action="export-viz" style="margin-top:8px;font-size:11px">📋 Export HTML</button>
+        <button class="btn btn-xs" data-action="export-viz" style="margin-top:8px;font-size:11px">📋 导出 HTML</button>
       </div>
 
       <!-- SEO panel -->
       <div id="panel-seo" class="tab-content">
         <div class="field">
-          <label>SEO Title <span class="req">*</span></label>
-          <input id="pMetaTitle" placeholder="e.g. NMRV050 Worm Gearbox Manufacturer | GRANGIN">
+          <label>SEO 标题 <span class="req">*</span></label>
+          <input id="pMetaTitle" placeholder="例如：NMRV050 蜗轮减速机制造商 | GRANGIN">
           <div class="char-count" id="seoTitleCount">0 / 50-60</div>
-          <div class="helper">50-60 chars. Each product unique.</div>
+          <div class="helper">50-60字符，每个产品唯一</div>
         </div>
         <div class="field">
-          <label>Meta Description <span class="req">*</span></label>
-          <textarea id="pMetaDesc" rows="3" placeholder="120-155 chars. Include keywords + params."></textarea>
+          <label>Meta 描述 <span class="req">*</span></label>
+          <textarea id="pMetaDesc" rows="3" placeholder="120-155字符，包含关键词和参数"></textarea>
           <div class="char-count" id="metaDescCount">0 / 120-155</div>
         </div>
         <div class="field">
-          <label>Keywords</label>
-          <input id="pKeywords" placeholder="worm gearbox, NMRV050, speed reducer">
+          <label>关键词</label>
+          <input id="pKeywords" placeholder="蜗轮减速机, NMRV050, 减速器">
         </div>
         <div class="field">
-          <label>Order</label>
+          <label>排序</label>
           <input id="pOrder" type="number" value="0" style="width:120px">
-          <div class="helper">Higher=first. 900000+=featured</div>
+          <div class="helper">数值越大越靠前，900000+为推荐</div>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="card" style="margin-top:16px">
-        <h3>Actions</h3>
-        <button class="btn btn-primary" data-action="save-product">💾 Save &amp; Publish</button>
-        <button class="btn btn-secondary" data-action="reset-form">↺ Reset</button>
-        <span style="font-size:12px;color:var(--g);margin-left:12px">Deploys via GitHub Actions in ~2 min</span>
+        <h3>操作</h3>
+        <button class="btn btn-primary" data-action="save-product">💾 保存并发布</button>
+        <button class="btn btn-secondary" data-action="reset-form">↺ 重置</button>
+        <span style="font-size:12px;color:var(--g);margin-left:12px">通过 GitHub Actions 约 2 分钟部署</span>
       </div>
     </div>
 
     <!-- Media page -->
     <div id="page-media" class="tab-content">
       <div class="card">
-        <h3>🖼️ Media Library</h3>
-        <p style="color:var(--g);font-size:13px;margin-bottom:16px">Upload images — click URL to copy</p>
+        <h3>🖼️ 媒体库</h3>
+        <p style="color:var(--g);font-size:13px;margin-bottom:16px">上传图片 — 点击 URL 即可复制</p>
         <div class="upload-zone" onclick="document.getElementById('mediaFileInput').click()">
           <div class="icon">📁</div>
-          <p>Click to browse<br><small>JPG, PNG, WebP ≤5MB</small></p>
+          <p>点击浏览<br><small>JPG、PNG、WebP ≤5MB</small></p>
         </div>
         <input type="file" id="mediaFileInput" accept="image/*" style="display:none" onchange="if(window.AdminMedia)AdminMedia.upload()">
         <div id="mediaList" style="margin-top:12px"></div>
@@ -292,13 +310,13 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <div class="toast" id="toast"></div>
 
 <!-- External JS files — loaded in order -->
-<script src="./js/admin-utils.js?v=32"></script>
-<script src="./js/admin-auth.js?v=32"></script>
-<script src="./js/admin-dashboard.js?v=32"></script>
-<script src="./js/admin-products.js?v=35"></script>
-<script src="./js/admin-editor.js?v=37"></script>
-<script src="./js/admin-media.js?v=32"></script>
+<script src="./js/admin-utils.js?v=33"></script>
+<script src="./js/admin-auth.js?v=33"></script>
+<script src="./js/admin-dashboard.js?v=33"></script>
+<script src="./js/admin-products.js?v=45"></script>
+<script src="./js/admin-editor.js?v=38"></script>
+<script src="./js/admin-media.js?v=35"></script>
 
-<div style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#9ca3af;z-index:9999;opacity:0.5">后台版本: image-block-v1</div>
+<div style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#9ca3af;z-index:9999;opacity:0.5">后台版本: v45-zh</div>
 </body>
 </html>

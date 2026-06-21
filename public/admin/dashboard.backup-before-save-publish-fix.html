@@ -212,6 +212,24 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <label>Short Description <span class="req">*</span></label>
           <textarea id="pExcerpt" rows="2" placeholder="Concise description for listings (120-160 chars)"></textarea>
         </div>
+        <!-- Image Gallery Upload -->
+        <div class="card" style="margin-top:16px">
+          <h3>🖼️ Product Images <small style="font-weight:normal;color:var(--g)">(≤5MB each, first = main)</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
+          <div class="upload-zone" style="padding:32px" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
+            <div class="icon">📁</div>
+            <p>Click or drag images here<br><small>JPG, PNG, WebP — first image is the main product image.</small></p>
+          </div>
+          <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="if(window.AdminProducts)window.AdminProducts.addGalleryImages()">
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <span style="font-size:11px;color:var(--g);white-space:nowrap">📎 或贴入URL:</span>
+            <input id="galleryUrlInput" placeholder="从 Media 复制图片 URL，粘贴到此处" style="flex:1;padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px" onkeydown="if(event.key==='Enter'){event.preventDefault();if(window.AdminProducts)window.AdminProducts.addGalleryUrl()}">
+            <button type="button" class="btn btn-xs btn-primary" style="padding:6px 16px;white-space:nowrap" onclick="if(window.AdminProducts)window.AdminProducts.addGalleryUrl()">+ Add</button>
+          </div>
+          <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px"></div>
+          <input type="hidden" id="pGallery" value="">
+          <div class="helper" style="margin-top:8px">First image auto-syncs to Image URL &amp; ALT fields below.</div>
+        </div>
+
         <div class="field">
           <label>Image ALT Text</label>
           <input id="pImgAlt" placeholder="e.g. Industrial worm screw jack front view">
@@ -295,7 +313,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <script src="./js/admin-utils.js?v=32"></script>
 <script src="./js/admin-auth.js?v=32"></script>
 <script src="./js/admin-dashboard.js?v=32"></script>
-<script src="./js/admin-products.js?v=35"></script>
+<script src="./js/admin-products.js?v=42"></script>
 <script src="./js/admin-editor.js?v=37"></script>
 <script src="./js/admin-media.js?v=32"></script>
 

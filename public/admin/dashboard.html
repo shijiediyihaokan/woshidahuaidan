@@ -11,7 +11,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min-height:100vh}
 
-/* Anti-Blank-Screen: CSS-only fallback — survives JS failure */
 @keyframes absSpin{to{transform:rotate(360deg)}}
 @keyframes absShow{0%,98%{display:none;opacity:0}100%{display:block;opacity:1}}
 #absLoading{text-align:center;padding:60px 20px;font-family:Inter,system-ui,sans-serif;background:#f0f2f5;min-height:100vh}
@@ -20,81 +19,63 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 #absErrorBox{display:none;text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:500px;margin:0 auto}
 #absTimeout{animation:absShow .5s 8s forwards}
 
-/* Dashboard layout */
 .dashboard{display:none}.dashboard.on{display:flex;min-height:100vh}
-.sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10}
+.sidebar{width:220px;background:#1a1a1a;color:#fff;padding:24px 0;position:fixed;top:0;bottom:0;left:0;z-index:10;overflow-y:auto}
 .sidebar .brand{padding:0 20px 24px;border-bottom:1px solid #333;margin-bottom:16px;font-size:20px;font-weight:800;color:#fff}
-.sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#999;font-size:14px;text-decoration:none;transition:.2s;border-left:3px solid transparent}
 .sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.05);border-left-color:var(--r)}
-.sidebar .user{padding:16px 20px;border-top:1px solid #333;position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;gap:10px;font-size:13px}
+.sidebar .user{padding:16px 20px;border-top:1px solid #333;margin-top:16px;display:flex;align-items:center;gap:10px;font-size:13px}
 .sidebar .user .avatar{width:32px;height:32px;background:var(--r);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
-.main{margin-left:220px;flex:1;padding:32px}
+.main{margin-left:220px;flex:1;padding:24px}
 
-/* Cards & Grid */
-.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:24px;margin-bottom:24px}
-.card h3{font-size:16px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
-.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.field{margin-bottom:20px}
-.field label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px}
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:20px;margin-bottom:20px}
+.card h3{font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:5px}
 .field label .req{color:var(--r);margin-left:2px}
-.field input,.field select,.field textarea{width:100%;padding:10px 14px;border:1.5px solid #d1d5db;border-radius:8px;font-size:14px;font-family:inherit;transition:.2s}
+.field input,.field select,.field textarea{width:100%;padding:8px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;font-family:inherit;transition:.2s}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(206,17,50,.1)}
-.field textarea{resize:vertical;min-height:100px}
-.field .helper{font-size:11px;color:var(--g);margin-top:4px}
+.field textarea{resize:vertical;min-height:80px}
+.field .helper{font-size:11px;color:var(--g);margin-top:3px}
 
-/* Buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.2s}
 .btn-primary{background:var(--r);color:#fff}.btn-primary:hover{background:#a80d28}
 .btn-secondary{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}.btn-secondary:hover{background:#e5e7eb}
-.btn-sm{padding:6px 14px;font-size:12px}
-.btn-xs{padding:4px 10px;font-size:11px;border-radius:4px}
+.btn-sm{padding:5px 12px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:10px;border-radius:4px}
 
-/* Tabs */
-.tab-nav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #f0f0f0;padding-bottom:0}
-.tab-btn{padding:8px 20px;background:none;border:none;font-size:13px;font-weight:600;color:var(--g);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab-nav{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid #f0f0f0}
+.tab-btn{padding:7px 16px;background:none;border:none;font-size:12px;font-weight:600;color:var(--g);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
 .tab-btn.active{color:var(--r);border-bottom-color:var(--r)}
 .tab-content{display:none}.tab-content.active{display:block}
 
-/* Upload zone */
-.upload-zone{border:2px dashed #d1d5db;border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
+.upload-zone{border:2px dashed #d1d5db;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
 .upload-zone:hover{border-color:var(--r);background:#fef2f2}
-.upload-zone .icon{font-size:40px;margin-bottom:8px}
+.upload-zone .icon{font-size:36px;margin-bottom:6px}
 
-/* Editor preview */
-.viz-preview{min-height:600px;max-height:70vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:16px;background:#fafafa}
-/* Sticky toolbar in Detail Page editor */
+.viz-preview{min-height:500px;max-height:65vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:14px;background:#fafafa}
 #panel-detail{overflow:visible!important}
-#panel-detail .modules-bar{position:-webkit-sticky;position:sticky;top:0;z-index:50;background:#f0f2f5;padding:8px 0;margin-bottom:8px;border-bottom:1px solid #e5e7eb}
+#panel-detail .modules-bar{position:sticky;top:0;z-index:50;background:#f0f2f5;padding:6px 0;margin-bottom:8px;border-bottom:1px solid #e5e7eb}
 .viz-module{position:relative}.viz-actions{position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px}
 
-/* Modules bar */
-.modules-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
-.mod-btn{padding:5px 12px;border:1px solid #e5e7eb;border-radius:6px;background:#fff;font-size:12px;cursor:pointer;transition:.2s;white-space:nowrap}
+.modules-bar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:10px}
+.mod-btn{padding:4px 10px;border:1px solid #e5e7eb;border-radius:5px;background:#fff;font-size:11px;cursor:pointer;transition:.2s;white-space:nowrap}
 .mod-btn:hover{background:#f9fafb;border-color:var(--r)}
-.mod-sep{width:1px;height:20px;background:#e5e7eb;margin:0 4px}
 
-/* Toast */
-.toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:13px;z-index:9999;max-width:90%}
+.toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;max-width:90%}
 .toast.success{background:#059669;color:#fff}
 .toast.error{background:#ce1132;color:#fff}
 
-/* Error banner */
-.admin-error-banner{display:none;padding:12px 20px;background:#fef2f2;border-bottom:2px solid #ce1132;color:#ce1132;font-size:13px;text-align:center;position:sticky;top:0;z-index:100}
+.admin-error-banner{display:none;padding:10px 20px;background:#fef2f2;border-bottom:2px solid #ce1132;color:#ce1132;font-size:13px;text-align:center;position:sticky;top:0;z-index:100}
 .admin-error-banner .close-btn{margin-left:12px;cursor:pointer;font-weight:bold}
 
-/* === Detail Page Editor: Image Block === */
-.viz-preview .image-block{text-align:center;margin:12px 0;padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+.viz-preview .image-block{text-align:center;margin:10px 0;padding:6px;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
 .viz-preview .image-block img{max-width:100%;height:auto;display:block;border-radius:6px}
-.viz-preview .image-block .img-placeholder{min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:2px dashed #d1d5db;border-radius:6px;color:var(--g);font-size:13px}
-.viz-preview .image-block .img-caption{font-size:12px;color:var(--g);margin-top:6px}
-.viz-preview .image-block .img-alt-label{font-size:10px;color:var(--g);margin-top:4px}
-
 </style>
 </head>
 <body>
 
-<!-- Anti-Blank-Screen: always present, never removed from HTML -->
 <div id="absLoading">
   <div style="max-width:480px;margin:0 auto">
     <div style="font-size:56px;margin-bottom:12px">⚙️</div>
@@ -108,12 +89,12 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <span style="font-weight:700;color:#ce1132;font-size:15px">初始化失败</span>
         </div>
         <div style="font-size:12px;line-height:1.8;color:#374151">
-          <div style="margin-bottom:8px"><strong>错误：</strong> <span id="absErrMsg" style="color:#ce1132">JavaScript 未能加载 — 可能是语法错误或资源被阻止</span></div>
+          <div style="margin-bottom:8px"><strong>错误：</strong> <span id="absErrMsg" style="color:#ce1132">JavaScript 未能加载</span></div>
           <div><strong>可能原因：</strong></div>
           <ul style="margin:4px 0 12px 16px;padding:0;color:#6b7280">
             <li>JS 脚本存在语法错误</li>
-            <li>GitHub Pages CDN 提供缓存的旧版本</li>
-            <li>浏览器扩展阻止了脚本加载</li>
+            <li>CDN 缓存旧版本</li>
+            <li>浏览器扩展阻止脚本</li>
             <li>请尝试 Ctrl+Shift+R 强制刷新</li>
           </ul>
         </div>
@@ -126,21 +107,18 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
   </div>
 </div>
 
-<!-- Admin error banner (shown on JS errors) -->
 <div id="adminErrorBanner" class="admin-error-banner">
   <span id="adminErrorText"></span>
   <span class="close-btn" onclick="this.parentElement.style.display='none'">✕</span>
 </div>
 
-<!-- Dashboard (hidden until JS initializes) -->
 <div id="dash" class="dashboard">
-
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="brand">⚙️ Ceten</div>
     <nav>
       <a href="#" data-page="overview" class="active">📊 概览</a>
-      <a href="#" data-page="products">📦 产品</a>
+      <a href="#" data-page="products">📦 产品管理</a>
+      <a href="#" data-page="news">📰 新闻管理</a>
       <a href="#" data-page="media">🖼️ 媒体库</a>
     </nav>
     <div class="user">
@@ -152,34 +130,36 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
     </div>
   </div>
 
-  <!-- Main content -->
   <div class="main">
-    <!-- Overview page -->
+    <!-- ====== OVERVIEW ====== -->
     <div id="page-overview" class="tab-content active">
-      <div class="main-header">
-        <h1>网站概览</h1>
-        <p>产品、新闻和分类覆盖情况</p>
+      <div class="main-header" style="margin-bottom:20px">
+        <h1 style="font-size:22px;font-weight:800">网站概览</h1>
+        <p style="color:var(--g)">产品、新闻和分类覆盖情况</p>
       </div>
       <div class="card">
-        <h3>📦 按分类查看产品</h3>
+        <h3>📦 产品分类统计</h3>
         <div id="overviewCats">加载中...</div>
       </div>
       <div class="card">
+        <h3>📰 新闻统计</h3>
+        <div id="overviewNews">加载中...</div>
+      </div>
+      <div class="card">
         <h3>⚡ 快捷操作</h3>
-        <button class="btn btn-sm btn-secondary" data-page="products" style="margin:4px">➕ 新建产品</button>
+        <button class="btn btn-sm btn-secondary" data-page="products" style="margin:3px">➕ 新建产品</button>
+        <button class="btn btn-sm btn-secondary" data-page="news" style="margin:3px">📰 新建文章</button>
+        <button class="btn btn-sm btn-secondary" data-page="media" style="margin:3px">🖼️ 上传图片</button>
       </div>
     </div>
 
-    <!-- Products page -->
+    <!-- ====== PRODUCTS ====== -->
     <div id="page-products" class="tab-content">
-      <!-- Tabs -->
       <div class="tab-nav">
         <button class="tab-btn active" data-panel="basic">基本信息</button>
         <button class="tab-btn" data-panel="detail">详情页</button>
         <button class="tab-btn" data-panel="seo">SEO</button>
       </div>
-
-      <!-- Basic Info panel -->
       <div id="panel-basic" class="tab-content active">
         <div class="form-row">
           <div class="field">
@@ -190,7 +170,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <div class="field">
             <label>URL 别名 <span class="req">*</span></label>
             <input id="pSlug" placeholder="例如：nmrv050-worm-gearbox">
-            <div class="helper" id="slugHint">简短、干净的路径</div>
+            <div class="helper">简短、干净的路径</div>
           </div>
         </div>
         <div class="form-row">
@@ -212,36 +192,32 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <label>简短描述 <span class="req">*</span></label>
           <textarea id="pExcerpt" rows="2" placeholder="列表页简短描述（120-160字符）"></textarea>
         </div>
-        <!-- Image Gallery Upload -->
-        <div class="card" style="margin-top:16px">
-          <h3>🖼️ 产品图片 <small style="font-weight:normal;color:var(--g)">（每张≤5MB，第一张为主图）</small> <span id="imgStatus" style="font-size:12px;margin-left:8px"></span></h3>
-          <div class="upload-zone" style="padding:32px" id="galleryUploadZone" onclick="document.getElementById('galleryFile').click()">
+        <div class="card" style="margin-top:12px">
+          <h3>🖼️ 产品图片 <small style="font-weight:normal;color:var(--g)">（每张≤5MB，第一张为主图）</small></h3>
+          <div class="upload-zone" style="padding:24px" onclick="document.getElementById('galleryFile').click()">
             <div class="icon">📁</div>
-            <p>点击或拖拽图片到此处<br><small>JPG、PNG、WebP — 第一张是产品主图</small></p>
+            <p>点击或拖拽图片<br><small>JPG、PNG、WebP — 第一张是产品主图</small></p>
           </div>
           <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="if(window.AdminProducts)window.AdminProducts.addGalleryImages()">
-          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-            <span style="font-size:11px;color:var(--g);white-space:nowrap">📎 或贴入URL：</span>
-            <input id="galleryUrlInput" placeholder="从媒体库复制图片URL，粘贴到此处" style="flex:1;padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px" onkeydown="if(event.key==='Enter'){event.preventDefault();if(window.AdminProducts)window.AdminProducts.addGalleryUrl()}">
-            <button type="button" class="btn btn-xs btn-primary" style="padding:6px 16px;white-space:nowrap" onclick="if(window.AdminProducts)window.AdminProducts.addGalleryUrl()">+ 添加</button>
+          <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+            <span style="font-size:11px;color:var(--g);white-space:nowrap">📎 URL：</span>
+            <input id="galleryUrlInput" placeholder="从媒体库复制URL粘贴" style="flex:1;padding:5px 8px;border:1px solid #d1d5db;border-radius:5px;font-size:11px" onkeydown="if(event.key==='Enter'){event.preventDefault();if(window.AdminProducts)window.AdminProducts.addGalleryUrl()}">
+            <button type="button" class="btn btn-xs btn-primary" style="white-space:nowrap" onclick="if(window.AdminProducts)window.AdminProducts.addGalleryUrl()">+ 添加</button>
           </div>
-          <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px"></div>
+          <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"></div>
           <input type="hidden" id="pGallery" value="">
-          <div class="helper" style="margin-top:8px">第一张图片自动同步到下方的图片URL和ALT字段</div>
+          <div class="helper" style="margin-top:6px">第一张自动同步到图片URL和ALT字段</div>
         </div>
-
         <div class="field">
           <label>图片 ALT 文本</label>
           <input id="pImgAlt" placeholder="例如：工业蜗轮丝杆升降机前视图">
         </div>
       </div>
-
-      <!-- Detail Page panel -->
       <div id="panel-detail" class="tab-content">
         <div class="modules-bar">
           <button type="button" class="mod-btn" style="background:#ce1132;color:#fff;font-weight:bold" data-action="add-module" data-type="text">✏️ 添加文字</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="h2">📌 H2 标题</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="h3">📌 H3 标题</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="h2">📌 H2</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="h3">📌 H3</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="image">🖼️ 图片</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="2imgs">1×2</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="3imgs">1×3</button>
@@ -249,74 +225,107 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
           <button type="button" class="mod-btn" data-action="add-module" data-type="6imgs">1×6</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="features">✅ 特性</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="specs">📊 规格</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="faq">❓ 常见问题</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="faq">❓ FAQ</button>
           <button type="button" class="mod-btn" data-action="add-module" data-type="table">📋 表格</button>
-          <button type="button" class="mod-btn" data-action="add-module" data-type="cta">📧 行动号召</button>
+          <button type="button" class="mod-btn" data-action="add-module" data-type="cta">📧 CTA</button>
         </div>
         <div class="viz-preview" id="vizPreview"></div>
-        <button class="btn btn-xs" data-action="export-viz" style="margin-top:8px;font-size:11px">📋 导出 HTML</button>
+        <button class="btn btn-xs" data-action="export-viz" style="margin-top:6px;font-size:10px">📋 导出 HTML</button>
       </div>
-
-      <!-- SEO panel -->
       <div id="panel-seo" class="tab-content">
-        <div class="field">
-          <label>SEO 标题 <span class="req">*</span></label>
-          <input id="pMetaTitle" placeholder="例如：NMRV050 蜗轮减速机制造商 | GRANGIN">
-          <div class="char-count" id="seoTitleCount">0 / 50-60</div>
-          <div class="helper">50-60字符，每个产品唯一</div>
-        </div>
-        <div class="field">
-          <label>Meta 描述 <span class="req">*</span></label>
-          <textarea id="pMetaDesc" rows="3" placeholder="120-155字符，包含关键词和参数"></textarea>
-          <div class="char-count" id="metaDescCount">0 / 120-155</div>
-        </div>
-        <div class="field">
-          <label>关键词</label>
-          <input id="pKeywords" placeholder="蜗轮减速机, NMRV050, 减速器">
-        </div>
-        <div class="field">
-          <label>排序</label>
-          <input id="pOrder" type="number" value="0" style="width:120px">
-          <div class="helper">数值越大越靠前，900000+为推荐</div>
-        </div>
+        <div class="field"><label>SEO 标题</label><input id="pMetaTitle" placeholder="例如：NMRV050 蜗轮减速机制造商 | GRANGIN"><div class="helper">50-60字符</div></div>
+        <div class="field"><label>Meta 描述</label><textarea id="pMetaDesc" rows="2" placeholder="120-155字符，包含关键词和参数"></textarea></div>
+        <div class="field"><label>关键词</label><input id="pKeywords" placeholder="蜗轮减速机, NMRV050"></div>
+        <div class="field"><label>排序</label><input id="pOrder" type="number" value="0" style="width:100px"><div class="helper">越大越靠前</div></div>
       </div>
-
-      <!-- Actions -->
-      <div class="card" style="margin-top:16px">
+      <div class="card" style="margin-top:12px">
         <h3>操作</h3>
         <button class="btn btn-primary" data-action="save-product">💾 保存并发布</button>
         <button class="btn btn-secondary" data-action="reset-form">↺ 重置</button>
-        <span style="font-size:12px;color:var(--g);margin-left:12px">通过 GitHub Actions 约 2 分钟部署</span>
+        <span style="font-size:11px;color:var(--g);margin-left:10px">通过 GitHub Actions 约 2 分钟部署</span>
       </div>
     </div>
 
-    <!-- Media page -->
+    <!-- ====== NEWS ====== -->
+    <div id="page-news" class="tab-content">
+      <div class="card">
+        <h3>📰 文章列表</h3>
+        <div id="newsList">加载中...</div>
+      </div>
+      <div class="card">
+        <h3>✏️ 编辑文章</h3>
+        <div class="field">
+          <label>标题 <span class="req">*</span></label>
+          <input id="nTitle" placeholder="文章标题">
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>URL 别名 <span class="req">*</span></label>
+            <input id="nSlug" placeholder="article-slug">
+          </div>
+          <div class="field">
+            <label>日期 <span class="req">*</span></label>
+            <input id="nDate" type="date">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>分类 <span class="req">*</span></label>
+            <select id="nCat">
+              <option value="">请选择...</option>
+              <option>Product Knowledge</option>
+              <option>Selection Guide</option>
+              <option>Technical Guide</option>
+              <option>Industry News</option>
+              <option>Company News</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>配图 URL</label>
+            <input id="nImg" placeholder="/images/news/xxx.jpg">
+            <div class="helper">可选</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>摘要 <span class="req">*</span></label>
+          <textarea id="nExcerpt" rows="2" placeholder="文章摘要（用于列表展示）"></textarea>
+        </div>
+        <div class="field">
+          <label>正文 (Markdown)</label>
+          <textarea id="nBody" rows="10" placeholder="## 标题&#10;&#10;正文内容..."></textarea>
+        </div>
+        <button class="btn btn-primary" data-action="save-news">💾 保存并发布</button>
+        <button class="btn btn-secondary" data-action="reset-news">↺ 重置</button>
+        <span style="font-size:11px;color:var(--g);margin-left:10px">通过 GitHub Actions 约 2 分钟部署</span>
+      </div>
+    </div>
+
+    <!-- ====== MEDIA ====== -->
     <div id="page-media" class="tab-content">
       <div class="card">
         <h3>🖼️ 媒体库</h3>
-        <p style="color:var(--g);font-size:13px;margin-bottom:16px">上传图片 — 点击 URL 即可复制</p>
+        <p style="color:var(--g);font-size:13px;margin-bottom:14px">上传图片 — 点击 URL 复制</p>
         <div class="upload-zone" onclick="document.getElementById('mediaFileInput').click()">
           <div class="icon">📁</div>
           <p>点击浏览<br><small>JPG、PNG、WebP ≤5MB</small></p>
         </div>
         <input type="file" id="mediaFileInput" accept="image/*" style="display:none" onchange="if(window.AdminMedia)AdminMedia.upload()">
-        <div id="mediaList" style="margin-top:12px"></div>
+        <div id="mediaList" style="margin-top:10px"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- External JS files — loaded in order -->
-<script src="./js/admin-utils.js?v=33"></script>
-<script src="./js/admin-auth.js?v=33"></script>
-<script src="./js/admin-dashboard.js?v=33"></script>
-<script src="./js/admin-products.js?v=45"></script>
-<script src="./js/admin-editor.js?v=38"></script>
-<script src="./js/admin-media.js?v=35"></script>
+<script src="./js/admin-utils.js?v=34"></script>
+<script src="./js/admin-auth.js?v=34"></script>
+<script src="./js/admin-dashboard.js?v=34"></script>
+<script src="./js/admin-products.js?v=46"></script>
+<script src="./js/admin-editor.js?v=39"></script>
+<script src="./js/admin-news.js?v=1"></script>
+<script src="./js/admin-media.js?v=36"></script>
 
-<div style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#9ca3af;z-index:9999;opacity:0.5">后台版本: v45-zh</div>
+<div style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#9ca3af;z-index:9999;opacity:0.5">后台版本: v46</div>
 </body>
 </html>
