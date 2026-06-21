@@ -503,6 +503,28 @@ window.AdminProducts = (function() {
     }
   }
 
+  function addGalleryUrl() {
+    var input = document.getElementById('galleryUrlInput');
+    if (!input) return;
+    var url = input.value.trim();
+    if (!url) { U.toast('Please paste an image URL', 'error'); return; }
+    /* Basic validation */
+    if (!/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(url) && url.indexOf('/images/') < 0) {
+      U.toast('Doesn\'t look like an image URL (.jpg/.png/.webp expected)', 'error');
+      return;
+    }
+    var parts = url.split('/');
+    var fname = parts[parts.length - 1].split('?')[0];
+    galleryImages.push({
+      name: fname, url: url, size: '', dims: '',
+      alt: buildGalleryAlt(document.getElementById('pTitle').value || '', fname, document.getElementById('pCat').value),
+      dataUrl: url
+    });
+    renderGallery();
+    input.value = '';
+    U.toast('Added: ' + fname, 'success');
+  }
+
   return {
     init: init,
     loadOverview: loadOverview,
@@ -510,6 +532,7 @@ window.AdminProducts = (function() {
     resetForm: resetForm,
     editProduct: editProduct,
     addGalleryImages: addGalleryImages,
+    addGalleryUrl: addGalleryUrl,
     removeGalleryImage: removeGalleryImage,
     setMainImage: setMainImage,
     updateGallery: updateGallery,
