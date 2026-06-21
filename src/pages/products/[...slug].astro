@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { product } = Astro.props as { product: CollectionEntry<'products'> };
-const { title, category, excerpt, features, specs, image } = product.data;
+const { title, category, excerpt, features, specs, image, imageAlt } = product.data;
 
 // Related products (same category, excluding current)
 const allProducts = await getCollection('products', ({ data }) => data.published);

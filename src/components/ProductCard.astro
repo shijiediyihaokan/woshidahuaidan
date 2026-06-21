@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { product } = Astro.props;
-const { title, image, excerpt, category } = product.data;
+const { title, image, imageAlt, excerpt, category } = product.data;
 const href = `/products/${product.id}/`;
 ---
 

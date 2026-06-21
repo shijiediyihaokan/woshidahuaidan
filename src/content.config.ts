@@ -27,7 +27,13 @@ const products = defineCollection({
     metaTitle: z.string().optional(),
     metaDescription: z.string().optional(),
     keywords: z.string().optional(),
-    gallery: z.string().optional(),
+    gallery: z.array(z.object({
+      name: z.string().optional(),
+      url: z.string(),
+      size: z.string().optional(),
+      dims: z.string().optional(),
+      alt: z.string().optional(),
+    })).optional(),
   }),
 });
 

@@ -19,10 +19,14 @@ const pageDescription = metaDescription || excerpt?.slice(0, 155) || '';
 const pageKeywords = keywords || `${title}, ${category}, China manufacturer, GRANGIN`;
 const pageTitle = metaTitle || title;
 
-// Parse gallery if present
+// Parse gallery if present (supports both array and legacy string format)
 let galleryImages: Array<{url:string,alt?:string,name?:string}> = [];
 if(gallery){
-  try{ galleryImages = JSON.parse(gallery); }catch(e){}
+  if(Array.isArray(gallery)){
+    galleryImages = gallery;
+  }else if(typeof gallery === 'string'){
+    try{ galleryImages = JSON.parse(gallery); }catch(e){}
+  }
 }
 
 // WebP helper: prefers .webp if .png fallback
