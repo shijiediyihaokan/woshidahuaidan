@@ -15,7 +15,7 @@ window.AdminMedia = (function() {
   function upload() {
     var f = document.getElementById('mediaFileInput').files[0];
     if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { U.toast('File too large (>5MB)', 'error'); return; }
+    if (f.size > 5 * 1024 * 1024) { U.toast('文件过大（>5MB）', 'error'); return; }
 
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -34,12 +34,12 @@ window.AdminMedia = (function() {
           var url = '/images/products/' + f.name;
           if (d.content || (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))) {
             addToList(url, f.name);
-            U.toast('Uploaded!', 'success');
+            U.toast('上传成功！', 'success');
           } else {
-            U.toast(d.message || 'Upload failed', 'error');
+            U.toast(d.message || '上传失败', 'error');
           }
         })
-        .catch(function() { U.toast('Upload failed — network error', 'error'); });
+        .catch(function() { U.toast('上传失败 — 网络错误', 'error'); });
     };
     reader.readAsDataURL(f);
   }
@@ -49,7 +49,7 @@ window.AdminMedia = (function() {
     div.style.cssText = 'margin:4px 0;cursor:pointer;padding:4px;border-radius:4px';
     div.innerHTML = '<code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-size:11px">' + url + '</code> <span style="font-size:10px;color:var(--g)">(' + name + ')</span>';
     div.addEventListener('click', function() {
-      navigator.clipboard.writeText(url).then(function() { U.toast('Copied: ' + url, 'success'); });
+      navigator.clipboard.writeText(url).then(function() { U.toast('已复制：' + url, 'success'); });
     });
     document.getElementById('mediaList').appendChild(div);
   }

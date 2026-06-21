@@ -41,7 +41,7 @@ window.AdminUtils = (function() {
     if (errEl) errEl.textContent = msg;
     if (box) box.style.display = 'block';
     document.getElementById('absSpinner').style.display = 'none';
-    document.getElementById('absStatus').textContent = 'Initialization failed';
+    document.getElementById('absStatus').textContent = '初始化失败';
   }
 
   function fetchWithTimeout(url, options, timeout) {

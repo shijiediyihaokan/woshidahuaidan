@@ -200,7 +200,7 @@ window.AdminEditor = (function() {
 
         h='<div class="viz-module" id="viz-'+idx+'">'+act+
 
-          '<textarea oninput="__vizData['+idx+'].data.text=this.value" style="width:100%;min-height:80px;padding:12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;line-height:1.8;resize:vertical;color:#444" placeholder="Enter content...">'+d.text+'</textarea></div>';
+          '<textarea oninput="__vizData['+idx+'].data.text=this.value" style="width:100%;min-height:80px;padding:12px;border:1px solid #e5e7eb;border-radius:6px;font-size:14px;line-height:1.8;resize:vertical;color:#444" placeholder="请输入内容...">'+d.text+'</textarea></div>';
 
         break;
 
@@ -208,13 +208,13 @@ window.AdminEditor = (function() {
 
         h='<div class="viz-module" id="viz-'+idx+'">'+act+
 
-          '<input value="'+d.text+'" placeholder="H2 Title" onchange="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:8px 12px;border-left:4px solid '+d.color+';font-size:22px;font-weight:bold;background:#fafafa">'+
+          '<input value="'+d.text+'" placeholder="H2 标题" onchange="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:8px 12px;border-left:4px solid '+d.color+';font-size:22px;font-weight:bold;background:#fafafa">'+
 
           '<select onchange="__vizData['+idx+'].data.style=this.value;AdminEditor.renderAll()" style="padding:4px;font-size:11px">'+
 
-          '<option value="red-left"'+(d.style==='red-left'?' selected':'')+'>Red Left</option>'+
+          '<option value="red-left"'+(d.style==='red-left'?' selected':'')+'>红色左边框</option>'+
 
-          '<option value="red-underline"'+(d.style==='red-underline'?' selected':'')+'>Red Underline</option>'+
+          '<option value="red-underline"'+(d.style==='red-underline'?' selected':'')+'>红色下划线</option>'+
 
           '</select>'+
 
@@ -226,7 +226,7 @@ window.AdminEditor = (function() {
 
         h='<div class="viz-module" id="viz-'+idx+'">'+act+
 
-          '<input value="'+d.text+'" placeholder="H3 Title" onchange="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:6px 10px;border-left:4px solid '+d.color+';font-size:17px;font-weight:bold;background:#fafafa"></div>';
+          '<input value="'+d.text+'" placeholder="H3 标题" onchange="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:6px 10px;border-left:4px solid '+d.color+';font-size:17px;font-weight:bold;background:#fafafa"></div>';
 
         break;
 
@@ -291,14 +291,14 @@ window.AdminEditor = (function() {
           var ifit=item.fitMode||'contain';
           var ial=item.alignment||'center';
           var iam=(ial==='left'?'0 auto 0 0':ial==='right'?'0 0 0 auto':'auto');
-          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px;object-fit:'+ifit+';'+(iar!=='auto'?'aspect-ratio:'+iar.replace(':','/'):'')+'">':'<div class="icon">📁</div><p style="font-size:10px">Upload</p>');
+          gh+=(item.url?'<img src="'+item.url+'" style="max-width:100%;max-height:100px;border-radius:4px;object-fit:'+ifit+';'+(iar!=='auto'?'aspect-ratio:'+iar.replace(':','/'):'')+'">':'<div class="icon">📁</div><p style="font-size:10px">上传</p>');
 
           gh+='</div>';
 
           gh+='<div style="font-size:10px;color:var(--g);text-align:left;margin-top:2px">ALT 文本: <span style="color:#374151">'+(item.alt||'(auto)')+'</span></div>';
           gh+='<input value="'+(item.alt||'')+'" placeholder="编辑 ALT 文本" onchange="__vizData['+idx+'].data.imgs['+gi+'].alt=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
 
-          gh+='<input value="'+(item.text||'')+'" placeholder="Caption" onchange="__vizData['+idx+'].data.imgs['+gi+'].text=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
+          gh+='<input value="'+(item.text||'')+'" placeholder="说明文字" onchange="__vizData['+idx+'].data.imgs['+gi+'].text=this.value" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:1px">';
 
           /* Per-image config rows — same as single image */
           /* 宽度 */
@@ -338,16 +338,16 @@ window.AdminEditor = (function() {
         var fItems=d.items||[{name:'',desc:''}];
         h='<div class="viz-module" id="viz-'+idx+'">'+act;
         h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
-        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">🔑 Key Features</div>';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">🔑 核心特性</div>';
         for(var fi=0;fi<fItems.length;fi++){
           var fItem=fItems[fi]||{name:'',desc:''};
           h+='<div style="display:flex;gap:6px;margin-bottom:4px;align-items:center">';
           h+='<span style="color:#ce1132;font-weight:bold;font-size:14px;flex-shrink:0">✓</span>';
-          h+='<input type="text" value="'+(fItem.name||'')+'" placeholder="Feature text" onchange="__vizData['+idx+'].data.items['+fi+'].name=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
+          h+='<input type="text" value="'+(fItem.name||'')+'" placeholder="特性文字" onchange="__vizData['+idx+'].data.items['+fi+'].name=this.value" style="flex:1;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px">';
           h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.splice('+fi+',1);AdminEditor.renderAll()" style="flex-shrink:0;background:none;border:none;color:#999;cursor:pointer;font-size:14px" title="Remove">✕</button>';
           h+='</div>';
         }
-        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({name:\'\',desc:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Feature</button>';
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({name:\'\',desc:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ 添加特性</button>';
         h+='</div></div>';
         break;
 
@@ -355,7 +355,7 @@ window.AdminEditor = (function() {
         var sRows=d.rows||[{name:'',value:''}];
         h='<div class="viz-module" id="viz-'+idx+'">'+act;
         h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
-        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📊 Specifications</div>';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📊 规格参数</div>';
         for(var si=0;si<sRows.length;si++){
           var sRow=sRows[si]||{name:'',value:''};
           h+='<div style="display:flex;gap:6px;margin-bottom:4px;align-items:center">';
@@ -364,7 +364,7 @@ window.AdminEditor = (function() {
           h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.splice('+si+',1);AdminEditor.renderAll()" style="flex-shrink:0;background:none;border:none;color:#999;cursor:pointer;font-size:14px" title="Remove">✕</button>';
           h+='</div>';
         }
-        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.push({name:\'\',value:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Row</button>';
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.rows.push({name:\'\',value:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ 添加行</button>';
         h+='</div></div>';
         break;
 
@@ -372,7 +372,7 @@ window.AdminEditor = (function() {
         var qItems=d.items||[{q:'',a:''}];
         h='<div class="viz-module" id="viz-'+idx+'">'+act;
         h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
-        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">❓ FAQ</div>';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">❓ 常见问题</div>';
         for(var qi=0;qi<qItems.length;qi++){
           var qItem=qItems[qi]||{q:'',a:''};
           h+='<div style="margin-bottom:8px;padding:8px;background:#fafafa;border-radius:6px;position:relative">';
@@ -381,7 +381,7 @@ window.AdminEditor = (function() {
           h+='<textarea placeholder="答案" oninput="__vizData['+idx+'].data.items['+qi+'].a=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;min-height:60px;resize:vertical">'+(qItem.a||'')+'</textarea>';
           h+='</div>';
         }
-        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({q:\'\',a:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add FAQ</button>';
+        h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.items.push({q:\'\',a:\'\'});AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ 添加问答</button>';
         h+='</div></div>';
         break;
 
@@ -390,8 +390,8 @@ window.AdminEditor = (function() {
         var tRows=d.rows||[['',''],['','']];
         h='<div class="viz-module" id="viz-'+idx+'">'+act;
         h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
-        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📋 Table</div>';
-        h+='<div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;font-size:11px"><span style="color:var(--g)">Columns:</span>';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📋 表格</div>';
+        h+='<div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;font-size:11px"><span style="color:var(--g)">列数:</span>';
         [2,3,4].forEach(function(c){
           h+='<button type="button" class="btn btn-xs" onclick="__vizData['+idx+'].data.cols='+c+';__vizData['+idx+'].data.rows=[[\'\',\'\']];AdminEditor.renderAll()" style="'+(tCols===c?'background:#ce1132;color:#fff;border-color:#ce1132':'')+'">'+c+'</button>';
         });
@@ -407,14 +407,14 @@ window.AdminEditor = (function() {
           h+='</tr>';
         }
         h+='</table>';
-        h+='<button type="button" class="btn btn-xs" onclick="var r=[];for(var j=0;j<__vizData['+idx+'].data.cols;j++)r.push(\'\');__vizData['+idx+'].data.rows.push(r);AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ Add Row</button>';
+        h+='<button type="button" class="btn btn-xs" onclick="var r=[];for(var j=0;j<__vizData['+idx+'].data.cols;j++)r.push(\'\');__vizData['+idx+'].data.rows.push(r);AdminEditor.renderAll()" style="margin-top:6px;background:#f0f2f5;border:1px dashed #d1d5db;color:#6b7280;font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer">+ 添加行</button>';
         h+='</div></div>';
         break;
 
       case'cta':
         h='<div class="viz-module" id="viz-'+idx+'">'+act;
         h+='<div style="padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#fff">';
-        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📧 Call to Action</div>';
+        h+='<div style="font-weight:600;font-size:13px;margin-bottom:8px;color:#374151">📧 行动号召</div>';
         h+='<input type="text" value="'+(d.title||'')+'" placeholder="标题" onchange="__vizData['+idx+'].data.title=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;font-weight:600;margin-bottom:4px">';
         h+='<textarea placeholder="描述" oninput="__vizData['+idx+'].data.text=this.value" style="width:100%;padding:6px 8px;border:1px solid #e5e7eb;border-radius:4px;font-size:12px;min-height:60px;resize:vertical;margin-bottom:4px">'+(d.text||'')+'</textarea>';
         h+='<div style="display:flex;gap:6px">';
@@ -481,8 +481,8 @@ window.AdminEditor = (function() {
     menu.style.cssText = 'position:absolute;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;padding:6px 0;min-width:140px';
     var items = [
       {t:'text',l:'正文文字'},{t:'h2',l:'H2 标题'},{t:'h3',l:'H3 标题'},
-      {t:'image',l:'图片'},{t:'table',l:'表格'},{t:'features',l:'Features'},
-      {t:'specs',l:'Specs'},{t:'faq',l:'FAQ'},{t:'cta',l:'CTA'}
+      {t:'image',l:'图片'},{t:'table',l:'表格'},{t:'features',l:'特性列表'},
+      {t:'specs',l:'规格参数'},{t:'faq',l:'常见问题'},{t:'cta',l:'行动号召'}
     ];
     items.forEach(function(item){
       var el = document.createElement('div');
@@ -509,7 +509,7 @@ window.AdminEditor = (function() {
 
     var html='';for(var i=0;i<V.length;i++)html+=renderModule(V[i],i)+'\n';
 
-    navigator.clipboard.writeText(html).then(function(){U.toast('HTML copied!','success');});
+    navigator.clipboard.writeText(html).then(function(){U.toast('HTML 已复制！','success');});
 
   }
 

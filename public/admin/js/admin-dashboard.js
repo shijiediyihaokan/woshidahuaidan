@@ -46,7 +46,7 @@
         if (spinner) spinner.style.display = 'none';
         var box = document.getElementById('absErrorBox');
         if (box) box.style.display = 'block';
-        document.getElementById('absStatus').textContent = 'Timed out';
+        document.getElementById('absStatus').textContent = '加载超时';
       }
     }
   }, 8000);

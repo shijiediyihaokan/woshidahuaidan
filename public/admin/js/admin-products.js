@@ -243,7 +243,7 @@ window.AdminProducts = (function() {
 
     /* Update save button */
     var saveBtn = document.querySelector('[data-action="save-product"]');
-    if (saveBtn) saveBtn.textContent = '💾 Update & Publish';
+    if (saveBtn) saveBtn.textContent = '💾 更新并发布';
 
     /* Switch to Products tab */
     var productsLink = document.querySelector('.sidebar nav a[data-page="products"]');
@@ -253,7 +253,7 @@ window.AdminProducts = (function() {
     var basicTab = document.querySelector('#page-products .tab-btn[data-panel="basic"]');
     if (basicTab) basicTab.click();
 
-    U.toast('Loaded: ' + (p.title || p.slug), 'success');
+    U.toast('已加载：' + (p.title || p.slug), 'success');
   }
 
   /* === Save Product === */
@@ -263,10 +263,10 @@ window.AdminProducts = (function() {
     var c = document.getElementById('pCat').value;
     var ex = document.getElementById('pExcerpt').value.trim();
 
-    if (!t) { U.toast('Product Name required', 'error'); return; }
-    if (!s) { U.toast('Slug required', 'error'); return; }
-    if (!c) { U.toast('Category required', 'error'); return; }
-    if (!ex) { U.toast('Short Description required', 'error'); return; }
+    if (!t) { U.toast('请填写产品名称', 'error'); return; }
+    if (!s) { U.toast('请填写 URL 别名', 'error'); return; }
+    if (!c) { U.toast('请选择产品分类', 'error'); return; }
+    if (!ex) { U.toast('请填写简短描述', 'error'); return; }
 
     var fm = buildFrontmatter(t, s, c, ex);
     saveToGithub(s, fm, t);
@@ -435,11 +435,11 @@ window.AdminProducts = (function() {
             }
           }
           editingSlug = slug;
-          U.toast('Saved! Deploying...', 'success');
+          U.toast('已保存！正在部署...', 'success');
         }
-        else { U.toast(d.message || 'Save failed', 'error'); }
+        else { U.toast(d.message || '保存失败', 'error'); }
       })
-      .catch(function() { U.toast('Save failed — network error', 'error'); });
+      .catch(function() { U.toast('保存失败 — 网络错误', 'error'); });
   }
 
   function resetForm() {
@@ -454,10 +454,10 @@ window.AdminProducts = (function() {
     editingSlug = null;
     editingSha = null;
     var saveBtn = document.querySelector('[data-action="save-product"]');
-    if (saveBtn) saveBtn.textContent = '💾 Save & Publish';
+    if (saveBtn) saveBtn.textContent = '💾 保存并发布';
     var slugEl = document.getElementById('pSlug');
     if (slugEl) delete slugEl.dataset.manual;
-    U.toast('Form reset', 'success');
+    U.toast('表单已重置', 'success');
   }
 
   /* ================================================================
@@ -477,7 +477,7 @@ window.AdminProducts = (function() {
     var safeName = base + ext;
 
     if (f.size > 5 * 1024 * 1024) {
-      U.toast('❌ ' + f.name + ' file too large! ' + (f.size / 1024).toFixed(0) + 'KB > 5MB', 'error');
+      U.toast('❌ ' + f.name + ' 文件过大！' + (f.size / 1024).toFixed(0) + 'KB > 5MB', 'error');
       return;
     }
 
@@ -500,7 +500,7 @@ window.AdminProducts = (function() {
           if (d.content) addToGallery(f, e.target.result, url, safeName);
           else if (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))
             addToGallery(f, e.target.result, url, safeName);
-          else { addToGallery(f, e.target.result, url, safeName); U.toast('Upload failed: ' + d.message, 'error'); }
+          else { addToGallery(f, e.target.result, url, safeName); U.toast('上传失败：' + d.message, 'error'); }
         })
         .catch(function() { addToGallery(f, e.target.result, null, safeName); });
     };
@@ -572,14 +572,14 @@ window.AdminProducts = (function() {
   function removeGalleryImage(i) {
     galleryImages.splice(i, 1);
     renderGallery();
-    U.toast('Image removed', 'success');
+    U.toast('图片已移除', 'success');
   }
 
   function setMainImage(i) {
     var img = galleryImages.splice(i, 1)[0];
     galleryImages.unshift(img);
     renderGallery();
-    U.toast('⭐ New main image set', 'success');
+    U.toast('⭐ 已设置新主图', 'success');
   }
 
   function updateGallery() {
@@ -606,10 +606,10 @@ window.AdminProducts = (function() {
     var input = document.getElementById('galleryUrlInput');
     if (!input) return;
     var url = input.value.trim();
-    if (!url) { U.toast('Please paste an image URL', 'error'); return; }
+    if (!url) { U.toast('请粘贴图片 URL', 'error'); return; }
     /* Basic validation */
     if (!/\.(jpg|jpeg|png|webp|gif|svg)(\?.*)?$/i.test(url) && url.indexOf('/images/') < 0) {
-      U.toast('Doesn\'t look like an image URL (.jpg/.png/.webp expected)', 'error');
+      U.toast('不是有效的图片 URL 格式（需要 .jpg/.png/.webp）', 'error');
       return;
     }
     var parts = url.split('/');
@@ -621,7 +621,7 @@ window.AdminProducts = (function() {
     });
     renderGallery();
     input.value = '';
-    U.toast('Added: ' + fname, 'success');
+    U.toast('已添加：' + fname, 'success');
   }
 
   return {
