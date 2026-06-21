@@ -1,5 +1,5 @@
 /**
- * admin-products.js — Product list, search, edit entry
+ * admin-products.js — Product list, search, edit entry + Image Gallery
  * Depends on: AdminUtils, AdminAuth
  */
 window.AdminProducts = (function() {
@@ -9,6 +9,7 @@ window.AdminProducts = (function() {
   var products = [];
   var editingSlug = null;
   var editingSha = null;
+  var galleryImages = [];
 
   function init() {
     console.log('AdminProducts.init');
@@ -112,23 +113,32 @@ window.AdminProducts = (function() {
 
   function parseFrontmatter(md) {
     var prod = { title:'', category:'', subcategory:'', excerpt:'', slug:'',
-                 imageUrl:'', imageAlt:'', metaTitle:'', metaDescription:'', keywords:'', order:0 };
+                 image:'', imageAlt:'', gallery:'', metaTitle:'', metaDescription:'', keywords:'', order:0 };
     var m = md.match(/^---\n([\s\S]*?)\n---/);
     if (!m) return prod;
     var fm = m[1];
-    var fields = {
-      'title': 'title', 'category': 'category', 'subcategory': 'subcategory',
-      'excerpt': 'excerpt', 'slug': 'slug', 'imageUrl': 'imageUrl', 'imageAlt': 'imageAlt',
-      'metaTitle': 'metaTitle', 'metaDescription': 'metaDescription',
-      'keywords': 'keywords', 'order': 'order'
-    };
-    for (var key in fields) {
+
+    /* String fields */
+    var stringKeys = ['title','category','subcategory','excerpt','slug','image','imageAlt','imageUrl','metaTitle','metaDescription','keywords'];
+    stringKeys.forEach(function(key) {
       var re = new RegExp(key + ':\\s*"([^"]*)"');
       var match = fm.match(re);
-      if (match) prod[fields[key]] = match[1];
-    }
+      if (match) {
+        if (key === 'imageUrl') prod.image = match[1];  /* alias: imageUrl → image */
+        else prod[key] = match[1];
+      }
+    });
+
+    /* Numeric fields */
     var orderMatch = fm.match(/order:\s*(\d+)/);
     if (orderMatch) prod.order = parseInt(orderMatch[1]);
+
+    /* Gallery: JSON array on one or more lines */
+    var galleryMatch = fm.match(/gallery:\s*(\[[\s\S]*?\n)/);
+    if (galleryMatch) {
+      prod.gallery = galleryMatch[1].trim();
+    }
+
     return prod;
   }
 
@@ -185,21 +195,32 @@ window.AdminProducts = (function() {
     document.getElementById('pCat').value = p.category || '';
     document.getElementById('pExcerpt').value = p.excerpt || '';
     document.getElementById('pImgAlt').value = p.imageAlt || '';
-    document.getElementById('pImgUrl').value = p.imageUrl || '';
 
-    /* Show image preview if URL exists */
-    var preview = document.getElementById('basicImgPreview');
-    var placeholder = document.getElementById('basicImgPlaceholder');
-    var imgUrl = p.imageUrl || '';
-    if (imgUrl) {
-      preview.src = imgUrl;
-      preview.style.display = 'block';
-      if (placeholder) placeholder.style.display = 'none';
-    } else {
-      preview.src = '';
-      preview.style.display = 'none';
-      if (placeholder) placeholder.style.display = '';
+    /* Restore gallery from frontmatter */
+    galleryImages = [];
+    var galleryField = p.gallery || '';
+    if (galleryField) {
+      try {
+        var parsed = JSON.parse(galleryField);
+        if (Array.isArray(parsed)) {
+          parsed.forEach(function(img) {
+            /* dataUrl not stored in FM — use the URL as src for preview */
+            galleryImages.push({
+              name: img.name || '',
+              url: img.url || '',
+              size: img.size || '',
+              dims: img.dims || '',
+              alt: img.alt || '',
+              dataUrl: img.url || ''  /* use URL as preview source */
+            });
+          });
+        }
+      } catch(e) {
+        console.warn('Gallery parse error:', e);
+      }
     }
+    renderGallery();
+    document.getElementById('pGallery').value = galleryField;
 
     /* Trigger subcategory cascade */
     var catEl = document.getElementById('pCat');
@@ -253,7 +274,6 @@ window.AdminProducts = (function() {
 
   function buildFrontmatter(t, s, c, ex) {
     var sc = document.getElementById('pSub').value;
-    var imgUrl = document.getElementById('pImgUrl').value.trim();
     var alt = document.getElementById('pImgAlt').value.trim();
     var mt = document.getElementById('pMetaTitle').value.trim();
     var md = document.getElementById('pMetaDesc').value.trim();
@@ -263,8 +283,21 @@ window.AdminProducts = (function() {
     var fm = '---\ntitle: "' + t + '"\ncategory: "' + c + '"\n';
     if (sc) fm += 'subcategory: "' + sc + '"\n';
     fm += 'excerpt: "' + ex + '"\n';
-    if (imgUrl) fm += 'imageUrl: "' + imgUrl + '"\n';
+
+    /* Main image: first gallery image URL */
+    if (galleryImages.length > 0 && galleryImages[0].url) {
+      fm += 'image: "' + galleryImages[0].url + '"\n';
+    }
     if (alt) fm += 'imageAlt: "' + alt + '"\n';
+
+    /* Gallery: all images as JSON */
+    var galleryJson = JSON.stringify(galleryImages.map(function(img) {
+      return { name: img.name, url: img.url, size: img.size, dims: img.dims, alt: img.alt };
+    }));
+    if (galleryImages.length > 0) {
+      fm += 'gallery: ' + galleryJson + '\n';
+    }
+
     fm += 'slug: "' + s + '"\n';
     if (mt) fm += 'metaTitle: "' + mt + '"\n';
     if (md) fm += 'metaDescription: "' + md + '"\n';
@@ -311,15 +344,14 @@ window.AdminProducts = (function() {
   }
 
   function resetForm() {
-    ['pTitle','pSlug','pCat','pSub','pExcerpt','pImgUrl','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id) {
+    ['pTitle','pSlug','pCat','pSub','pExcerpt','pImgAlt','pMetaTitle','pMetaDesc','pKeywords'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
     document.getElementById('pOrder').value = '0';
-    /* Reset image preview */
-    var preview = document.getElementById('basicImgPreview');
-    var placeholder = document.getElementById('basicImgPlaceholder');
-    if (preview) { preview.src = ''; preview.style.display = 'none'; }
-    if (placeholder) placeholder.style.display = '';
+    /* Clear gallery */
+    document.getElementById('pGallery').value = '';
+    galleryImages = [];
+    renderGallery();
     editingSlug = null;
     editingSha = null;
     var saveBtn = document.querySelector('[data-action="save-product"]');
@@ -329,24 +361,36 @@ window.AdminProducts = (function() {
     U.toast('Form reset', 'success');
   }
 
-  /* === Basic Info Image Upload === */
-  function uploadBasicImage() {
-    var f = document.getElementById('basicImgInput').files[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { U.toast('File too large (>5MB)', 'error'); return; }
+  /* ================================================================
+   *  IMAGE GALLERY
+   *  ================================================================ */
+  function addGalleryImages() {
+    var files = document.getElementById('galleryFile').files;
+    for (var i = 0; i < files.length; i++) { uploadGalleryImage(files[i]); }
+    document.getElementById('galleryFile').value = '';
+  }
+
+  function uploadGalleryImage(f) {
+    /* Sanitize filename */
+    var ext = f.name.lastIndexOf('.') > 0 ? f.name.substring(f.name.lastIndexOf('.')) : '';
+    var base = f.name.substring(0, f.name.lastIndexOf('.') > 0 ? f.name.lastIndexOf('.') : f.name.length);
+    base = base.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9_-]/g, '').substring(0, 60);
+    var safeName = base + ext;
+
+    if (f.size > 5 * 1024 * 1024) {
+      U.toast('❌ ' + f.name + ' file too large! ' + (f.size / 1024).toFixed(0) + 'KB > 5MB', 'error');
+      return;
+    }
 
     var reader = new FileReader();
     reader.onload = function(e) {
       var b64 = e.target.result.split(',')[1];
+      var path = 'public/images/products/' + safeName;
+      var K = Auth.getToken();
+      if (!K) { addToGallery(f, e.target.result, null, safeName); return; }
+
       var repo = Auth.getRepo();
       var A = Auth.getApi();
-      var K = Auth.getToken();
-      /* Sanitize filename: keep extension, replace spaces/special chars */
-      var ext = f.name.split('.').pop().toLowerCase();
-      var base = f.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
-      var safeName = base + '.' + ext;
-      var path = 'public/images/products/' + safeName;
-
       U.fetchWithTimeout(A + '/repos/' + repo + '/contents/' + path, {
         method: 'PUT',
         headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
@@ -354,30 +398,116 @@ window.AdminProducts = (function() {
       }).then(function(r) { return r.json(); })
         .then(function(d) {
           var url = '/woshidahuaidan/images/products/' + safeName;
-          if (d.content || (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))) {
-            /* Update hidden field + preview */
-            document.getElementById('pImgUrl').value = url;
-            var preview = document.getElementById('basicImgPreview');
-            var placeholder = document.getElementById('basicImgPlaceholder');
-            if (preview) {
-              preview.src = e.target.result; /* data URL for instant preview */
-              preview.style.display = 'block';
-            }
-            if (placeholder) placeholder.style.display = 'none';
-            /* Auto-generate ALT if empty */
-            var altEl = document.getElementById('pImgAlt');
-            if (altEl && !altEl.value.trim()) {
-              altEl.value = (document.getElementById('pTitle').value || safeName.replace(/\.[^.]+$/, '').replace(/-/g, ' ')) + ' product image';
-            }
-            U.toast('Image uploaded!', 'success');
-          } else {
-            U.toast(d.message || 'Upload failed', 'error');
-          }
+          if (d.content) addToGallery(f, e.target.result, url, safeName);
+          else if (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))
+            addToGallery(f, e.target.result, url, safeName);
+          else { addToGallery(f, e.target.result, url, safeName); U.toast('Upload failed: ' + d.message, 'error'); }
         })
-        .catch(function() { U.toast('Upload failed — network error', 'error'); });
+        .catch(function() { addToGallery(f, e.target.result, null, safeName); });
     };
     reader.readAsDataURL(f);
   }
+
+  function buildGalleryAlt(productName, fileName, cat) {
+    var angleHints = {
+      front: 'front view', side: 'side view', back: 'back view', top: 'top view',
+      bottom: 'bottom view', iso: 'isometric view', assembly: 'assembly view',
+      detail: 'detail view', main: 'product image', multi: 'multi-angle view'
+    };
+    var hint = 'product image';
+    var fnLower = fileName.toLowerCase();
+    for (var k in angleHints) {
+      if (fnLower.indexOf(k) >= 0) { hint = angleHints[k]; break; }
+    }
+    var alt = '';
+    if (productName) {
+      alt = productName.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+    } else if (cat) {
+      alt = cat.toLowerCase().replace(/s$/, '');
+    } else {
+      alt = fnLower.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    alt = alt + ' ' + hint;
+    alt = alt.charAt(0).toUpperCase() + alt.slice(1);
+    return alt;
+  }
+
+  function addToGallery(f, dataUrl, url, safeName) {
+    var img = new Image();
+    img.onload = function() {
+      var dims = img.width + '×' + img.height + 'px';
+      var sizeKB = (f.size / 1024).toFixed(0) + 'KB';
+      var displayName = safeName || f.name;
+      var productName = document.getElementById('pTitle').value || '';
+      var defaultAlt = buildGalleryAlt(productName, f.name, document.getElementById('pCat').value);
+      galleryImages.push({
+        name: displayName, url: url || '', size: sizeKB,
+        dims: dims, alt: defaultAlt, dataUrl: dataUrl
+      });
+      renderGallery();
+    };
+    img.src = dataUrl;
+  }
+
+  function renderGallery() {
+    var strip = document.getElementById('galleryStrip');
+    if (!strip) return;
+    var html = '';
+    galleryImages.forEach(function(img, i) {
+      html += '<div style="position:relative;width:150px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#fafafa;flex-shrink:0">' +
+        '<img src="' + img.dataUrl + '" style="width:100%;height:120px;object-fit:cover">' +
+        '<button onclick="window.AdminProducts.removeGalleryImage(' + i + ')" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:22px;text-align:center">✕</button>' +
+        (i === 0
+          ? '<span style="position:absolute;top:4px;left:4px;background:var(--r);color:#fff;border-radius:3px;font-size:10px;padding:1px 5px;font-weight:bold">★ MAIN</span>'
+          : '<button onclick="window.AdminProducts.setMainImage(' + i + ')" title="Set as main" style="position:absolute;top:4px;left:4px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:3px;font-size:10px;padding:1px 5px;cursor:pointer">Set Main</button>') +
+        '<div style="padding:6px 8px">' +
+        '<input value="' + (img.name || '') + '" onchange="window.AdminProducts._galleryImages[' + i + '].name=this.value;window.AdminProducts.updateGallery()" style="width:100%;border:none;font-size:11px;padding:2px;background:transparent" title="Filename (editable)">' +
+        '<div style="font-size:10px;color:var(--g);margin:2px 0">' + (img.size || '') + ' | ' + (img.dims || '') + '</div>' +
+        '<input value="' + (img.alt || '') + '" placeholder="ALT text" onchange="window.AdminProducts._galleryImages[' + i + '].alt=this.value;window.AdminProducts.updateGallery()" style="width:100%;border:1px solid #e5e7eb;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">' +
+        '</div></div>';
+    });
+    strip.innerHTML = html;
+    updateGallery();
+  }
+
+  function removeGalleryImage(i) {
+    galleryImages.splice(i, 1);
+    renderGallery();
+    U.toast('Image removed', 'success');
+  }
+
+  function setMainImage(i) {
+    var img = galleryImages.splice(i, 1)[0];
+    galleryImages.unshift(img);
+    renderGallery();
+    U.toast('⭐ New main image set', 'success');
+  }
+
+  function updateGallery() {
+    var pg = document.getElementById('pGallery');
+    if (pg) pg.value = JSON.stringify(galleryImages.map(function(img) {
+      return { name: img.name, url: img.url, size: img.size, dims: img.dims, alt: img.alt };
+    }));
+    /* Sync first image to pImgAlt */
+    if (galleryImages.length > 0) {
+      var altEl = document.getElementById('pImgAlt');
+      if (altEl && !altEl.dataset.manualAlt) {
+        altEl.value = galleryImages[0].alt || '';
+      }
+    }
+    /* Track manual ALT edits */
+    var altEl = document.getElementById('pImgAlt');
+    if (altEl && !altEl.dataset.bound) {
+      altEl.dataset.bound = '1';
+      altEl.addEventListener('input', function() { this.dataset.manualAlt = '1'; });
+    }
+  }
+
+  /* Expose for inline onclick handlers */
+  window.AdminProducts._galleryImages = galleryImages;
+  window.AdminProducts.removeGalleryImage = removeGalleryImage;
+  window.AdminProducts.setMainImage = setMainImage;
+  window.AdminProducts.updateGallery = updateGallery;
 
   return {
     init: init,
@@ -385,6 +515,10 @@ window.AdminProducts = (function() {
     saveProduct: saveProduct,
     resetForm: resetForm,
     editProduct: editProduct,
-    uploadBasicImage: uploadBasicImage
+    addGalleryImages: addGalleryImages,
+    removeGalleryImage: removeGalleryImage,
+    setMainImage: setMainImage,
+    updateGallery: updateGallery,
+    _galleryImages: galleryImages
   };
 })();
