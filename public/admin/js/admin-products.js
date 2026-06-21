@@ -503,12 +503,6 @@ window.AdminProducts = (function() {
     }
   }
 
-  /* Expose for inline onclick handlers */
-  window.AdminProducts._galleryImages = galleryImages;
-  window.AdminProducts.removeGalleryImage = removeGalleryImage;
-  window.AdminProducts.setMainImage = setMainImage;
-  window.AdminProducts.updateGallery = updateGallery;
-
   return {
     init: init,
     loadOverview: loadOverview,
