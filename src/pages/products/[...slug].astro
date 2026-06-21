@@ -17,6 +17,9 @@ export async function getStaticPaths() {
 const { product } = Astro.props as { product: CollectionEntry<'products'> };
 const { title, category, excerpt, features, specs, image, imageAlt } = product.data;
 
+// Get body content from Detail Page editor
+const body = product.body || '';
+
 // Related products (same category, excluding current)
 const allProducts = await getCollection('products', ({ data }) => data.published);
 const related = allProducts
@@ -158,7 +161,16 @@ const breadcrumb = {
               </div>
             </div>
           )}
-        </di<FloatingContact />
+        </div>
+
+        <!-- Body Content from Detail Page Editor -->
+        {body && body.trim() && (
+          <div class="lg:col-span-2 mt-8 pt-8 border-t border-steel-200">
+            <div class="prose prose-steel max-w-none" set:html={body} />
+          </div>
+        )}
+
+        <FloatingContact />
 
   {related.length > 0 && (
     <section class="section-py bg-white">

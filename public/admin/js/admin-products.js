@@ -303,7 +303,106 @@ window.AdminProducts = (function() {
     if (md) fm += 'metaDescription: "' + md + '"\n';
     if (kw) fm += 'keywords: "' + kw + '"\n';
     fm += 'order: ' + o + '\npublished: true\n---\n';
+
+    /* Append Detail Page editor content as Markdown body */
+    var bodyHTML = buildDetailHTML();
+    if (bodyHTML) fm += '\n' + bodyHTML + '\n';
+
     return fm;
+  }
+
+  /* === Build clean HTML from Detail Page editor modules === */
+  function buildDetailHTML() {
+    if (typeof __vizData === 'undefined' || !__vizData.length) return '';
+    var html = '';
+    for (var i = 0; i < __vizData.length; i++) {
+      var m = __vizData[i];
+      var d = m.data || {};
+      switch (m.type) {
+        case 'text':
+          html += '<div class="detail-text">' + (d.text || '') + '</div>\n';
+          break;
+        case 'h2':
+          html += '<h2 class="detail-h2">' + (d.text || '') + '</h2>\n';
+          break;
+        case 'h3':
+          html += '<h3 class="detail-h3">' + (d.text || '') + '</h3>\n';
+          break;
+        case 'image':
+          if (d.url) {
+            var w = d.widthPercent || 60;
+            html += '<figure class="detail-image" style="text-align:' + (d.alignment || 'center') + '">' +
+              '<img src="' + d.url + '" alt="' + (d.alt || '') + '" style="width:' + w + '%;height:auto;display:inline-block" loading="lazy">' +
+              '</figure>\n';
+          }
+          break;
+        case 'features':
+          if (d.items && d.items.length) {
+            html += '<ul class="detail-features">\n';
+            for (var fi = 0; fi < d.items.length; fi++) {
+              var fItem = d.items[fi] || {};
+              if (fItem.name) html += '<li>' + fItem.name + '</li>\n';
+            }
+            html += '</ul>\n';
+          }
+          break;
+        case 'specs':
+          if (d.rows && d.rows.length) {
+            html += '<table class="detail-specs"><tbody>\n';
+            for (var si = 0; si < d.rows.length; si++) {
+              var sRow = d.rows[si] || {};
+              html += '<tr><td>' + (sRow.name || '') + '</td><td>' + (sRow.value || '') + '</td></tr>\n';
+            }
+            html += '</tbody></table>\n';
+          }
+          break;
+        case 'faq':
+          if (d.items && d.items.length) {
+            for (var qi = 0; qi < d.items.length; qi++) {
+              var qItem = d.items[qi] || {};
+              html += '<details class="detail-faq"><summary>' + (qItem.q || '') + '</summary><p>' + (qItem.a || '') + '</p></details>\n';
+            }
+          }
+          break;
+        case 'table':
+          if (d.rows && d.rows.length && d.cols) {
+            html += '<table class="detail-table"><tbody>\n';
+            for (var ti = 0; ti < d.rows.length; ti++) {
+              html += '<tr>';
+              for (var tj = 0; tj < (d.cols || 2); tj++) {
+                html += '<td>' + ((d.rows[ti] || [])[tj] || '') + '</td>';
+              }
+              html += '</tr>\n';
+            }
+            html += '</tbody></table>\n';
+          }
+          break;
+        case 'cta':
+          html += '<div class="detail-cta">';
+          if (d.title) html += '<h4>' + d.title + '</h4>';
+          if (d.text) html += '<p>' + d.text + '</p>';
+          if (d.email) html += '<p>Email: ' + d.email + '</p>';
+          if (d.phone) html += '<p>Phone: ' + d.phone + '</p>';
+          html += '</div>\n';
+          break;
+        case '2imgs': case '3imgs': case '4imgs': case '6imgs':
+          if (d.imgs && d.imgs.length) {
+            var gn = parseInt(m.type);
+            html += '<div class="detail-img-grid" style="display:grid;grid-template-columns:repeat(' + gn + ',1fr);gap:8px">\n';
+            for (var gi = 0; gi < d.imgs.length; gi++) {
+              var item = d.imgs[gi] || {};
+              if (item.url) {
+                html += '<figure><img src="' + item.url + '" alt="' + (item.alt || '') + '" style="width:100%" loading="lazy">';
+                if (item.text) html += '<figcaption>' + item.text + '</figcaption>';
+                html += '</figure>\n';
+              }
+            }
+            html += '</div>\n';
+          }
+          break;
+      }
+    }
+    return html;
   }
 
   function saveToGithub(slug, content, title) {
@@ -397,7 +496,7 @@ window.AdminProducts = (function() {
         body: JSON.stringify({ message: 'Upload ' + safeName, content: b64, branch: 'main' })
       }).then(function(r) { return r.json(); })
         .then(function(d) {
-          var url = '/woshidahuaidan/images/products/' + safeName;
+          var url = '/images/products/' + safeName;
           if (d.content) addToGallery(f, e.target.result, url, safeName);
           else if (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))
             addToGallery(f, e.target.result, url, safeName);

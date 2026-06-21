@@ -31,7 +31,7 @@ window.AdminMedia = (function() {
         body: JSON.stringify({ message: 'Upload ' + f.name, content: b64, branch: 'main' })
       }).then(function(r) { return r.json(); })
         .then(function(d) {
-          var url = '/woshidahuaidan/images/products/' + f.name;
+          var url = '/images/products/' + f.name;
           if (d.content || (d.message && (d.message.indexOf('already exists') >= 0 || d.message.indexOf('sha') >= 0))) {
             addToList(url, f.name);
             U.toast('Uploaded!', 'success');
