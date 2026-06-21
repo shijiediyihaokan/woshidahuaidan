@@ -90,7 +90,7 @@ window.AdminNews = (function() {
   }
 
   function renderArticleList() {
-    var container = document.getElementById('newsListContent');
+    var container = document.getElementById('newsList');
     if (!container) return;
 
     var cats = {};
@@ -127,7 +127,7 @@ window.AdminNews = (function() {
   }
 
   function renderEmpty() {
-    var container = document.getElementById('newsListContent');
+    var container = document.getElementById('newsList');
     if (container) container.innerHTML = '<p style="color:var(--g)">暂无文章或需要登录</p>';
   }
 
@@ -149,9 +149,8 @@ window.AdminNews = (function() {
     var saveBtn = document.querySelector('[data-action="save-news"]');
     if (saveBtn) saveBtn.textContent = '💾 更新并发布';
 
-    /* Switch to news-new page */
-    var newLink = document.querySelector('.sidebar nav a[data-page="news-new"]');
-    if (newLink) newLink.click();
+    var newsLink = document.querySelector('.sidebar nav a[data-page="news"]');
+    if (newsLink) newsLink.click();
 
     U.toast('已加载：' + (a.title || a.slug), 'success');
   }

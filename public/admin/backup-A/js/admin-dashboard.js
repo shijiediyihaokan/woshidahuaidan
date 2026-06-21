@@ -87,13 +87,18 @@
       await U.safeInitModule('Editor', function() {
         if (window.AdminEditor) return window.AdminEditor.init();
       });
+      await U.safeInitModule('News', function() {
+        if (window.AdminNews) return window.AdminNews.init();
+      });
       await U.safeInitModule('Media', function() {
         if (window.AdminMedia) return window.AdminMedia.init();
       });
 
+      /* Load news stats in overview */
+      loadNewsStats();
+
       initDone = true;
-      console.log('Admin dashboard loaded: image-block-v1');
-  console.log('✅ Dashboard fully initialized');
+      console.log('✅ Dashboard fully initialized');
     } catch (e) {
       console.error('Dashboard init failed:', e);
       U.hideLoading();
@@ -101,6 +106,45 @@
       U.showErrorBanner('Dashboard failed: ' + e.message);
       U.showABSError(e.message);
     }
+  }
+
+  /* === News stats for overview === */
+  function loadNewsStats() {
+    var repo = Auth.getRepo();
+    var A = Auth.getApi();
+    var K = Auth.getToken();
+    var url = A + '/repos/' + repo + '/contents/src/content/news';
+    U.fetchWithTimeout(url, { headers: { 'Authorization': 'token ' + K } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!Array.isArray(data)) { document.getElementById('overviewNews').innerHTML = '<p style="color:var(--g)">暂无数据</p>'; return; }
+        var cats = {};
+        var total = 0;
+        data.forEach(function(f) {
+          if (!f.name.endsWith('.md')) return;
+          total++;
+          U.fetchWithTimeout(f.download_url || f.url)
+            .then(function(r) { return r.text(); })
+            .then(function(md) {
+              var m = md.match(/category:\s*"([^"]+)"/);
+              if (m) cats[m[1]] = (cats[m[1]] || 0) + 1;
+              renderNewsStats(cats, total);
+            })
+            .catch(function() {});
+        });
+        if (total === 0) document.getElementById('overviewNews').innerHTML = '<p style="color:var(--g)">暂无文章</p>';
+      })
+      .catch(function() { document.getElementById('overviewNews').innerHTML = '<p style="color:var(--g)">加载失败</p>'; });
+  }
+
+  function renderNewsStats(cats, total) {
+    var all = ['Product Knowledge','Selection Guide','Technical Guide','Industry News','Company News'];
+    var html = '<span>总计: <b>' + total + '</b> 篇文章</span><br><br>';
+    all.forEach(function(c) {
+      var n = cats[c] || 0;
+      html += '<div style="margin:3px 0"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + (n ? '#27ae60' : '#e0e0e0') + ';margin-right:5px"></span><b>' + c + '</b>: ' + (n || '无') + '</div>';
+    });
+    document.getElementById('overviewNews').innerHTML = html;
   }
 
   /* === Navigation === */

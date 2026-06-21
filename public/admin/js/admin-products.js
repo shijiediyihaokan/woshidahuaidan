@@ -18,6 +18,10 @@ window.AdminProducts = (function() {
     return Promise.resolve();
   }
 
+  function rebind() {
+    bindEvents();
+  }
+
   function bindEvents() {
     /* Save product */
     var saveBtn = document.querySelector('[data-action="save-product"]');
@@ -80,7 +84,8 @@ window.AdminProducts = (function() {
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (!Array.isArray(data)) {
-          document.getElementById('overviewCats').innerHTML = '<p style="color:var(--g)">No products found or login required.</p>';
+          var el = document.getElementById('productListContent') || document.getElementById('overviewCats');
+          if (el) el.innerHTML = '<p style="color:var(--g)">暂无产品或需要登录</p>';
           return;
         }
         products = [];
@@ -107,7 +112,8 @@ window.AdminProducts = (function() {
         if (processed === 0) renderOverview();
       })
       .catch(function() {
-        document.getElementById('overviewCats').innerHTML = '<p style="color:#ce1132">⚠ Failed to load products. Please check GitHub token.</p>';
+        var el = document.getElementById('productListContent') || document.getElementById('overviewCats');
+        if (el) el.innerHTML = '<p style="color:#ce1132">⚠ 加载失败，请检查 GitHub Token</p>';
       });
   }
 
@@ -179,7 +185,17 @@ window.AdminProducts = (function() {
       html += '</tbody></table>';
     }
 
-    document.getElementById('overviewCats').innerHTML = html;
+    document.getElementById('productListContent').innerHTML = html;
+    /* Also update overview stats */
+    var ovCats = document.getElementById('overviewCats');
+    if (ovCats) {
+      var ovHtml = '<span>总计: <b>' + products.length + '</b> 个产品</span><br><br>';
+      all.forEach(function(c) {
+        var n = cats[c] || 0;
+        ovHtml += '<div style="margin:2px 0"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:' + (n ? '#27ae60' : '#e0e0e0') + ';margin-right:4px"></span><b>' + c + '</b>: ' + (n || '无') + '</div>';
+      });
+      ovCats.innerHTML = ovHtml;
+    }
   }
 
   /* === Edit Product === */
@@ -245,13 +261,9 @@ window.AdminProducts = (function() {
     var saveBtn = document.querySelector('[data-action="save-product"]');
     if (saveBtn) saveBtn.textContent = '💾 更新并发布';
 
-    /* Switch to Products tab */
-    var productsLink = document.querySelector('.sidebar nav a[data-page="products"]');
-    if (productsLink) productsLink.click();
-
-    /* Switch to Basic Info tab */
-    var basicTab = document.querySelector('#page-products .tab-btn[data-panel="basic"]');
-    if (basicTab) basicTab.click();
+    /* Switch to product-new page */
+    var newLink = document.querySelector('.sidebar nav a[data-page="product-new"]');
+    if (newLink) newLink.click();
 
     U.toast('已加载：' + (p.title || p.slug), 'success');
   }
@@ -626,6 +638,7 @@ window.AdminProducts = (function() {
 
   return {
     init: init,
+    rebind: rebind,
     loadOverview: loadOverview,
     saveProduct: saveProduct,
     resetForm: resetForm,
