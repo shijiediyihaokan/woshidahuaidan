@@ -404,6 +404,43 @@ window.AdminProducts = (function() {
     if (newForm) newForm.innerHTML = '';
   }
 
+  /* === Auto-fill SEO fields for new products === */
+  function autoFillSEO(title, category, excerpt) {
+    var mtEl = document.getElementById('pMetaTitle');
+    var mdEl = document.getElementById('pMetaDesc');
+    var kwEl = document.getElementById('pKeywords');
+    var scEl = document.getElementById('pSub');
+    var subcat = scEl ? scEl.options[scEl.selectedIndex].text : '';
+    if (subcat === 'None' || subcat === '无') subcat = '';
+
+    if (mtEl && !mtEl.value.trim()) {
+      mtEl.value = title + ' | GRANGIN';
+    }
+    if (mdEl && !mdEl.value.trim()) {
+      var desc = excerpt || title;
+      var suffix = ' High quality ' + title + ' manufactured by GRANGIN. ' +
+        (subcat || category) + '. Inquire now for pricing and specifications.';
+      if ((desc + suffix).length > 155) {
+        desc = desc.substring(0, 155 - suffix.length).replace(/\s+\S*$/, '');
+      }
+      mdEl.value = desc + suffix;
+    }
+    if (kwEl && !kwEl.value.trim()) {
+      var kw = [title];
+      if (category) kw.push(category);
+      if (subcat) kw.push(subcat);
+      kw.push('manufacturer', 'supplier', 'factory', 'China', 'wholesale');
+      // Deduplicate
+      var seen = {};
+      kwEl.value = kw.filter(function(k) {
+        var lower = k.toLowerCase();
+        if (seen[lower]) return false;
+        seen[lower] = true;
+        return true;
+      }).join(', ');
+    }
+  }
+
   /* === Save Product === */
   function saveProduct() {    var tEl = document.getElementById('pTitle');    if (!tEl) { U.toast('表单未加载，请刷新页面', 'error'); return; }
     var t = tEl.value.trim();
@@ -415,6 +452,9 @@ window.AdminProducts = (function() {
     if (!s) { U.toast('请填写 URL 别名', 'error'); return; }
     if (!c) { U.toast('请选择产品分类', 'error'); return; }
     if (!ex) { U.toast('请填写简短描述', 'error'); return; }
+
+    /* Auto-fill empty SEO fields for new products */
+    autoFillSEO(t, c, ex);
 
     var fm = buildFrontmatter(t, s, c, ex);
     saveToGithub(s, fm, t);
