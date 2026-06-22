@@ -317,7 +317,68 @@ window.AdminProducts = (function() {
     /* Scroll to the form */
     if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    /* Auto-generate SEO fields if empty */
+    autoGenerateSEO(p);
+
     U.toast('已加载：' + (p.title || p.slug), 'success');
+  }
+
+  /* === Auto-generate SEO fields === */
+  function autoGenerateSEO(p) {
+    var title = p.title || '';
+    var excerpt = p.excerpt || '';
+    var category = p.category || '';
+    var subcategory = p.subcategory || '';
+
+    if (!title) return;
+
+    /* Build category keyword for SEO text */
+    var catKeyword = subcategory || category || 'product';
+
+    /* Meta Title: product name + manufacturer suffix, 50-60 chars */
+    if (!p.metaTitle) {
+      var base = title;
+      var suffix = ' | GRANGIN';
+      if ((base + suffix).length > 60) {
+        suffix = ' Manufacturer & Supplier';
+      }
+      var mt = base + suffix;
+      if (mt.length > 60) {
+        mt = base.substring(0, 60 - suffix.length) + suffix;
+      }
+      document.getElementById('pMetaTitle').value = mt;
+    }
+
+    /* Meta Description: based on excerpt + boilerplate, 120-155 chars */
+    if (!p.metaDescription) {
+      var boilerplate = ' High quality ' + title + ' manufactured by GRANGIN. ' +
+        catKeyword.charAt(0).toUpperCase() + catKeyword.slice(1) +
+        '. Inquire now for pricing and specifications.';
+      var md = excerpt ? excerpt : title;
+      if ((md + boilerplate).length > 155) {
+        var maxExcerpt = 155 - boilerplate.length;
+        if (maxExcerpt > 0) {
+          md = md.substring(0, maxExcerpt).replace(/\s+\S*$/, '');
+        } else {
+          md = title.substring(0, Math.max(10, 155 - boilerplate.length));
+        }
+      }
+      document.getElementById('pMetaDesc').value = md + boilerplate;
+    }
+
+    /* Keywords: product name + category + common suffixes, comma-separated */
+    if (!p.keywords) {
+      var kwParts = [title];
+      if (category && category.toLowerCase() !== title.toLowerCase()) {
+        kwParts.push(category);
+      }
+      if (subcategory && subcategory.toLowerCase() !== title.toLowerCase() &&
+          subcategory.toLowerCase() !== category.toLowerCase()) {
+        kwParts.push(subcategory);
+      }
+      kwParts.push('manufacturer', 'supplier', 'factory', 'China', 'wholesale');
+      document.getElementById('pKeywords').value = kwParts.join(', ');
+    }
   }
 
   /* === Return to product list from edit mode === */
@@ -425,8 +486,9 @@ window.AdminProducts = (function() {
         case 'image':
           if (d.url) {
             var w = d.widthPercent || 60;
+            var imgHtml = '<img src="' + d.url + '" alt="' + (d.alt || '') + '" style="width:' + w + '%;height:auto;display:inline-block" loading="lazy">';
             html += '<figure class="detail-image" style="text-align:' + (d.alignment || 'center') + '">' +
-              '<img src="' + d.url + '" alt="' + (d.alt || '') + '" style="width:' + w + '%;height:auto;display:inline-block" loading="lazy">' +
+              (d.link ? '<a href="' + d.link + '" target="_blank">' + imgHtml + '</a>' : imgHtml) +
               '</figure>\n';
           }
           break;
