@@ -2,7 +2,7 @@
 title: "Worm Screw Jack"
 category: "Gearboxes"
 subcategory: "Screw Jacks"
-excerpt: "A compact linear actuator converting rotary to linear force. 
+excerpt: "The compact linear actuator converting rotary to linear force. 
 This worm screw jack ensures reliable lifting with built-in mechanical locking."
 image: "/images/products/screw-jack.png"
 imageAlt: "Worm screw jack product image"
