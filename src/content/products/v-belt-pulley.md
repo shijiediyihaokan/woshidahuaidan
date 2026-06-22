@@ -20,6 +20,7 @@ specs:
 metaTitle: "V-Belt Pulleys — Taper Bush Type SPZ/SPA/SPB/SPC | GRANGIN"
 metaDescription: "Cast iron V-belt pulleys with taper bush. SPZ, SPA, SPB, SPC profiles. Diameter 50-1250mm. Taper lock bush 1008-5050. For industrial belt drive systems."
 order: 100
+slug: "v-belt-pulley"
 published: true
 ---
 

@@ -21,7 +21,7 @@ const sc = getSubCategory(category, subcategory);
 if (!cat || !sc) return Astro.redirect('/products/');
 
 const allProducts = await getCollection('products', ({ data }) => data.published);
-const products = allProducts.filter(p => p.data.category === cat.name && p.data.subcategory === sc.name);
+const products = allProducts.filter(p => p.data.category === cat.name && (p.data.subcategory === sc.name || p.data.subcategory === sc.slug));
 
 const breadcrumb = { items: [
   { name: 'Home', url: new URL('/', Astro.site).href },

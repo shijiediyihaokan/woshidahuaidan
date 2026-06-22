@@ -20,6 +20,7 @@ specs:
 metaTitle: "Chain Sprockets — Simplex & Duplex Roller Chain | GRANGIN"
 metaDescription: "ANSI/ISO standard simplex and duplex roller chain sprockets. Hardened teeth, bore and keyway options. For conveyor, transmission, and industrial chain drives."
 order: 200
+slug: "chain-sprocket"
 published: true
 ---
 

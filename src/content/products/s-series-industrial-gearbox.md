@@ -21,6 +21,7 @@ specs:
 metaTitle: "S Series Industrial Gearbox — Heavy Duty Parallel Shaft | GRANGIN"
 metaDescription: "S series heavy duty industrial gearbox S37-S167. Parallel shaft design. High torque capacity. For heavy machinery, conveyors, and demanding industrial applications."
 order: 100
+slug: "s-series-industrial-gearbox"
 published: true
 ---
 
