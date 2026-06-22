@@ -23,19 +23,24 @@ window.AdminProducts = (function() {
   }
 
   function bindEvents() {
-    /* Save product */
+    /* Save product — remove old listener first to prevent double-binding */
     var saveBtn = document.querySelector('[data-action="save-product"]');
     console.log('BIND: saveBtn found=', !!saveBtn);
+    console.trace('BIND: called from');
     if (saveBtn) {
+      saveBtn.removeEventListener('click', saveProduct);
       saveBtn.addEventListener('click', saveProduct);
-      console.log('BIND: saveProduct listener attached');
+      console.log('BIND: saveProduct listener attached (old removed)');
     } else {
       console.warn('BIND: save-btn NOT FOUND in DOM');
     }
 
     /* Reset form */
     var resetBtn = document.querySelector('[data-action="reset-form"]');
-    if (resetBtn) resetBtn.addEventListener('click', resetForm);
+    if (resetBtn) {
+      resetBtn.removeEventListener('click', resetForm);
+      resetBtn.addEventListener('click', resetForm);
+    }
 
     /* Auto-slug from title */
     var titleEl = document.getElementById('pTitle');
