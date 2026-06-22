@@ -24,16 +24,9 @@ window.AdminProducts = (function() {
 
   function bindEvents() {
     /* Save product — remove old listener first to prevent double-binding */
-    var saveBtn = document.querySelector('[data-action="save-product"]');
-    console.log('BIND: saveBtn found=', !!saveBtn);
-    console.trace('BIND: called from');
-    if (saveBtn) {
+    var saveBtn = document.querySelector('[data-action="save-product"]');    if (saveBtn) {
       saveBtn.removeEventListener('click', saveProduct);
-      saveBtn.addEventListener('click', saveProduct);
-      console.log('BIND: saveProduct listener attached (old removed)');
-    } else {
-      console.warn('BIND: save-btn NOT FOUND in DOM');
-    }
+      saveBtn.addEventListener('click', saveProduct);    } else {    }
 
     /* Reset form */
     var resetBtn = document.querySelector('[data-action="reset-form"]');
@@ -222,31 +215,16 @@ window.AdminProducts = (function() {
     console.log('Editing product:', p.title || p.slug);
 
     /* Inject form template into list page if not already there */
-    var formContainer = document.getElementById('productListForm');
-    console.log('editProduct: formContainer found=', !!formContainer, 'children=', formContainer ? formContainer.children.length : -1);
-    if (formContainer && !formContainer.children.length) {
-      var tpl = document.getElementById('tplProductForm');
-      console.log('editProduct: tpl found=', !!tpl, 'content childCount=', tpl ? tpl.content.childNodes.length : -1);
-      if (tpl) {
-        var clone = document.importNode(tpl.content, true);
-        console.log('editProduct: clone childCount=', clone.childNodes.length);
-        formContainer.appendChild(clone);
-        console.log('editProduct: after append, formContainer children=', formContainer.children.length);
-        /* Verify key elements exist */
-        console.log('editProduct: vizPreview=', !!document.getElementById('vizPreview'));
-        console.log('editProduct: pTitle=', !!document.getElementById('pTitle'));
-      }
+    var formContainer = document.getElementById('productListForm');    if (formContainer && !formContainer.children.length) {
+      var tpl = document.getElementById('tplProductForm');      if (tpl) {
+        var clone = document.importNode(tpl.content, true);        formContainer.appendChild(clone);        /* Verify key elements exist */      }
       /* Clear the new-product form to avoid duplicate IDs in DOM */
       var newForm = document.getElementById('productNewForm');
       if (newForm) newForm.innerHTML = '';
       rebind();
     }
 
-    /* Populate Basic Info */
-    console.log('POPULATE: p.title=', p.title, 'p.slug=', p.slug);
-    document.getElementById('pTitle').value = p.title || '';
-    console.log('POPULATE: after set, pTitle.value=', document.getElementById('pTitle').value);
-    document.getElementById('pSlug').value = p.slug || '';
+    /* Populate Basic Info */    document.getElementById('pTitle').value = p.title || '';    document.getElementById('pSlug').value = p.slug || '';
     document.getElementById('pSlug').dataset.manual = '1';
     document.getElementById('pCat').value = p.category || '';
     document.getElementById('pExcerpt').value = p.excerpt || '';
@@ -366,11 +344,7 @@ window.AdminProducts = (function() {
   }
 
   /* === Save Product === */
-  function saveProduct() {
-    console.log('SAVE: saveProduct called');
-    var tEl = document.getElementById('pTitle');
-    console.log('SAVE: pTitle el=', !!tEl, 'value=', tEl ? tEl.value : 'N/A');
-    if (!tEl) { U.toast('表单未加载，请刷新页面', 'error'); return; }
+  function saveProduct() {    var tEl = document.getElementById('pTitle');    if (!tEl) { U.toast('表单未加载，请刷新页面', 'error'); return; }
     var t = tEl.value.trim();
     var s = document.getElementById('pSlug').value.trim();
     var c = document.getElementById('pCat').value;
@@ -531,14 +505,8 @@ window.AdminProducts = (function() {
     var K = Auth.getToken();
     var path = 'src/content/products/' + slug + '.md';
     var b64 = btoa(unescape(encodeURIComponent(content)));
-
-    console.log('SAVE2GITHUB: editingSha=', editingSha, 'slug=', slug);
-
     var body = { message: (editingSha ? 'Update: ' : 'Add: ') + title, content: b64, branch: 'main' };
     if (editingSha) body.sha = editingSha;
-
-    console.log('SAVE2GITHUB: body has sha=', !!body.sha, 'message=', body.message);
-
     U.fetchWithTimeout(A + '/repos/' + repo + '/contents/' + path, {
       method: 'PUT',
       headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
