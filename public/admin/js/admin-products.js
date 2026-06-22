@@ -25,7 +25,13 @@ window.AdminProducts = (function() {
   function bindEvents() {
     /* Save product */
     var saveBtn = document.querySelector('[data-action="save-product"]');
-    if (saveBtn) saveBtn.addEventListener('click', saveProduct);
+    console.log('BIND: saveBtn found=', !!saveBtn);
+    if (saveBtn) {
+      saveBtn.addEventListener('click', saveProduct);
+      console.log('BIND: saveProduct listener attached');
+    } else {
+      console.warn('BIND: save-btn NOT FOUND in DOM');
+    }
 
     /* Reset form */
     var resetBtn = document.querySelector('[data-action="reset-form"]');
@@ -332,7 +338,11 @@ window.AdminProducts = (function() {
 
   /* === Save Product === */
   function saveProduct() {
-    var t = document.getElementById('pTitle').value.trim();
+    console.log('SAVE: saveProduct called');
+    var tEl = document.getElementById('pTitle');
+    console.log('SAVE: pTitle el=', !!tEl, 'value=', tEl ? tEl.value : 'N/A');
+    if (!tEl) { U.toast('表单未加载，请刷新页面', 'error'); return; }
+    var t = tEl.value.trim();
     var s = document.getElementById('pSlug').value.trim();
     var c = document.getElementById('pCat').value;
     var ex = document.getElementById('pExcerpt').value.trim();
