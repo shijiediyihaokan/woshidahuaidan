@@ -232,7 +232,9 @@ window.AdminProducts = (function() {
     }
 
     /* Populate Basic Info */
+    console.log('POPULATE: p.title=', p.title, 'p.slug=', p.slug);
     document.getElementById('pTitle').value = p.title || '';
+    console.log('POPULATE: after set, pTitle.value=', document.getElementById('pTitle').value);
     document.getElementById('pSlug').value = p.slug || '';
     document.getElementById('pSlug').dataset.manual = '1';
     document.getElementById('pCat').value = p.category || '';
