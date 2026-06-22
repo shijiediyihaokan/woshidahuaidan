@@ -685,7 +685,7 @@ function login(){
     btnEl.textContent='登录成功！';btnEl.style.background='#059669';
     console.log("LOGIN_SUCCESS_REDIRECT");
     localStorage.setItem('ggn_token', K);
-    setTimeout(function(){window.location.href='./dashboard.html?v=8';},500);
+    setTimeout(function(){window.location.href='./dashboard.html?v=9';},500);
   })
   .catch(function(e){
     console.log("LOGIN_ERROR:", e.message);
@@ -695,7 +695,7 @@ function login(){
 /* Auto-login from localStorage */
 (function(){
   var saved=localStorage.getItem('ggn_token');
-  if(saved){ window.location.href = './dashboard.html?v=8'; }
+  if(saved){ window.location.href = './dashboard.html?v=9'; }
 })();
 function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(function(){el.style.display='none'},3000);}
 

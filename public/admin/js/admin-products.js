@@ -206,11 +206,18 @@ window.AdminProducts = (function() {
 
     /* Inject form template into list page if not already there */
     var formContainer = document.getElementById('productListForm');
+    console.log('editProduct: formContainer found=', !!formContainer, 'children=', formContainer ? formContainer.children.length : -1);
     if (formContainer && !formContainer.children.length) {
       var tpl = document.getElementById('tplProductForm');
+      console.log('editProduct: tpl found=', !!tpl, 'content childCount=', tpl ? tpl.content.childNodes.length : -1);
       if (tpl) {
         var clone = document.importNode(tpl.content, true);
+        console.log('editProduct: clone childCount=', clone.childNodes.length);
         formContainer.appendChild(clone);
+        console.log('editProduct: after append, formContainer children=', formContainer.children.length);
+        /* Verify key elements exist */
+        console.log('editProduct: vizPreview=', !!document.getElementById('vizPreview'));
+        console.log('editProduct: pTitle=', !!document.getElementById('pTitle'));
       }
       /* Clear the new-product form to avoid duplicate IDs in DOM */
       var newForm = document.getElementById('productNewForm');
