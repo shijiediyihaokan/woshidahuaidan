@@ -138,13 +138,19 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 
     <!-- ====== PRODUCT LIST ====== -->
     <div id="page-product-list" class="page">
-      <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布产品</h1>
-      <div class="card"><div id="productListContent">加载中...</div></div>
+      <h1 id="productListTitle" style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布产品</h1>
+      <div class="card" id="productListCard"><div id="productListContent">加载中...</div></div>
+      <div id="productListForm" style="display:none"></div>
     </div>
 
     <!-- ====== NEWS NEW ====== -->
     <div id="page-news-new" class="page">
       <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">➕ 发布新文章</h1>
+      <div id="newsNewForm"></div>
+    </div>
+
+    <!-- ====== News form template (shared by new + edit-in-list) ====== -->
+    <template id="tplNewsForm">
       <div class="card">
         <div class="field"><label>标题 <span class="req">*</span></label><input id="nTitle" placeholder="文章标题"></div>
         <div class="form-row">
@@ -162,12 +168,13 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         <button class="btn btn-secondary" data-action="reset-news">↺ 重置</button>
         <span style="font-size:11px;color:var(--g);margin-left:8px">通过 GitHub Actions 约 2 分钟部署</span>
       </div>
-    </div>
+    </template>
 
     <!-- ====== NEWS LIST ====== -->
     <div id="page-news-list" class="page">
-      <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布文章</h1>
-      <div class="card"><div id="newsListContent">加载中...</div></div>
+      <h1 id="newsListTitle" style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布文章</h1>
+      <div class="card" id="newsListCard"><div id="newsListContent">加载中...</div></div>
+      <div id="newsListForm" style="display:none"></div>
     </div>
 
     <!-- ====== MEDIA ====== -->

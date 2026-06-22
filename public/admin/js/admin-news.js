@@ -17,6 +17,10 @@ window.AdminNews = (function() {
     return Promise.resolve();
   }
 
+  function rebind() {
+    bindEvents();
+  }
+
   function bindEvents() {
     var saveBtn = document.querySelector('[data-action="save-news"]');
     if (saveBtn) saveBtn.addEventListener('click', saveArticle);
@@ -135,6 +139,21 @@ window.AdminNews = (function() {
   function editArticle(idx) {
     var a = articles[idx];
     if (!a) return;
+
+    /* Inject form template into list page if not already there */
+    var formContainer = document.getElementById('newsListForm');
+    if (formContainer && !formContainer.children.length) {
+      var tpl = document.getElementById('tplNewsForm');
+      if (tpl) {
+        var clone = document.importNode(tpl.content, true);
+        formContainer.appendChild(clone);
+      }
+      /* Clear the news-new form to avoid duplicate IDs in DOM */
+      var newForm = document.getElementById('newsNewForm');
+      if (newForm) newForm.innerHTML = '';
+      bindEvents();
+    }
+
     document.getElementById('nTitle').value = a.title || '';
     document.getElementById('nSlug').value = a.slug || '';
     document.getElementById('nSlug').dataset.manual = '1';
@@ -149,11 +168,48 @@ window.AdminNews = (function() {
     var saveBtn = document.querySelector('[data-action="save-news"]');
     if (saveBtn) saveBtn.textContent = '💾 更新并发布';
 
-    /* Switch to news-new page */
-    var newLink = document.querySelector('.sidebar nav a[data-page="news-new"]');
-    if (newLink) newLink.click();
+    /* Show form on the current list page — stay, don't navigate away */
+    var listCard = document.getElementById('newsListCard');
+    var listTitle = document.getElementById('newsListTitle');
+    if (listCard) listCard.style.display = 'none';
+    if (listTitle) listTitle.textContent = '📋 已发布文章 — 正在编辑：' + (a.title || a.slug);
+    if (formContainer) {
+      formContainer.style.display = 'block';
+      /* Add back button if not present */
+      if (!document.getElementById('newsListBackBtn')) {
+        var backBtn = document.createElement('button');
+        backBtn.id = 'newsListBackBtn';
+        backBtn.className = 'btn btn-secondary';
+        backBtn.style.cssText = 'margin-bottom:14px';
+        backBtn.textContent = '← 返回文章列表';
+        backBtn.addEventListener('click', showArticleListTable);
+        formContainer.insertBefore(backBtn, formContainer.firstChild);
+      }
+    }
+
+    if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     U.toast('已加载：' + (a.title || a.slug), 'success');
+  }
+
+  /* === Return to article list from edit mode === */
+  function showArticleListTable() {
+    var listCard = document.getElementById('newsListCard');
+    var listTitle = document.getElementById('newsListTitle');
+    var formContainer = document.getElementById('newsListForm');
+    var backBtn = document.getElementById('newsListBackBtn');
+    if (listCard) listCard.style.display = '';
+    if (listTitle) listTitle.textContent = '📋 已发布文章';
+    if (formContainer) formContainer.style.display = 'none';
+    if (formContainer) formContainer.innerHTML = '';
+    if (backBtn) backBtn.remove();
+    editingSlug = null;
+    editingSha = null;
+    var saveBtn = document.querySelector('[data-action="save-news"]');
+    if (saveBtn) saveBtn.textContent = '💾 保存并发布';
+    /* Clear news-new form container so it will re-inject from template on next visit */
+    var newForm = document.getElementById('newsNewForm');
+    if (newForm) newForm.innerHTML = '';
   }
 
   /* === Save article === */
@@ -207,6 +263,11 @@ window.AdminNews = (function() {
           if (d.content.sha) editingSha = d.content.sha;
           editingSlug = slug;
           U.toast('已保存！正在部署...', 'success');
+          /* If editing from the list page, return to list view after save */
+          var listFm = document.getElementById('newsListForm');
+          if (listFm && listFm.style.display !== 'none') {
+            setTimeout(function() { showArticleListTable(); }, 1500);
+          }
         } else {
           U.toast(d.message || '保存失败', 'error');
         }
@@ -230,9 +291,11 @@ window.AdminNews = (function() {
 
   return {
     init: init,
+    rebind: rebind,
     loadArticleList: loadArticleList,
     saveArticle: saveArticle,
     resetForm: resetForm,
-    editArticle: editArticle
+    editArticle: editArticle,
+    showArticleListTable: showArticleListTable
   };
 })();

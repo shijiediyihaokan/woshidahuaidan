@@ -86,9 +86,26 @@
       var container = document.getElementById('productNewForm');
       if (container && !container.children.length) {
         var tpl = document.getElementById('tplProductForm');
-        if (tpl) container.innerHTML = tpl.innerHTML;
+        if (tpl) {
+          var clone = document.importNode(tpl.content, true);
+          container.appendChild(clone);
+        }
         /* Re-bind product events */
         if (window.AdminProducts) window.AdminProducts.rebind();
+      }
+    }
+
+    /* News new page: inject form from template */
+    if (pageId === 'news-new') {
+      var nContainer = document.getElementById('newsNewForm');
+      if (nContainer && !nContainer.children.length) {
+        var nTpl = document.getElementById('tplNewsForm');
+        if (nTpl) {
+          var nClone = document.importNode(nTpl.content, true);
+          nContainer.appendChild(nClone);
+        }
+        /* Re-bind news events */
+        if (window.AdminNews) window.AdminNews.rebind();
       }
     }
   }

@@ -204,6 +204,20 @@ window.AdminProducts = (function() {
     if (!p) return;
     console.log('Editing product:', p.title || p.slug);
 
+    /* Inject form template into list page if not already there */
+    var formContainer = document.getElementById('productListForm');
+    if (formContainer && !formContainer.children.length) {
+      var tpl = document.getElementById('tplProductForm');
+      if (tpl) {
+        var clone = document.importNode(tpl.content, true);
+        formContainer.appendChild(clone);
+      }
+      /* Clear the new-product form to avoid duplicate IDs in DOM */
+      var newForm = document.getElementById('productNewForm');
+      if (newForm) newForm.innerHTML = '';
+      rebind();
+    }
+
     /* Populate Basic Info */
     document.getElementById('pTitle').value = p.title || '';
     document.getElementById('pSlug').value = p.slug || '';
@@ -261,11 +275,52 @@ window.AdminProducts = (function() {
     var saveBtn = document.querySelector('[data-action="save-product"]');
     if (saveBtn) saveBtn.textContent = '💾 更新并发布';
 
-    /* Switch to product-new page */
-    var newLink = document.querySelector('.sidebar nav a[data-page="product-new"]');
-    if (newLink) newLink.click();
+    /* Show form on the current list page — stay, don't navigate away */
+    var listCard = document.getElementById('productListCard');
+    var listTitle = document.getElementById('productListTitle');
+    if (listCard) listCard.style.display = 'none';
+    if (listTitle) listTitle.textContent = '📋 已发布产品 — 正在编辑：' + (p.title || p.slug);
+    if (formContainer) {
+      formContainer.style.display = 'block';
+      /* Add back button if not present */
+      if (!document.getElementById('productListBackBtn')) {
+        var backBtn = document.createElement('button');
+        backBtn.id = 'productListBackBtn';
+        backBtn.className = 'btn btn-secondary';
+        backBtn.style.cssText = 'margin-bottom:14px';
+        backBtn.textContent = '← 返回产品列表';
+        backBtn.addEventListener('click', showProductListTable);
+        formContainer.insertBefore(backBtn, formContainer.firstChild);
+      }
+    }
+
+    /* Scroll to the form */
+    if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     U.toast('已加载：' + (p.title || p.slug), 'success');
+  }
+
+  /* === Return to product list from edit mode === */
+  function showProductListTable() {
+    var listCard = document.getElementById('productListCard');
+    var listTitle = document.getElementById('productListTitle');
+    var formContainer = document.getElementById('productListForm');
+    var backBtn = document.getElementById('productListBackBtn');
+    if (listCard) listCard.style.display = '';
+    if (listTitle) listTitle.textContent = '📋 已发布产品';
+    if (formContainer) formContainer.style.display = 'none';
+    if (formContainer) formContainer.innerHTML = '';
+    if (backBtn) backBtn.remove();
+    editingSlug = null;
+    editingSha = null;
+    var saveBtn = document.querySelector('[data-action="save-product"]');
+    if (saveBtn) saveBtn.textContent = '💾 保存并发布';
+    /* Clear viz data */
+    if (typeof __vizData !== 'undefined') { __vizData.length = 0; }
+    if (window.AdminEditor && window.AdminEditor.renderAll) window.AdminEditor.renderAll();
+    /* Clear new-product form container so it will re-inject from template on next visit */
+    var newForm = document.getElementById('productNewForm');
+    if (newForm) newForm.innerHTML = '';
   }
 
   /* === Save Product === */
@@ -448,6 +503,11 @@ window.AdminProducts = (function() {
           }
           editingSlug = slug;
           U.toast('已保存！正在部署...', 'success');
+          /* If editing from the list page, return to list view after save */
+          var listFm = document.getElementById('productListForm');
+          if (listFm && listFm.style.display !== 'none') {
+            setTimeout(function() { showProductListTable(); }, 1500);
+          }
         }
         else { U.toast(d.message || '保存失败', 'error'); }
       })
@@ -643,6 +703,7 @@ window.AdminProducts = (function() {
     saveProduct: saveProduct,
     resetForm: resetForm,
     editProduct: editProduct,
+    showProductListTable: showProductListTable,
     addGalleryImages: addGalleryImages,
     addGalleryUrl: addGalleryUrl,
     removeGalleryImage: removeGalleryImage,
