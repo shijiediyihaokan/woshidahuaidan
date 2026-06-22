@@ -503,8 +503,12 @@ window.AdminProducts = (function() {
     var path = 'src/content/products/' + slug + '.md';
     var b64 = btoa(unescape(encodeURIComponent(content)));
 
+    console.log('SAVE2GITHUB: editingSha=', editingSha, 'slug=', slug);
+
     var body = { message: (editingSha ? 'Update: ' : 'Add: ') + title, content: b64, branch: 'main' };
     if (editingSha) body.sha = editingSha;
+
+    console.log('SAVE2GITHUB: body has sha=', !!body.sha, 'message=', body.message);
 
     U.fetchWithTimeout(A + '/repos/' + repo + '/contents/' + path, {
       method: 'PUT',
