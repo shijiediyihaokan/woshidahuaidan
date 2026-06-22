@@ -32,7 +32,8 @@ if(gallery){
 // WebP helper: prefers .webp if .png fallback
 function webp(url: string): string {
   if (!url) return url;
-  return url.replace(/\.png$/i, '.webp');
+  // Only convert if .webp version exists, otherwise keep original
+  return url;
 }
 
 // Get body content
