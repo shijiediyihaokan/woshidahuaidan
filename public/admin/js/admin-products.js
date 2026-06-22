@@ -156,6 +156,12 @@ window.AdminProducts = (function() {
       prod.gallery = galleryMatch[1].trim();
     }
 
+    /* vizData: JSON array for detail page module restore */
+    var vizMatch = fm.match(/vizData:\s*(\[[\s\S]*?\])\s*\n/);
+    if (vizMatch) {
+      prod.vizData = vizMatch[1].trim();
+    }
+
     return prod;
   }
 
@@ -287,6 +293,22 @@ window.AdminProducts = (function() {
     document.getElementById('pKeywords').value = p.keywords || '';
     document.getElementById('pOrder').value = p.order || 0;
 
+    /* Restore detail page modules from vizData */
+    if (typeof __vizData !== 'undefined') {
+      __vizData.length = 0;
+      if (p.vizData) {
+        try {
+          var vizParsed = JSON.parse(p.vizData);
+          if (Array.isArray(vizParsed)) {
+            vizParsed.forEach(function(m) { __vizData.push(m); });
+          }
+        } catch(e) { console.warn('vizData parse error:', e); }
+      }
+      if (window.AdminEditor && window.AdminEditor.renderAll) {
+        window.AdminEditor.renderAll();
+      }
+    }
+
     /* Set edit state */
     editingSlug = p.slug || p.filename.replace('.md', '');
     editingSha = p.sha;
@@ -393,7 +415,14 @@ window.AdminProducts = (function() {
     if (mt) fm += 'metaTitle: "' + mt + '"\n';
     if (md) fm += 'metaDescription: "' + md + '"\n';
     if (kw) fm += 'keywords: "' + kw + '"\n';
-    fm += 'order: ' + o + '\npublished: true\n---\n';
+    fm += 'order: ' + o + '\n';
+
+    /* Store vizData modules as JSON for edit restore */
+    if (typeof __vizData !== 'undefined' && __vizData.length) {
+      fm += 'vizData: ' + JSON.stringify(__vizData) + '\n';
+    }
+
+    fm += 'published: true\n---\n';
 
     /* Append Detail Page editor content as Markdown body */
     var bodyHTML = buildDetailHTML();
