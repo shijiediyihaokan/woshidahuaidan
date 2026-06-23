@@ -16,13 +16,13 @@ export interface Props {
 }
 
 const { title, description, image, keywords, pageType = 'website' } = Astro.props;
-const siteName = 'GRANGIN — Industrial Transmission Solutions';
+const siteName = 'Ceten Drive — Industrial Transmission Solutions';
 const brandName = 'Zhejiang Guangjin Intelligent Technology Co., Ltd.';
 
 // Page-specific title
 const pageTitle = title === 'Home' 
-  ? `${siteName} | ${brandName}`
-  : `${title} | GRANGIN`;
+  ? `${siteName} | Gearboxes, Motors & Custom Parts`
+  : `${title} | Ceten Drive`;
 const metaDesc = description || `${brandName} — China professional manufacturer of gears, sprockets, belt pulleys, gear motors & CNC machined parts. ISO 9001/45001/14001 certified. 20+ years experience.`;
 const metaImage = image || '/images/og-default.jpg';
 const metaKeywords = keywords || 'gears, sprockets, belt pulleys, gear motors, CNC machined parts, transmission components, China manufacturer, industrial gearbox, worm gear, helical gear';

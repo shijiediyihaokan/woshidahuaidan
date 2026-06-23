@@ -77,7 +77,30 @@
       "type": "string"
     },
     "gallery": {
-      "type": "string"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "dims": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
     },
     "$schema": {
       "type": "string"

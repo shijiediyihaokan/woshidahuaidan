@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Ceten 管理后台</title>
+<style>
+:root{--r:#ce1132;--d:#1a1a1a;--g:#6b7280;--l:#f3f4f6;--w:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min-height:100vh}
+
+/* Anti-Blank */
+@keyframes absSpin{to{transform:rotate(360deg)}}
+@keyframes absShow{0%,98%{display:none;opacity:0}100%{display:block;opacity:1}}
+#absLoading{text-align:center;padding:60px 20px;background:#f0f2f5;min-height:100vh}
+#absLoading.resolved{display:none}
+#absSpinner{width:40px;height:40px;border:3px solid #e5e7eb;border-top:3px solid var(--r);border-radius:50%;margin:0 auto 20px;animation:absSpin .8s linear infinite}
+#absErrorBox{display:none;text-align:left;padding:20px;background:#fff;border:1px solid #fecaca;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);max-width:500px;margin:0 auto}
+#absTimeout{animation:absShow .5s 8s forwards}
+
+/* Layout */
+.dashboard{display:none}.dashboard.on{display:flex;min-height:100vh}
+.sidebar{width:200px;background:var(--d);color:#fff;padding:20px 0;position:fixed;top:0;bottom:0;left:0;z-index:10;overflow-y:auto}
+.sidebar .brand{padding:0 16px 18px;border-bottom:1px solid #333;margin-bottom:12px;font-size:18px;font-weight:800}
+.sidebar nav a,.sidebar nav .submenu-parent{display:flex;align-items:center;gap:8px;padding:9px 16px;color:#999;font-size:13px;text-decoration:none;transition:.2s;border-left:3px solid transparent;cursor:pointer}
+.sidebar nav a:hover,.sidebar nav a.active,.sidebar nav .submenu-parent:hover,.sidebar nav .submenu-parent.open{color:#fff;background:rgba(255,255,255,.05);border-left-color:var(--r)}
+.sidebar nav .submenu{display:none;padding-left:12px}
+.sidebar nav .submenu.open{display:block}
+.sidebar nav .submenu a{padding:7px 16px 7px 28px;font-size:12px}
+.sidebar .user{padding:14px 16px;border-top:1px solid #333;margin-top:12px;display:flex;align-items:center;gap:8px;font-size:12px}
+.sidebar .user .avatar{width:28px;height:28px;background:var(--r);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.main{margin-left:200px;flex:1;padding:20px;min-width:0}
+
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:18px;margin-bottom:16px}
+.card h3{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #f0f0f0}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-col{display:flex;flex-direction:column;gap:12px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px}
+.field label .req{color:var(--r)}
+.field input,.field select,.field textarea{width:100%;padding:7px 10px;border:1.5px solid #d1d5db;border-radius:6px;font-size:13px;font-family:inherit;transition:.2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(206,17,50,.08)}
+.field textarea{resize:vertical;min-height:60px}
+.field .helper{font-size:10px;color:var(--g);margin-top:2px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:.2s}
+.btn-primary{background:var(--r);color:#fff}.btn-primary:hover{background:#a80d28}
+.btn-secondary{background:var(--l);color:#374151;border:1px solid #d1d5db}.btn-secondary:hover{background:#e5e7eb}
+.btn-sm{padding:5px 10px;font-size:11px}.btn-xs{padding:3px 7px;font-size:10px;border-radius:4px}
+.btn-green{background:#059669;color:#fff}.btn-green:hover{background:#047857}
+
+/* Upload */
+.upload-zone{border:2px dashed #d1d5db;border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
+.upload-zone:hover{border-color:var(--r);background:#fef2f2}
+.upload-zone .icon{font-size:30px;margin-bottom:4px}
+
+/* Editor */
+.viz-preview{min-height:400px;max-height:60vh;overflow-y:auto;border:2px dashed #e5e7eb;border-radius:8px;padding:12px;background:#fafafa}
+.viz-module{position:relative}.viz-actions{position:absolute;top:4px;right:4px;z-index:5;display:flex;gap:4px}
+.modules-bar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:8px;position:sticky;top:0;z-index:50;background:#f0f2f5;padding:5px 0;border-bottom:1px solid #e5e7eb}
+.mod-btn{padding:3px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;font-size:10px;cursor:pointer;white-space:nowrap}
+.mod-btn:hover{background:#f9fafb;border-color:var(--r)}
+
+/* Toast & Error */
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:6px;font-size:12px;z-index:9999}
+.toast.success{background:#059669;color:#fff}.toast.error{background:var(--r);color:#fff}
+.admin-error-banner{display:none;padding:8px 16px;background:#fef2f2;border-bottom:2px solid var(--r);color:var(--r);font-size:12px;text-align:center;position:sticky;top:0;z-index:100}
+</style>
+</head>
+<body>
+
+<div id="absLoading">
+  <div style="max-width:440px;margin:0 auto">
+    <div style="font-size:48px;margin-bottom:8px">⚙️</div>
+    <h1 style="font-size:20px;font-weight:800;color:var(--d);margin:0 0 4px">Ceten 管理后台</h1>
+    <p id="absStatus" style="color:var(--g);font-size:12px;margin:0 0 20px">正在加载...</p>
+    <div id="absSpinner"></div>
+    <div id="absErrorBox">
+      <div id="absTimeout" style="text-align:left;padding:16px;background:#fff;border:1px solid #fecaca;border-radius:8px;max-width:440px;margin:0 auto">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><span style="font-size:20px">⚠️</span><span style="font-weight:700;color:var(--r);font-size:14px">初始化失败</span></div>
+        <div style="font-size:11px;line-height:1.7;color:#374151">
+          <div><strong>错误：</strong><span id="absErrMsg" style="color:var(--r)">JavaScript 加载失败</span></div>
+          <ul style="margin:4px 0 10px 14px;color:var(--g)"><li>JS 语法错误</li><li>CDN 缓存旧版</li><li>浏览器扩展阻止</li><li>请 Ctrl+Shift+R 强制刷新</li></ul>
+        </div>
+        <div style="display:flex;gap:6px"><button onclick="location.reload()" style="flex:1;padding:8px;background:var(--r);color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600">🔄 刷新</button><button onclick="localStorage.clear();location.href='./'" style="flex:1;padding:8px;background:var(--g);color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600">↩ 返回登录</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="adminErrorBanner" class="admin-error-banner"><span id="adminErrorText"></span><span class="close-btn" onclick="this.parentElement.style.display='none'" style="margin-left:10px;cursor:pointer;font-weight:bold">✕</span></div>
+
+<div id="dash" class="dashboard">
+  <div class="sidebar">
+    <div class="brand">⚙️ Ceten</div>
+    <nav>
+      <a href="#" data-page="overview" class="active">📊 概览</a>
+
+      <div class="submenu-parent" data-submenu="products">📦 产品管理</div>
+      <div class="submenu" data-sub="products">
+        <a href="#" data-page="product-new">➕ 新发布</a>
+        <a href="#" data-page="product-list">📋 已发布</a>
+      </div>
+
+      <div class="submenu-parent" data-submenu="news">📰 新闻管理</div>
+      <div class="submenu" data-sub="news">
+        <a href="#" data-page="news-new">➕ 新发布</a>
+        <a href="#" data-page="news-list">📋 已发布</a>
+      </div>
+
+      <a href="#" data-page="media">🖼️ 媒体库</a>
+    </nav>
+    <div class="user">
+      <div class="avatar" id="userAvatar">?</div>
+      <div><div style="font-weight:600" id="userName">管理员</div><div style="font-size:10px;color:var(--g);cursor:pointer" onclick="if(window.AdminAuth)AdminAuth.logout()">🚪 退出</div></div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- ====== OVERVIEW ====== -->
+    <div id="page-overview" class="page active">
+      <h1 style="font-size:20px;font-weight:800;margin-bottom:16px">网站概览</h1>
+      <div class="card"><h3>📦 产品统计</h3><div id="overviewCats">加载中...</div></div>
+      <div class="card"><h3>📰 新闻统计</h3><div id="overviewNews">加载中...</div></div>
+    </div>
+
+    <!-- ====== PRODUCT NEW ====== -->
+    <div id="page-product-new" class="page">
+      <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">➕ 发布新产品</h1>
+      <div id="productNewForm"></div>
+    </div>
+
+    <!-- ====== PRODUCT LIST ====== -->
+    <div id="page-product-list" class="page">
+      <h1 id="productListTitle" style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布产品</h1>
+      <div class="card" id="productListCard"><div id="productListContent">加载中...</div></div>
+      <div id="productListForm" style="display:none"></div>
+    </div>
+
+    <!-- ====== NEWS NEW ====== -->
+    <div id="page-news-new" class="page">
+      <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">➕ 发布新文章</h1>
+      <div id="newsNewForm"></div>
+    </div>
+
+    <!-- ====== News form template (shared by new + edit-in-list) ====== -->
+    <template id="tplNewsForm">
+      <div class="card">
+        <div class="field"><label>标题 <span class="req">*</span></label><input id="nTitle" placeholder="文章标题"></div>
+        <div class="form-row">
+          <div class="field"><label>URL 别名 <span class="req">*</span></label><input id="nSlug" placeholder="article-slug"></div>
+          <div class="field"><label>日期 <span class="req">*</span></label><input id="nDate" type="date"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>分类 <span class="req">*</span></label>
+            <select id="nCat"><option value="">请选择</option><option>Product Knowledge</option><option>Selection Guide</option><option>Technical Guide</option><option>Industry News</option><option>Company News</option></select></div>
+          <div class="field"><label>配图 URL</label><input id="nImg" placeholder="/images/news/xxx.jpg"><div class="helper">可选</div></div>
+        </div>
+        <div class="field"><label>摘要 <span class="req">*</span></label><textarea id="nExcerpt" rows="2" placeholder="文章摘要"></textarea></div>
+        <div class="field"><label>正文 (Markdown)</label><textarea id="nBody" rows="8" placeholder="## 标题&#10;&#10;正文内容..."></textarea></div>
+        <button class="btn btn-primary" data-action="save-news">💾 保存并发布</button>
+        <button class="btn btn-secondary" data-action="reset-news">↺ 重置</button>
+        <span style="font-size:11px;color:var(--g);margin-left:8px">通过 GitHub Actions 约 2 分钟部署</span>
+      </div>
+    </template>
+
+    <!-- ====== NEWS LIST ====== -->
+    <div id="page-news-list" class="page">
+      <h1 id="newsListTitle" style="font-size:18px;font-weight:800;margin-bottom:14px">📋 已发布文章</h1>
+      <div class="card" id="newsListCard"><div id="newsListContent">加载中...</div></div>
+      <div id="newsListForm" style="display:none"></div>
+    </div>
+
+    <!-- ====== MEDIA ====== -->
+    <div id="page-media" class="page">
+      <h1 style="font-size:18px;font-weight:800;margin-bottom:14px">🖼️ 媒体库</h1>
+      <div class="card">
+        <p style="color:var(--g);font-size:12px;margin-bottom:12px">上传图片 — 点击 URL 复制</p>
+        <div class="upload-zone" onclick="document.getElementById('mediaFileInput').click()"><div class="icon">📁</div><p>点击浏览<br><small>JPG、PNG、WebP ≤5MB</small></p></div>
+        <input type="file" id="mediaFileInput" accept="image/*" style="display:none" onchange="if(window.AdminMedia)AdminMedia.upload()">
+        <div id="mediaList" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Product form template (rendered by JS) -->
+<template id="tplProductForm">
+  <div class="card">
+    <div class="form-row">
+      <div class="field"><label>产品名称 (H1) <span class="req">*</span></label><input id="pTitle" placeholder="例如：NMRV050 蜗轮减速机"><div class="helper">页面 H1，必须唯一</div></div>
+      <div class="field"><label>URL 别名 <span class="req">*</span></label><input id="pSlug" placeholder="例如：nmrv050-worm-gearbox"><div class="helper">简短干净路径</div></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>产品分类 <span class="req">*</span></label>
+        <select id="pCat"><option value="">请选择</option><option>Gearboxes</option><option>Gear Motors</option><option>AC Motors</option><option>Gears</option><option>Sprockets</option><option>Pulleys</option><option>Transmission Shafts</option><option>Sheet Metal Fabrication</option></select></div>
+      <div class="field"><label>子分类</label><select id="pSub"><option value="">无</option></select></div>
+    </div>
+    <div class="field"><label>简短描述 <span class="req">*</span></label><textarea id="pExcerpt" rows="2" placeholder="列表页简短描述（120-160字符）"></textarea></div>
+    <div class="field"><label>图片 ALT 文本</label><input id="pImgAlt" placeholder="例如：工业蜗轮丝杆升降机前视图"></div>
+  </div>
+
+  <div class="card">
+    <h3>🖼️ 产品图片 <small style="font-weight:normal;color:var(--g);font-size:11px">（每张≤5MB，第一张为主图）</small></h3>
+    <div class="upload-zone" style="padding:18px" onclick="document.getElementById('galleryFile').click()"><div class="icon">📁</div><p>点击或拖拽图片<br><small>JPG、PNG、WebP — 第一张是产品主图</small></p></div>
+    <input type="file" id="galleryFile" accept="image/*" multiple style="display:none" onchange="if(window.AdminProducts)window.AdminProducts.addGalleryImages()">
+    <div style="display:flex;gap:5px;margin-top:5px;align-items:center"><span style="font-size:10px;color:var(--g);white-space:nowrap">📎 URL：</span><input id="galleryUrlInput" placeholder="从媒体库复制URL粘贴" style="flex:1;padding:4px 7px;border:1px solid #d1d5db;border-radius:4px;font-size:10px" onkeydown="if(event.key==='Enter'){event.preventDefault();if(window.AdminProducts)window.AdminProducts.addGalleryUrl()}"><button type="button" class="btn btn-xs btn-primary" onclick="if(window.AdminProducts)window.AdminProducts.addGalleryUrl()">+ 添加</button></div>
+    <div id="galleryStrip" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
+    <input type="hidden" id="pGallery" value="">
+  </div>
+
+  <div class="card">
+    <h3>✏️ 详情页内容</h3>
+    <div class="modules-bar">
+      <button type="button" class="mod-btn" style="background:var(--r);color:#fff;font-weight:bold" data-action="add-module" data-type="text">✏️ 文字</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="h2">📌 H2</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="h3">📌 H3</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="image">🖼️ 图片</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="2imgs">1×2</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="3imgs">1×3</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="4imgs">1×4</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="features">✅ 特性</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="specs">📊 规格</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="faq">❓ FAQ</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="table">📋 表格</button>
+      <button type="button" class="mod-btn" data-action="add-module" data-type="cta">📧 CTA</button>
+    </div>
+    <div class="viz-preview" id="vizPreview"></div>
+  </div>
+
+  <div class="card">
+    <h3>🔍 SEO 信息</h3>
+    <div class="field"><label>SEO 标题</label><input id="pMetaTitle" placeholder="例如：NMRV050 蜗轮减速机制造商 | GRANGIN"><div class="helper">50-60字符</div></div>
+    <div class="field"><label>Meta 描述</label><textarea id="pMetaDesc" rows="2" placeholder="120-155字符，包含关键词和参数"></textarea></div>
+    <div class="form-row">
+      <div class="field"><label>关键词</label><input id="pKeywords" placeholder="蜗轮减速机, NMRV050"></div>
+      <div class="field"><label>排序</label><input id="pOrder" type="number" value="0"><div class="helper">越大越靠前</div></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" data-action="save-product">💾 保存并发布</button>
+  <button class="btn btn-secondary" data-action="reset-form">↺ 重置</button>
+  <span style="font-size:11px;color:var(--g);margin-left:8px">通过 GitHub Actions 约 2 分钟部署</span>
+</template>
+
+<script src="./js/admin-utils.js?v=35"></script>
+<script src="./js/admin-auth.js?v=35"></script>
+<script src="./js/admin-dashboard.js?v=36"></script>
+<script src="./js/admin-products.js?v=51"></script>
+<script src="./js/admin-editor.js?v=40"></script>
+<script src="./js/admin-news.js?v=3"></script>
+<script src="./js/admin-media.js?v=37"></script>
+
+<div style="position:fixed;bottom:4px;right:8px;font-size:11px;color:#ce1132;z-index:9999;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #ce1132">v54</div>
+</body>
+</html>

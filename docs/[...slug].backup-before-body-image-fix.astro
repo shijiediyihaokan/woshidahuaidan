@@ -1,0 +1,195 @@
+---
+// ============================================================
+// products/[...slug].astro — SEO-optimized product detail
+// ============================================================
+import Layout from '../../layouts/Layout.astro';
+import SEO from '../../components/SEO.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products', ({ data }) => data.published);
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props as { product: CollectionEntry<'products'> };
+const { title, category, excerpt, features, specs, image, imageAlt } = product.data;
+
+// Related products (same category, excluding current)
+const allProducts = await getCollection('products', ({ data }) => data.published);
+const related = allProducts
+  .filter(p => p.data.category === category && p.id !== product.id)
+  .slice(0, 3);
+
+// Build page-specific meta
+const pageDescription = excerpt.slice(0, 160);
+const pageKeywords = `${title}, ${category}, China manufacturer, industrial ${category.toLowerCase()}, transmission parts, GRANGIN`;
+const productUrl = new URL(`/product/${product.id}/`, Astro.site).href;
+
+// Product structured data
+const productSchema = {
+  name: title,
+  description: excerpt,
+  image: image || undefined,
+  category: category,
+  sku: product.id,
+  brand: 'GRANGIN',
+  offers: {
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+  },
+};
+
+// Breadcrumb structured data
+const breadcrumb = {
+  items: [
+    { name: 'Home', url: new URL('/', Astro.site).href },
+    { name: 'Products', url: new URL('/product/', Astro.site).href },
+    { name: category, url: new URL(`/product/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`, Astro.site).href },
+    { name: title, url: productUrl },
+  ],
+};
+---
+
+<Layout title={title} description={pageDescription} image={image} keywords={pageKeywords} pageType="product">
+  
+  <!-- Structured Data -->
+  <SEO product={productSchema} breadcrumb={breadcrumb} pageType="productMultiple" />
+
+  <!-- Breadcrumb -->
+  <div class="bg-steel-50 border-b border-steel-200">
+    <div class="container-page py-3">
+      <nav class="flex items-center gap-2 text-sm text-steel-500" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-brand-600 transition-colors">Home</a>
+        <span>/</span>
+        <a href="/product/" class="hover:text-brand-600 transition-colors">Products</a>
+        <span>/</span>
+        <a href={`/product/?category=${category.toLowerCase().replace(/\\s+/g, '-')}`} class="hover:text-brand-600 transition-colors">{category}</a>
+        <span>/</span>
+        <span class="text-steel-800 font-medium">{title}</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product Hero -->
+  <section class="section-py bg-white" itemscope itemtype="https://schema.org/Product">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <!-- Image -->
+        <div>
+          <div class="aspect-[4/3] bg-steel-100 rounded-lg flex items-center justify-center overflow-hidden">
+            {image ? (
+              <img src={image} alt={imageAlt || title + ' product photo'} itemprop="image" class="w-full h-full object-cover" width="800" height="600" loading="lazy" />
+            ) : (
+              <div class="text-center p-8">
+                <div class="text-7xl mb-3" aria-hidden="true">⚙️</div>
+                <span class="tag tag-red text-sm" itemprop="category">{category}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div>
+          <span class="tag tag-red mb-3" itemprop="category">{category}</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-steel-900 mt-2 mb-4" itemprop="name">{title}</h1>
+          <p class="text-steel-500 leading-relaxed mb-6" itemprop="description">{excerpt}</p>
+
+          {specs && specs.length > 0 && (
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              {specs.slice(0, 4).map((spec) => (
+                <div class="bg-steel-50 rounded-lg p-3">
+                  <p class="text-xs text-steel-400 mb-0.5">{spec.name}</p>
+                  <p class="text-sm font-semibold text-steel-800">{spec.value}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+
+          <div class="flex flex-col sm:flex-row gap-3 mt-6" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+            <meta itemprop="priceCurrency" content="USD">
+            <meta itemprop="availability" content="https://schema.org/InStock">
+            <a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
+            <a href="mailto:info@ggn-gear.com" class="btn-outline text-base px-8 py-3">Email Inquiry</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features & Specs -->
+  <section class="section-py bg-steel-50">
+    <div class="container-page">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <h2 class="text-2xl font-bold text-steel-900 mb-6">Product Details</h2>
+          
+          {features && features.length > 0 && (
+            <div class="mb-8">
+              <h3 class="text-lg font-semibold text-steel-800 mb-4">Key Features</h3>
+              <ul class="space-y-3">
+                {features.map((feature) => (
+                  <li class="flex items-start gap-3">
+                    <span class="text-brand-600 mt-0.5 shrink-0">✓</span>
+                    <span class="text-sm text-steel-600">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {specs && specs.length > 0 && (
+            <div>
+              <h3 class="text-lg font-semibold text-steel-800 mb-4">Technical Specifications</h3>
+              <div class="bg-white rounded-lg border border-steel-200 overflow-hidden">
+                <table class="w-full">
+                  <tbody>
+                    {specs.map((spec, i) => (
+                      <tr class={`${i % 2 === 0 ? 'bg-white' : 'bg-steel-50'} border-b border-steel-100 last:border-0`}>
+                        <td class="px-4 py-3 text-sm font-medium text-steel-700 w-1/3">{spec.name}</td>
+                        <td class="px-4 py-3 text-sm text-steel-600">{spec.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </di<FloatingContact />
+
+  {related.length > 0 && (
+    <section class="section-py bg-white">
+      <div class="container-page">
+        <h2 class="text-2xl font-bold text-steel-900 mb-6">Related Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {related.map((p) => (
+            <a href={`/product/${p.id}/`} class="card-base group">
+              <div class="aspect-[4/3] bg-steel-100 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="text-4xl mb-1">⚙️</div>
+                  <span class="tag tag-red">{p.data.category}</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-steel-900 group-hover:text-brand-600 transition-colors text-sm">{p.data.title}</h3>
+                <p class="text-xs text-steel-500 mt-1 line-clamp-2">{p.data.excerpt}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="py-16 bg-dark-900 text-white text-center">
+    <div class="container-page">
+      <h2 class="text-2xl sm:text-3xl font-black mb-3">Need a <span class="text-brand-400">Custom Solution</span>?</h2>
+      <p class="text-steel-400 max-w-xl mx-auto mb-6">We provide OEM/ODM services. Tell us your specifications.</p>
+      <a href="/contact/" class="btn-primary text-base px-8 py-3">Request Quote</a>
+    </div>
+  </section>
+
+</Layout>
