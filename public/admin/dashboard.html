@@ -160,10 +160,32 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
         <div class="form-row">
           <div class="field"><label>分类 <span class="req">*</span></label>
             <select id="nCat"><option value="">请选择</option><option>Product Knowledge</option><option>Selection Guide</option><option>Technical Guide</option><option>Industry News</option><option>Company News</option></select></div>
-          <div class="field"><label>配图 URL</label><input id="nImg" placeholder="/images/news/xxx.jpg"><div class="helper">可选</div></div>
+          <div class="field"><label>封面图</label>
+            <div style="display:flex;gap:8px;align-items:flex-end">
+              <div class="upload-zone" id="newsCoverUpload" onclick="document.getElementById('newsCoverFile').click()" style="width:120px;height:80px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px dashed #d1d5db;border-radius:6px;position:relative;overflow:hidden">
+                <span style="font-size:28px;color:#9ca3af">📷</span>
+                <img id="newsCoverPreview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              </div>
+              <div style="flex:1">
+                <input id="nImg" placeholder="或手动粘贴图片 URL" style="margin-bottom:4px">
+                <input type="file" id="newsCoverFile" accept="image/*" style="display:none" onchange="if(window.AdminNews)AdminNews.uploadCoverImage()">
+                <div class="helper">点击左侧上传或手动输入 URL</div>
+              </div>
+            </div></div>
         </div>
         <div class="field"><label>摘要 <span class="req">*</span></label><textarea id="nExcerpt" rows="2" placeholder="文章摘要"></textarea></div>
-        <div class="field"><label>正文 (Markdown)</label><textarea id="nBody" rows="8" placeholder="## 标题&#10;&#10;正文内容..."></textarea></div>
+        <div class="field"><label>正文 (Markdown)</label>
+            <div class="md-toolbar" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">
+              <button type="button" class="btn btn-xs" onclick="window.AdminNews.insertMarkdown('bold')" title="粗体 Ctrl+B"><b>B</b></button>
+              <button type="button" class="btn btn-xs" onclick="window.AdminNews.insertMarkdown('italic')" title="斜体 Ctrl+I"><i>I</i></button>
+              <button type="button" class="btn btn-xs" onclick="window.AdminNews.insertMarkdown('h2')" title="二级标题">H2</button>
+              <button type="button" class="btn btn-xs" onclick="window.AdminNews.insertMarkdown('h3')" title="三级标题">H3</button>
+              <button type="button" class="btn btn-xs" onclick="window.AdminNews.insertMarkdown('link')" title="链接">🔗</button>
+              <button type="button" class="btn btn-xs" onclick="document.getElementById('newsBodyImgFile').click()" title="上传正文图片">🖼️ 插图</button>
+              <input type="file" id="newsBodyImgFile" accept="image/*" style="display:none" onchange="if(window.AdminNews)AdminNews.uploadBodyImage()">
+              <span style="font-size:10px;color:var(--g);margin-left:auto;align-self:center">选中文字后点击按钮</span>
+            </div>
+            <textarea id="nBody" rows="12" placeholder="## 标题&#10;&#10;正文内容...&#10;&#10;使用上方工具栏插入格式和图片"></textarea></div>
         <button class="btn btn-primary" data-action="save-news">💾 保存并发布</button>
         <button class="btn btn-secondary" data-action="reset-news">↺ 重置</button>
         <span style="font-size:11px;color:var(--g);margin-left:8px">通过 GitHub Actions 约 2 分钟部署</span>
@@ -257,7 +279,7 @@ body{font-family:Inter,system-ui,sans-serif;background:#f0f2f5;color:#111827;min
 <script src="./js/admin-dashboard.js?v=36"></script>
 <script src="./js/admin-products.js?v=51"></script>
 <script src="./js/admin-editor.js?v=40"></script>
-<script src="./js/admin-news.js?v=4"></script>
+<script src="./js/admin-news.js?v=5"></script>
 <script src="./js/admin-media.js?v=37"></script>
 
 <div style="position:fixed;bottom:4px;right:8px;font-size:11px;color:#ce1132;z-index:9999;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #ce1132">v54</div>
