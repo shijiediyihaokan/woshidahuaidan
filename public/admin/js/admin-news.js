@@ -161,6 +161,10 @@ window.AdminNews = (function() {
     document.getElementById('nCat').value = a.category || '';
     document.getElementById('nExcerpt').value = a.excerpt || '';
     document.getElementById('nImg').value = a.image || '';
+    /* Show cover preview if image exists */
+    var preview = document.getElementById('newsCoverPreview');
+    if (preview && a.image) { preview.src = a.image; preview.style.display = 'block'; }
+    else if (preview) { preview.style.display = 'none'; preview.src = ''; }
 
     editingSlug = a.slug || a.filename.replace('.md', '');
     editingSha = a.sha;
@@ -275,10 +279,163 @@ window.AdminNews = (function() {
       .catch(function() { U.toast('保存失败 — 网络错误', 'error'); });
   }
 
+  /* === Upload cover image === */
+  function uploadCoverImage() {
+    var file = document.getElementById('newsCoverFile').files[0];
+    if (!file) { U.toast('请选择图片', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { U.toast('图片不能超过 5MB', 'error'); return; }
+
+    var fname = file.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9._-]/g, '').substring(0, 60);
+    if (!fname) fname = 'image-' + Date.now() + '.jpg';
+    var ext = fname.split('.').pop().toLowerCase();
+    if (['jpg','jpeg','png','webp','gif','svg'].indexOf(ext) === -1) { U.toast('不支持的文件格式', 'error'); return; }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64 = e.target.result.split(',')[1];
+      var repo = Auth.getRepo();
+      var A = Auth.getApi();
+      var K = Auth.getToken();
+      var path = 'public/images/news/' + fname;
+      var apiUrl = A + '/repos/' + repo + '/contents/' + path;
+
+      U.fetchWithTimeout(apiUrl, { headers: { 'Authorization': 'token ' + K } })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var payload = { message: 'Upload cover: ' + fname, content: base64, branch: 'main' };
+          if (d.sha) payload.sha = d.sha;
+          return U.fetchWithTimeout(apiUrl, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.content) {
+            var imgUrl = '/images/news/' + fname;
+            document.getElementById('nImg').value = imgUrl;
+            var preview = document.getElementById('newsCoverPreview');
+            if (preview) { preview.src = e.target.result; preview.style.display = 'block'; }
+            U.toast('封面上传成功', 'success');
+          } else {
+            U.toast('上传失败: ' + (d.message || '未知错误'), 'error');
+          }
+        })
+        .catch(function(err) { U.toast('上传失败', 'error'); console.error(err); });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* === Upload body image and insert markdown === */
+  function uploadBodyImage() {
+    var file = document.getElementById('newsBodyImgFile').files[0];
+    if (!file) { U.toast('请选择图片', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { U.toast('图片不能超过 5MB', 'error'); return; }
+
+    var fname = file.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9._-]/g, '').substring(0, 60);
+    if (!fname) fname = 'body-' + Date.now() + '.jpg';
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var base64 = e.target.result.split(',')[1];
+      var repo = Auth.getRepo();
+      var A = Auth.getApi();
+      var K = Auth.getToken();
+      var uploadPath = 'public/images/news/' + fname;
+      var apiUrl = A + '/repos/' + repo + '/contents/' + uploadPath;
+
+      U.fetchWithTimeout(apiUrl, { headers: { 'Authorization': 'token ' + K } })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var payload = { message: 'Upload body image: ' + fname, content: base64, branch: 'main' };
+          if (d.sha) payload.sha = d.sha;
+          return U.fetchWithTimeout(apiUrl, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + K, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.content) {
+            var imgUrl = '/images/news/' + fname;
+            var mdImg = '![' + fname + '](' + imgUrl + ')';
+            var textarea = document.getElementById('nBody');
+            if (textarea) {
+              var start = textarea.selectionStart;
+              var end = textarea.selectionEnd;
+              var before = textarea.value.substring(0, start);
+              var after = textarea.value.substring(end);
+              textarea.value = before + '
+' + mdImg + '
+' + after;
+              textarea.selectionStart = textarea.selectionEnd = start + mdImg.length + 2;
+              textarea.focus();
+            }
+            U.toast('图片已插入', 'success');
+          } else {
+            U.toast('上传失败: ' + (d.message || '未知错误'), 'error');
+          }
+        })
+        .catch(function(err) { U.toast('上传失败', 'error'); console.error(err); });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* === Insert markdown formatting === */
+  function insertMarkdown(type) {
+    var ta = document.getElementById('nBody');
+    if (!ta) return;
+    var start = ta.selectionStart;
+    var end = ta.selectionEnd;
+    var text = ta.value;
+    var sel = text.substring(start, end);
+
+    var before = '', after = '', placeholder = '';
+    switch (type) {
+      case 'bold':
+        before = '**'; after = '**'; placeholder = sel || '粗体文字';
+        break;
+      case 'italic':
+        before = '*'; after = '*'; placeholder = sel || '斜体文字';
+        break;
+      case 'h2':
+        before = '
+## '; after = ''; placeholder = sel || '二级标题';
+        break;
+      case 'h3':
+        before = '
+### '; after = ''; placeholder = sel || '三级标题';
+        break;
+      case 'link':
+        var url = prompt('输入链接 URL:', 'https://');
+        if (!url) return;
+        before = '['; after = '](' + url + ')'; placeholder = sel || '链接文字';
+        break;
+      default: return;
+    }
+
+    var insertText = before + placeholder + after;
+    ta.value = text.substring(0, start) + insertText + text.substring(end);
+    ta.focus();
+
+    if (sel) {
+      ta.selectionStart = start + before.length;
+      ta.selectionEnd = start + before.length + sel.length;
+    } else {
+      ta.selectionStart = ta.selectionEnd = start + before.length + placeholder.length + after.length;
+    }
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
   function resetForm() {
     ['nTitle','nSlug','nDate','nCat','nExcerpt','nImg','nBody'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
+    /* Clear cover preview */
+    var preview = document.getElementById('newsCoverPreview');
+    if (preview) { preview.style.display = 'none'; preview.src = ''; }
     document.getElementById('nCat').value = '';
     editingSlug = null;
     editingSha = null;
@@ -296,6 +453,9 @@ window.AdminNews = (function() {
     saveArticle: saveArticle,
     resetForm: resetForm,
     editArticle: editArticle,
-    showArticleListTable: showArticleListTable
+    showArticleListTable: showArticleListTable,
+    uploadCoverImage: uploadCoverImage,
+    uploadBodyImage: uploadBodyImage,
+    insertMarkdown: insertMarkdown
   };
 })();
