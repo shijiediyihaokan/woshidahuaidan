@@ -28,7 +28,7 @@ const articleUrl = new URL(`/news/${article.data.slug || article.id}/`, Astro.si
 const breadcrumb = {
   items: [
     { name: 'Home', url: new URL('/', Astro.site).href },
-    { name: 'Knowledge Center', url: new URL('/news/', Astro.site).href },
+    { name: 'Knowledge Center', url: new URL('/knowledge-center/', Astro.site).href },
     { name: title, url: articleUrl },
   ],
 };
@@ -43,7 +43,7 @@ const breadcrumb = {
     <div class="container-page py-3">
       <nav class="flex items-center gap-2 text-sm text-steel-500">
         <a href="/" class="hover:text-brand-600 transition-colors">Home</a><span>/</span>
-        <a href="/news/" class="hover:text-brand-600 transition-colors">Knowledge Center</a><span>/</span>
+        <a href="/knowledge-center/" class="hover:text-brand-600 transition-colors">Knowledge Center</a><span>/</span>
         <span class="text-steel-800 font-medium truncate">{title}</span>
       </nav>
     </div>
@@ -72,7 +72,7 @@ const breadcrumb = {
 
       <!-- Back to Knowledge Center -->
       <div class="mt-12 pt-8 border-t border-steel-200 text-center">
-        <a href="/news/" class="btn-outline text-sm">
+        <a href="/knowledge-center/" class="btn-outline text-sm">
           ← Back to Knowledge Center
         </a>
       </div>
