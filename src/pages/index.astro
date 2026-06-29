@@ -222,21 +222,16 @@ const testimonials = [
       </div>
 
       <div class="max-w-4xl mx-auto">
-        <div class="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-dark-800 to-dark-900 shadow-2xl border border-steel-200 flex items-center justify-center group cursor-pointer">
-          <!-- Play button + coming soon -->
-          <div class="text-center">
-            <div class="w-24 h-24 mx-auto mb-5 bg-brand-600/20 rounded-full flex items-center justify-center group-hover:bg-brand-600/40 group-hover:scale-110 transition-all duration-300">
-              <svg class="w-12 h-12 text-brand-400 group-hover:text-brand-300 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <p class="text-steel-200 text-lg font-semibold mb-1">Factory Tour Video</p>
-            <p class="text-steel-500 text-sm">Coming Soon</p>
-          </div>
-          <!-- Decorative background pattern -->
-          <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><circle cx=%2230%22 cy=%2230%22 r=%221%22 fill=%22white%22/></svg>')"></div>
+        <div class="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-steel-200">
+          <iframe
+            class="absolute inset-0 w-full h-full"
+            src="https://www.youtube.com/embed/ic0cpIwFgQk"
+            title="Ceten Factory Tour"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         </div>
-        <p class="text-center text-xs text-steel-400 mt-4">
-          🎬 Video coming soon — replace the placeholder in <code class="bg-steel-100 px-1.5 py-0.5 rounded text-xs">index.astro</code> with your YouTube URL
-        </p>
       </div>
     </div>
   </section>
