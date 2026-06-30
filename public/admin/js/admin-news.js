@@ -367,9 +367,7 @@ window.AdminNews = (function() {
               var end = textarea.selectionEnd;
               var before = textarea.value.substring(0, start);
               var after = textarea.value.substring(end);
-              textarea.value = before + '
-' + mdImg + '
-' + after;
+              textarea.value = before + '\n' + mdImg + '\n' + after;
               textarea.selectionStart = textarea.selectionEnd = start + mdImg.length + 2;
               textarea.focus();
             }
@@ -401,12 +399,10 @@ window.AdminNews = (function() {
         before = '*'; after = '*'; placeholder = sel || '斜体文字';
         break;
       case 'h2':
-        before = '
-## '; after = ''; placeholder = sel || '二级标题';
+        before = '\n## '; after = ''; placeholder = sel || '二级标题';
         break;
       case 'h3':
-        before = '
-### '; after = ''; placeholder = sel || '三级标题';
+        before = '\n### '; after = ''; placeholder = sel || '三级标题';
         break;
       case 'link':
         var url = prompt('输入链接 URL:', 'https://');

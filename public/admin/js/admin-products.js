@@ -707,27 +707,7 @@ window.AdminProducts = (function() {
   }
 
   function buildGalleryAlt(productName, fileName, cat) {
-    var angleHints = {
-      front: 'front view', side: 'side view', back: 'back view', top: 'top view',
-      bottom: 'bottom view', iso: 'isometric view', assembly: 'assembly view',
-      detail: 'detail view', main: 'product image', multi: 'multi-angle view'
-    };
-    var hint = 'product image';
-    var fnLower = fileName.toLowerCase();
-    for (var k in angleHints) {
-      if (fnLower.indexOf(k) >= 0) { hint = angleHints[k]; break; }
-    }
-    var alt = '';
-    if (productName) {
-      alt = productName.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
-    } else if (cat) {
-      alt = cat.toLowerCase().replace(/s$/, '');
-    } else {
-      alt = fnLower.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
-    }
-    alt = alt + ' ' + hint;
-    alt = alt.charAt(0).toUpperCase() + alt.slice(1);
-    return alt;
+    return fileName || '';
   }
 
   function addToGallery(f, dataUrl, url, safeName) {
@@ -736,8 +716,7 @@ window.AdminProducts = (function() {
       var dims = img.width + '×' + img.height + 'px';
       var sizeKB = (f.size / 1024).toFixed(0) + 'KB';
       var displayName = safeName || f.name;
-      var productName = document.getElementById('pTitle').value || '';
-      var defaultAlt = buildGalleryAlt(productName, f.name, document.getElementById('pCat').value);
+      var defaultAlt = buildGalleryAlt('', displayName, '');
       galleryImages.push({
         name: displayName, url: url || '', size: sizeKB,
         dims: dims, alt: defaultAlt, dataUrl: dataUrl

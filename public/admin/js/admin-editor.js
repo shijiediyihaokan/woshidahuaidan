@@ -170,9 +170,40 @@ window.AdminEditor = (function() {
     scrollToViz(afterIdx+1);
   }
 
+  function filenameFromSrc(src) {
+    if (!src || src.indexOf('data:') === 0) return '';
+    var clean = src.split('?')[0].split('#')[0];
+    var name = clean.substring(clean.lastIndexOf('/') + 1);
+    try { name = decodeURIComponent(name); } catch(e) {}
+    return name;
+  }
+
+  function isOldGeneratedAlt(alt) {
+    return / (product image|front view|side view|back view|top view|bottom view|isometric view|assembly view|detail view|multi-angle view)$/i.test(alt || '');
+  }
+
+  function normalizeImageAlts() {
+    for (var i = 0; i < V.length; i++) {
+      var m = V[i] || {};
+      var d = m.data || {};
+      if (m.type === 'image') {
+        var singleName = filenameFromSrc(d.url);
+        if (singleName && (!d.alt || isOldGeneratedAlt(d.alt))) d.alt = singleName;
+      } else if ((m.type === '2imgs' || m.type === '3imgs' || m.type === '4imgs' || m.type === '6imgs') && d.imgs) {
+        for (var j = 0; j < d.imgs.length; j++) {
+          var img = d.imgs[j] || {};
+          var gridName = filenameFromSrc(img.url);
+          if (gridName && (!img.alt || isOldGeneratedAlt(img.alt))) img.alt = gridName;
+        }
+      }
+    }
+  }
+
   function renderAll() {
 
     var p=document.getElementById('vizPreview');if(!p)return;
+
+    normalizeImageAlts();
 
     var h='';for(var i=0;i<V.length;i++)h+=renderModule(V[i],i);
 
@@ -241,7 +272,7 @@ window.AdminEditor = (function() {
         if(iu){
           h+='<img src="'+iu+'" alt="'+(d.alt||'')+'" style="width:'+wp+'%;height:auto;object-fit:'+fm+';display:block;margin:'+am+';border-radius:4px;'+(ar!=='auto'?'aspect-ratio:'+ar.replace(':','/'):'')+'">';
         }else{
-          h+='<div class="img-placeholder" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.url=ev.target.result;if(!__vizData['+idx+'].data.alt)__vizData['+idx+'].data.alt=AdminEditor.autoAlt(fn);AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()" style="cursor:pointer;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:2px dashed #d1d5db;border-radius:6px;color:var(--g);font-size:13px">📁 点击上传图片</div>';
+          h+='<div class="img-placeholder" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){__vizData['+idx+'].data.url=ev.target.result;__vizData['+idx+'].data.alt=AdminEditor.autoAlt(fn);AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()" style="cursor:pointer;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fafafa;border:2px dashed #d1d5db;border-radius:6px;color:var(--g);font-size:13px">📁 点击上传图片</div>';
         }
         h+='<div style="margin-top:6px;font-size:10px;color:var(--g)">ALT 文本: <span style="color:#374151;font-weight:600">'+(d.alt||'(自动生成)')+'</span></div>';
         h+='<input value="'+(d.alt||'')+'" placeholder="编辑 ALT 文本" onchange="__vizData['+idx+'].data.alt=this.value;AdminEditor.renderAll()" style="width:100%;border:1px solid #eee;border-radius:3px;font-size:10px;padding:2px 4px;margin-top:2px">';
@@ -284,7 +315,7 @@ window.AdminEditor = (function() {
 
           var item=gimgs[gi]||{url:'',alt:'',text:'',widthPercent:60,aspectRatio:'auto',fitMode:'contain',alignment:'center'};
 
-          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=cur.alt||AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\',widthPercent:cur.widthPercent||60,aspectRatio:cur.aspectRatio||\'auto\',fitMode:cur.fitMode||\'contain\',alignment:cur.alignment||\'center\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
+          gh+='<div class="upload-zone" style="padding:12px 6px;cursor:pointer;min-height:80px" onclick="var f=document.createElement(\'input\');f.type=\'file\';f.accept=\'image/*\';f.onchange=function(){var fn=this.files[0]?this.files[0].name:\'\';var r=new FileReader();r.onload=function(ev){var cur=__vizData['+idx+'].data.imgs['+gi+']||{};var a=AdminEditor.autoAlt(fn);__vizData['+idx+'].data.imgs['+gi+']={url:ev.target.result,alt:a,text:cur.text||\'\',widthPercent:cur.widthPercent||60,aspectRatio:cur.aspectRatio||\'auto\',fitMode:cur.fitMode||\'contain\',alignment:cur.alignment||\'center\'};AdminEditor.renderAll()};r.readAsDataURL(this.files[0])};f.click()">';
 
           var iw=item.widthPercent||60;
           var iar=item.aspectRatio||'auto';
@@ -513,65 +544,10 @@ window.AdminEditor = (function() {
 
   }
 
-  /* Auto-generate ALT text from product name + filename hints */
+  /* Auto-generate ALT text from the uploaded filename. */
 
   function autoAlt(fileName) {
-
-    var productName = document.getElementById('pTitle');
-
-    var pn = productName ? productName.value.trim() : '';
-
-    var fn = fileName || '';
-
-    /* Detect angle/view from filename */
-
-    var angleHints = {front:'front view',side:'side view',back:'back view',top:'top view',
-
-      bottom:'bottom view',iso:'isometric view',assembly:'assembly view',
-
-      detail:'detail view',main:'product image',multi:'multi-angle view'};
-
-    var angle = 'product image';
-
-    var fnLower = fn.toLowerCase();
-
-    for(var k in angleHints) {
-
-      if(fnLower.indexOf(k) >= 0) { angle = angleHints[k]; break; }
-
-    }
-
-    var alt = '';
-
-    if(pn) {
-
-      alt = pn.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
-
-    } else if(fn) {
-
-      alt = fnLower.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
-
-    } else {
-
-      alt = 'product';
-
-    }
-
-    /* Remove stop words and clean up */
-
-    var stopWords = ['the','a','an','of','in','on','at','to','for','with','and','or'];
-
-    var words = alt.split(' ').filter(function(w) { return w.length > 1 && stopWords.indexOf(w) < 0; });
-
-    alt = words.join(' ');
-
-    if(!alt || alt.length < 3) alt = 'product';
-
-    alt = alt + ' ' + angle;
-
-    alt = alt.charAt(0).toUpperCase() + alt.slice(1);
-
-    return alt;
+    return fileName || '';
 
   }
 

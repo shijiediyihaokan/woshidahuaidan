@@ -730,13 +730,12 @@ function uploadGalleryImage(f){
     }).catch(function(){ addToGallery(f, e.target.result, null, safeName); });
   }; reader.readAsDataURL(f);
 }
-function buildGalleryAlt(productName, fileName, cat){var angleHints={front:'front view',side:'side view',back:'back view',top:'top view',bottom:'bottom view',iso:'isometric view',assembly:'assembly view',detail:'detail view',main:'product image',multi:'multi-angle view'};var hint='product image';var fnLower=fileName.toLowerCase();for(var k in angleHints){if(fnLower.indexOf(k)>=0){hint=angleHints[k];break;}}var alt='';if(productName){alt=productName.toLowerCase().replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();}else if(cat){alt=cat.toLowerCase().replace(/s$/,'');}else{alt=fnLower.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();}alt=alt+' '+hint;alt=alt.charAt(0).toUpperCase()+alt.slice(1);return alt;}
+function buildGalleryAlt(productName, fileName, cat){return fileName||'';}
 function addToGallery(f, dataUrl, url, safeName){
   var img = new Image();
   img.onload = function(){
     var dims = img.width+'×'+img.height+'px', sizeKB = (f.size/1024).toFixed(0)+'KB', displayName = safeName||f.name;
-    var productName = document.getElementById('pTitle').value || '';
-    var defaultAlt = buildGalleryAlt(productName, f.name, document.getElementById('pCat').value);
+    var defaultAlt = buildGalleryAlt('', displayName, '');
     galleryImages.push({name: displayName, url: url||'', size: sizeKB, dims: dims, alt: defaultAlt, dataUrl: dataUrl});
     renderGallery();
   }; img.src = dataUrl;
@@ -803,6 +802,7 @@ function handleModalUpload(fileInputId, widgetId, nameInputId){
         var dE=document.getElementById('mImgDims'+idx); if(dE)dE.value=dims;
         var sE=document.getElementById('mImgSize'+idx); if(sE)sE.value=sizeKB;
         var uE=document.getElementById('mImgUrl'+idx); if(uE&&url)uE.value=url;
+        var aE=document.getElementById('mAlt'+idx); if(aE&&!aE.value)aE.value=f.name;
       }; img.src=e.target.result;
     }
   }; reader.readAsDataURL(f);
